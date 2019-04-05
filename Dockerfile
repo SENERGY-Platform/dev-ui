@@ -1,4 +1,4 @@
-FROM node:8.9
+FROM node:11.13
 
 COPY . /workspace
 WORKDIR /workspace
