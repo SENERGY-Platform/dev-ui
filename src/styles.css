@@ -24,7 +24,7 @@
 }
 
 .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
-  background-color: rgb(46,125,50);
+  background-color: rgb(68, 132, 206);
 }
 
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
@@ -545,7 +545,7 @@ mat-form-field {
 
 .hover-mat-card:hover {
   cursor: pointer;
-  background: rgb(46, 125, 50);
+  background: rgb(68, 132, 206);
   transition: 0.3s;
   color: white;
 }
@@ -612,7 +612,7 @@ code {
 
 .doc a {
   line-height: 1.6;
-  color: rgb(46, 125, 50);
+  color: rgb(68, 132, 206);
   font-size: 1em;
 }
 
