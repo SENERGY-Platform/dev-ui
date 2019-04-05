@@ -84,6 +84,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     FlexLayoutModule,
+    CoreModule,
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
