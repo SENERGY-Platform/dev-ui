@@ -33,6 +33,7 @@ import { HttpClient} from '@angular/common/http';
 
 import { GettingStartedComponent } from './getting-started/getting-started.component';
 import { TranslateModule } from '@ngx-translate/core';
+import {DashboardDocComponent} from './dashboard-doc/dashboard-doc.component';
 
 @Component({
   templateUrl: './routing.component.html',
@@ -62,6 +63,11 @@ const routes: Routes = [
       {
         path: 'iot',
         component: IotRepoDocComponent,
+        canActivate: [ValidTokenGuard]
+      },
+      {
+        path: 'dashboard',
+        component: DashboardDocComponent,
         canActivate: [ValidTokenGuard]
       },
       {
@@ -99,7 +105,8 @@ const routes: Routes = [
     ProcessDocComponent,
     SecurityDocComponent,
     GettingStartedComponent,
-    RoutingComponent
+    RoutingComponent,
+    DashboardDocComponent
   ]
 })
 export class PlatformDocModule { }
