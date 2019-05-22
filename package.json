@@ -38,13 +38,13 @@
     "remove-markdown": "^0.3.0",
     "request-promise": "^4.2.2",
     "rxjs": "^6.3.3",
-    "swagger-ui": "^3.20.5",
+    "swagger-ui": "^3.22.2",
     "swagger-ui-dist": "^3.19.5",
     "typescript": "^2.9.2",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.8",
+    "@angular-devkit/build-angular": "^0.13.9",
     "@angular/cli": "^6.2.7",
     "@angular/compiler-cli": "^6.1.10",
     "@angular/language-service": "^6.1.10",
