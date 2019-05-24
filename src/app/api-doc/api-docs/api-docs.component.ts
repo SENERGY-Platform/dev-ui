@@ -58,13 +58,14 @@ export class ApiDocsComponent implements OnInit {
     this.translateService.get("SEARCH").subscribe(name => this.searchPlaceholder = name);
     this.swaggerService.getSwagger().then(swaggerList => {
       this.swaggerList = swaggerList;
-      this.swaggerListShown = swaggerList
-    })
+      this.swaggerListShown = swaggerList;
+    });
   }
 
   search() {
+    const insensitiveQuery = new RegExp(this.query, 'gi')
     this.swaggerListShown = this.swaggerList.filter(api => {
-      return api["info"]["description"].indexOf(this.query) != -1 || api["info"]["title"].indexOf(this.query) != -1
-    })
+      return insensitiveQuery.test(api['info']['description']) || insensitiveQuery.test(api['info']['title']);
+    });
   }
 }
