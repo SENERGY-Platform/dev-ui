@@ -48,7 +48,7 @@
         </mat-form-field>
       </div>
     </div>
-    <button (click)="addRedirectUri()" color="primary" type="submit" mat-raised-button>{{'ADD' | translate}}</button>
+    <button (click)="addRedirectUri()" color="primary" type="submit" mat-raised-button>Add Redirect URI</button>
 
     <div formArrayName="webOrigins">
       <div *ngFor="let webOrigin of form['controls'].webOrigins.controls; index as i">
@@ -57,7 +57,7 @@
         </mat-form-field>
       </div>
     </div>
-    <button (click)="addWebOrigins()" color="primary" type="submit" mat-raised-button>{{'ADD' | translate}}</button>
+    <button (click)="addWebOrigins()" color="primary" type="submit" mat-raised-button>Add Access-Control-Allow-Origin</button>
 
     <button color="primary" type="submit" mat-raised-button (click)="submit()">{{'UPDATE' | translate}}</button>
   </form>
