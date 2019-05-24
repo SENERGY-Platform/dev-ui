@@ -43,9 +43,9 @@ export class SidenavService {
     getSections(): SidenavSectionModel[] {
         const sections: SidenavSectionModel[] = [];
 
-        sections.push(new SidenavSectionModel('API', 'link', 'build', '/api', []));
+        sections.push(new SidenavSectionModel('API', 'link', 'code', '/api', []));
 
-        sections.push(new SidenavSectionModel('Documentation', 'toggle', 'folder', '/doc', [
+        sections.push(new SidenavSectionModel('Documentation', 'toggle', 'library_books', '/doc', [
             new SidenavPageModel('Getting Started', 'link', 'play_arrow', '/doc/start'),
             new SidenavPageModel('Prozesse', 'link', 'ballot', '/doc/process'),
             new SidenavPageModel('Analytics', 'link', 'insert_chart', '/doc/analytics'),
@@ -57,7 +57,7 @@ export class SidenavService {
 
         sections.push(new SidenavSectionModel('Clients', 'link', 'computer', '/clients', []));
 
-        sections.push(new SidenavSectionModel('Permissions', 'link', 'pan_tool', '/permissions', []));
+        sections.push(new SidenavSectionModel('Permissions', 'link', 'security', '/permissions', []));
 
 
 
