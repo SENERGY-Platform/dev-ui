@@ -48,12 +48,13 @@ export class ViewClientComponent implements OnInit {
     });
   }
 
-  addWebOrigins() {
-
+  addWebOrigins(){
+    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
   }
 
+
   addRedirectUri() {
-    
+    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
   }
 
   loadClientInformations() {
