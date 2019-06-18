@@ -44,11 +44,11 @@ app.get("/settings.js", (req, res) => {
     headers: {
       'Authorization' : 'Basic ' + Buffer.from(kong_username+ ":" + kong_password).toString('base64')
     },
-    uri: kong_admin_url + "/apis",
+    uri: kong_admin_url + "/routes",
     method: 'GET'
   }).then(function(kong_uris) {
     kong_uris = JSON.parse(kong_uris)["data"].map(function(uri) {
-      return uri["uris"][0]
+      return uri["paths"][0]
     })
 
     res.send("var KEYCLOAK_URL = '" + keycloak + "';var CLIENT_ID = '" + client_id + "';var KONG_URL = '" + kong_url + "';var KONG_URIS = '" + JSON.stringify(kong_uris) + "';");
