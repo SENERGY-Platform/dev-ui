@@ -49,6 +49,11 @@ const routes: Routes = [
         path: '',
         component: PermissionsListComponent,
         canActivate: [ValidTokenGuard]
+      },
+      {
+          path: 'edit',
+          component: PermissionsEditComponent,
+          canActivate: [ValidTokenGuard]
       }
     ]
   }
