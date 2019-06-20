@@ -41,66 +41,52 @@ export interface Model {
   styleUrls: ['./permissions-edit.component.css']
 })
 export class PermissionsEditComponent implements OnInit {
-
-  myControl = new FormControl();
-
-  userIsAdmin: false;
-
-
-  subject: string;
-  actions: string;
-  id: string;
-  resource: string;
-
-  submit_failed: any = false;
-
-  // all actions
-  get = false;
-  post = false;
-  patch = false;
-  delete = false;
-  put = false;
-
-  // all roles and uris and users
-  roles: any;
-  uris: any;
-  users: any;
-  policies: any;
-
-  // options for autocomplete filter
-  filteredOptions: Observable<string[]>;
-
-  public btnDisable: boolean;
-
-
-  array_of_actions: string[];
+    myControl = new FormControl();
+    userIsAdmin: false;
+    subject: string;
+    actions: string;
+    id: string;
+    resource: string;
+    submit_failed: any = false;
+    // all actions
+    get = false;
+    post = false;
+    patch = false;
+    delete = false;
+    put = false;
+    // all roles and uris and users
+    roles: any;
+    uris: any;
+    users: any;
+    policies: any;
+    // options for autocomplete filter
+    filteredOptions: Observable<string[]>;
+    public btnDisable: boolean;
+    array_of_actions: string[];
 
     public form = this.fb.group({
-        role: this.route.snapshot.paramMap.get('subject'),
-        user: this.route.snapshot.paramMap.get('subject'),
-        actions: this.fb.array([])
+      role: this.route.snapshot.paramMap.get('subject'),
+      user: this.route.snapshot.paramMap.get('subject'),
+      actions: this.fb.array([])
     });
 
-  constructor(
-      private kongService: KongService,
-      private fb: FormBuilder,
-      private userManagementService: UserManagementService,
-      private route: ActivatedRoute,
-      private ladonService: LadonService,
-      private router: Router,
-      private authService: AuthService){
+    constructor(
+        private kongService: KongService,
+        private fb: FormBuilder,
+        private userManagementService: UserManagementService,
+        private route: ActivatedRoute,
+        private ladonService: LadonService,
+        private router: Router,
+        private authService: AuthService) {
+        this.userManagementService.loadRoles().then((roles: Model) => {
+        this.roles = roles;
+        this.intbtnDisable();
+        });
+        this.userManagementService.loadUsers().then(users => this.users = users);
+    }
 
-      this.userManagementService.loadRoles().then((roles: Model) => {
-          this.roles = roles;
-          this.intbtnDisable();
-      });
-      this.userManagementService.loadUsers().then(users => this.users = users);
-
-      
-  }
-
-  ngOnInit() {
-      this.userIsAdmin = this.authService.userHasRole("admin");
+    ngOnInit() {
+      this.userIsAdmin = this.authService.userHasRole('admin');
 
       this.uris = this.kongService.loadUris();
 
@@ -118,25 +104,24 @@ export class PermissionsEditComponent implements OnInit {
               startWith(''),
               map(value => this._filter(value))
           );
-  }
+    }
 
 
     addAction() {
-        var control = < FormArray > this.form.controls['actions'];
-        var addrCtrl = this.fb.group({
-            endpoint: ["", Validators.pattern("\w+")],
-            get: [""],
-            post: [""],
-            delete: [""],
-            patch: [""],
-            put: [""]
+        const control = < FormArray > this.form.controls['actions'];
+        const addrCtrl = this.fb.group({
+            endpoint: ['', Validators.pattern('\w+')],
+            get: [''],
+            post: [''],
+            delete: [''],
+            patch: [''],
+            put: ['']
         });
         control.push(addrCtrl);
     }
 
-    checkactiveActions(){
-
-        this.array_of_actions = this.actions.split(",");
+    checkactiveActions() {
+        this.array_of_actions = this.actions.split(',');
 
         for (let i = 0; i < this.array_of_actions.length; i++) {
             if (this.array_of_actions[i] === 'GET') {
@@ -152,38 +137,36 @@ export class PermissionsEditComponent implements OnInit {
             }
         }
     }
-
     submit() {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
         const form_value = this.form.value;
 
-        form_value["actions"].forEach(action => {
+        form_value['actions'].forEach(action => {
             const policy = {
-                "Subjects": [this.subject],
-                "Actions": [],
-                "Resources": ["<^(endpoints:" + this.resource.substring(1) + ").*>"],
-                "Effect": "allow",
-                "id": this.id
+                'Subjects': [this.subject],
+                'Actions': [],
+                'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+                'Effect': 'allow',
+                'id': this.id
             };
 
-            if (this.get) policy["Actions"].push("GET")
-            if (this.post) policy["Actions"].push("POST")
-            if (this.patch) policy["Actions"].push("PATCH")
-            if (this.delete) policy["Actions"].push("DELETE")
-            if (this.put) policy["Actions"].push("PUT")
+            if (this.get) { policy['Actions'].push('GET'); }
+            if (this.post) { policy['Actions'].push('POST'); }
+            if (this.patch) { policy['Actions'].push('PATCH'); }
+            if (this.delete) { policy['Actions'].push('DELETE'); }
+            if (this.put) { policy['Actions'].push('PUT'); }
 
             this.ladonService.deletePolicy(policy).then(response => {
 
                 this.ladonService.postPolicy(policy).then(res => {
-                    console.log(policy)
-                    this.submit_failed = res["Error"] != ""
-                }, error => {
-                    this.submit_failed = true
-                })
+                    console.log(policy);
+                    this.submit_failed = res['Error'] !== '';
+                    }, error => {
+                    this.submit_failed = true;
+                });
                 this.loadPolicies();
-            })
-
+            });
         });
     }
 
@@ -192,22 +175,22 @@ export class PermissionsEditComponent implements OnInit {
     loadPolicies() {
         this.ladonService.getAllPolicies().then(response => {
             this.policies = (<any>response).map(policy => {
-                policy["subject"] = policy["subjects"][0]
-                if (policy["resources"][0] == "<.*>") {
-                    policy["resource"] = policy["resources"][0]
+                policy['subject'] = policy['subjects'][0];
+                if (policy['resources'][0] === '<.*>') {
+                    policy['resource'] = policy['resources'][0];
                 } else {
-                    policy["resource"] = policy["resources"][0].split("(")[1].split(")")[0].replace(/:/g, "/").replace("endpoints", "")
+                    policy['resource'] = policy['resources'][0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
                 }
-                policy["actions"] = policy["actions"].toString()
-                return policy
-            })
+                policy['actions'] = policy['actions'].toString();
+                return policy;
+            });
 
-            this.policies = new MatTableDataSource(this.policies)
-        })
+            this.policies = new MatTableDataSource(this.policies);
+        });
     }
 
     showAll() {
-        this.router.navigate(["/permissions"])
+        this.router.navigate(['/permissions']);
     }
 
     // autocomplete filter
