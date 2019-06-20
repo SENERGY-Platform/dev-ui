@@ -27,7 +27,6 @@
     </div>
     <div class="role-user">
         <mat-form-field *ngIf="btnDisable">
-            <!--<mat-select [(ngModel)]="subject" formControlName="user" placeholder="User"> -->
             <mat-select [(ngModel)]="subject" placeholder="User">
                 <mat-option *ngFor="let user of users" [value]="user.username">
                     {{user.username}}
@@ -35,7 +34,6 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="!btnDisable">
-            <!--<mat-select [(ngModel)]="subject" formControlName="role" placeholder="Role"> -->
             <mat-select [(ngModel)]="subject" placeholder="Role">
                 <mat-option *ngFor="let role of roles" [value]="role.name">
                     {{role.name}}
@@ -45,11 +43,11 @@
     </div>
     <div class="rule"  [formGroup]="methods">
         <div class="action_checkboxes">
-            <mat-checkbox [(ngModel)] = "get"  formControlName="get">GET</mat-checkbox>
-            <mat-checkbox [(ngModel)] = "post" formControlName="post">POST</mat-checkbox>
-            <mat-checkbox [(ngModel)] = "patch" formControlName="patch">PATCH</mat-checkbox>
-            <mat-checkbox [(ngModel)] = "delete" formControlName="delete">DELETE</mat-checkbox>
-            <mat-checkbox [(ngModel)] = "put" formControlName="put">PUT</mat-checkbox>
+            <mat-checkbox formControlName="get">GET</mat-checkbox>
+            <mat-checkbox formControlName="post">POST</mat-checkbox>
+            <mat-checkbox formControlName="patch">PATCH</mat-checkbox>
+            <mat-checkbox formControlName="delete">DELETE</mat-checkbox>
+            <mat-checkbox formControlName="put">PUT</mat-checkbox>
         </div>
     </div>
     <div>
@@ -62,8 +60,9 @@
             </mat-autocomplete>
         </mat-form-field>
     </div>
-    <div mat-dialog-actions>
-        <button mat-button [mat-dialog-close] (click)="submit()">Speichern</button>
-        <button mat-button [mat-dialog-close] (click)="no()">Abbrechen</button>
-    </div>
 </div>
+<div mat-dialog-actions>
+    <button mat-button color="primary" [mat-dialog-close] (click)="yes()"><b>Speichern</b></button>
+    <button mat-button color="primary" [mat-dialog-close] (click)="no()"><b>Abbrechen</b></button>
+</div>
+

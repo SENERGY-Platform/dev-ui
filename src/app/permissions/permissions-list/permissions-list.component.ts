@@ -21,7 +21,7 @@ import {
 } from '@angular/core';
 import {
   DatePipe
-} from '@angular/common'
+} from '@angular/common';
 import {
   HttpClient,
   HttpHeaders
@@ -67,22 +67,22 @@ export class PermissionsListComponent implements OnInit {
 
     ngOnInit() {
         this.loadPolicies();
-        this.userIsAdmin = this.authService.userHasRole("admin");
+        this.userIsAdmin = this.authService.userHasRole('admin');
     }
 
 
     loadPolicies() {
         this.ladonService.getAllPolicies().then(response => {
             this.policies = (<any>response).map(policy => {
-                policy["subject"] = policy["subjects"][0]
-                if (policy["resources"][0] == "<.*>") {
-                  policy["resource"] = policy["resources"][0]
+                policy['subject'] = policy['subjects'][0];
+                if (policy['resources'][0] === '<.*>') {
+                  policy['resource'] = policy['resources'][0];
                 } else {
-                  policy["resource"] = policy["resources"][0].split("(")[1].split(")")[0].replace(/:/g, "/").replace("endpoints", "")
+                  policy['resource'] = policy['resources'][0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
                 }
-                policy["actions"] = policy["actions"].toString()
-                return policy
-            })
+                policy['actions'] = policy['actions'].toString();
+                return policy;
+            });
 
             // for sorting algorithm
             this.sortedData = this.policies.slice();
@@ -93,29 +93,26 @@ export class PermissionsListComponent implements OnInit {
     }
 
   createPolicy() {
-    this.router.navigate(["/permissions/add"])
+    this.router.navigate(['/permissions/add']);
   }
 
   editPolicy(policy) {
-      /*this.router.navigate(["/permissions/edit",
-          {id: policy['id'], actions: policy['actions'], subject: policy['subject'], resource: policy['resource']}]
-      );*/
-
-      const dialogRef = this.dialog.open(PermissionsEditComponent, {
-          width: '450px'
-      });
+      const dialogRef = this.dialog.open(PermissionsEditComponent,
+          {data: {id: policy['id'], actions: policy['actions'], subject: policy['subject'], resource: policy['resource']}, width: '38.2%'});
 
       dialogRef.afterClosed().subscribe(result => {
           if (result === 'yes') {
               this.loadPolicies();
+          } else if (result === 'error') {
+              window.alert('Could not edit policy!');
           }
       });
   }
 
   deletePolicy(policy) {
     this.ladonService.deletePolicy(policy).then(response => {
-      this.loadPolicies()
-    })
+      this.loadPolicies();
+    });
   }
 
   sortData(sort: Sort) {
