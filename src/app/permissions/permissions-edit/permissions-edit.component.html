@@ -15,65 +15,55 @@
   ~     limitations under the License.
   ~
   -->
-
-<div *ngIf="userIsAdmin" class="outer">
-    <mat-accordion multi="true">
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Placeholder Title
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div>
-                <mat-radio-button class="radio-button" [checked]="!btnDisable" (click)="onChange('subject')">
-                    Role
-                </mat-radio-button>
-                <mat-radio-button class="radio-button" [checked]="btnDisable" (click)="onChange('role')">
-                    User
-                </mat-radio-button>
-            </div>
-            <div class="role-user">
-                <mat-form-field *ngIf="btnDisable">
-                    <mat-select [(ngModel)]="subject" formControlName="user" placeholder="User">
-                        <mat-option *ngFor="let user of users" [value]="user.username">
-                            {{user.username}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field *ngIf="!btnDisable">
-                    <mat-select [(ngModel)]="subject" formControlName="role" placeholder="Role">
-                        <mat-option *ngFor="let role of roles" [value]="role.name">
-                            {{role.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="rule"  [formGroup]="controls">
-                <div class="action_checkboxes">
-                    <mat-checkbox [(ngModel)] = "get"  formControlName="get">GET</mat-checkbox>
-                    <mat-checkbox [(ngModel)] = "post" formControlName="post">POST</mat-checkbox>
-                    <mat-checkbox [(ngModel)] = "patch" formControlName="patch">PATCH</mat-checkbox>
-                    <mat-checkbox [(ngModel)] = "delete" formControlName="delete">DELETE</mat-checkbox>
-                    <mat-checkbox [(ngModel)] = "put" formControlName="put">PUT</mat-checkbox>
-                </div>
-            </div>
-            <div>
-                <mat-form-field class="endpoint">
-                    <input type="text" [(ngModel)]="resource" placeholder="Endpoint" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option *ngFor="let uri of filteredOptions | async" [value]="uri">
-                            {{uri}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-            </div>
-            <div class="save-button-box">
-                <div class="save-button">
-                    <button mat-icon-button color="primary" (click)="submit()">
-                        <mat-icon>save</mat-icon>
-                    </button>
-                </div>
-            </div>
-        </mat-expansion-panel>
-    </mat-accordion>
+<h1 mat-dialog-title>Permission ändern</h1>
+<div *ngIf="userIsAdmin" mat-dialog-content>
+    <div>
+        <mat-radio-button class="radio-button" [checked]="!btnDisable" (click)="onChange('subject')">
+            Role
+        </mat-radio-button>
+        <mat-radio-button class="radio-button" [checked]="btnDisable" (click)="onChange('role')">
+            User
+        </mat-radio-button>
+    </div>
+    <div class="role-user">
+        <mat-form-field *ngIf="btnDisable">
+            <!--<mat-select [(ngModel)]="subject" formControlName="user" placeholder="User"> -->
+            <mat-select [(ngModel)]="subject" placeholder="User">
+                <mat-option *ngFor="let user of users" [value]="user.username">
+                    {{user.username}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="!btnDisable">
+            <!--<mat-select [(ngModel)]="subject" formControlName="role" placeholder="Role"> -->
+            <mat-select [(ngModel)]="subject" placeholder="Role">
+                <mat-option *ngFor="let role of roles" [value]="role.name">
+                    {{role.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="rule"  [formGroup]="methods">
+        <div class="action_checkboxes">
+            <mat-checkbox [(ngModel)] = "get"  formControlName="get">GET</mat-checkbox>
+            <mat-checkbox [(ngModel)] = "post" formControlName="post">POST</mat-checkbox>
+            <mat-checkbox [(ngModel)] = "patch" formControlName="patch">PATCH</mat-checkbox>
+            <mat-checkbox [(ngModel)] = "delete" formControlName="delete">DELETE</mat-checkbox>
+            <mat-checkbox [(ngModel)] = "put" formControlName="put">PUT</mat-checkbox>
+        </div>
+    </div>
+    <div>
+        <mat-form-field class="endpoint">
+            <input type="text" [(ngModel)]="resource" placeholder="Endpoint" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let uri of filteredOptions | async" [value]="uri">
+                    {{uri}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button [mat-dialog-close] (click)="submit()">Speichern</button>
+        <button mat-button [mat-dialog-close] (click)="no()">Abbrechen</button>
+    </div>
 </div>

@@ -42,6 +42,7 @@ import {
 } from '../../services/auth/auth.service';
 import {Sort} from '@angular/material';
 import { PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
+import { PermissionsEditComponent } from '../permissions-edit/permissions-edit.component';
 
 @Component({
   selector: 'list',
@@ -96,9 +97,19 @@ export class PermissionsListComponent implements OnInit {
   }
 
   editPolicy(policy) {
-      this.router.navigate(["/permissions/edit",
+      /*this.router.navigate(["/permissions/edit",
           {id: policy['id'], actions: policy['actions'], subject: policy['subject'], resource: policy['resource']}]
-      );
+      );*/
+
+      const dialogRef = this.dialog.open(PermissionsEditComponent, {
+          width: '450px'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+          if (result === 'yes') {
+              this.loadPolicies();
+          }
+      });
   }
 
   deletePolicy(policy) {
@@ -107,7 +118,7 @@ export class PermissionsListComponent implements OnInit {
     })
   }
 
-    sortData(sort: Sort) {
+  sortData(sort: Sort) {
         const data = this.policies.slice();
 
         if (!sort.active || sort.direction === '') {

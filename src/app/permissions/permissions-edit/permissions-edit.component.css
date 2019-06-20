@@ -23,6 +23,7 @@ admin {
 .action_checkboxes {
     display: flex;
     justify-content: space-between;
+    margin: auto;
 }
 
 .radio-button {
@@ -30,12 +31,8 @@ admin {
     margin-right: 5%;
 }
 
-.save-button {
-    float: right;
-}
-
-.save-button-box {
-    overflow: auto;
+.mat-dialog-actions{
+    margin: auto;
 }
 
 .endpoint {

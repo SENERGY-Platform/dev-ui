@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserManagementService} from '../../services/user-management/user-management.service';
 import { ActivatedRoute } from '@angular/router';
 import {KongService} from '../../services/kong/kong.service';
@@ -48,12 +48,6 @@ export class PermissionsEditComponent implements OnInit {
     id: string;
     resource: string;
     submit_failed: any = false;
-    // all actions
-    get = false;
-    post = false;
-    patch = false;
-    delete = false;
-    put = false;
     // all roles and uris and users
     roles: any;
     uris: any;
@@ -63,6 +57,7 @@ export class PermissionsEditComponent implements OnInit {
     filteredOptions: Observable<string[]>;
     public btnDisable: boolean;
     array_of_actions: string[];
+    methods
 
     public form = this.fb.group({
       role: this.route.snapshot.paramMap.get('subject'),
@@ -79,98 +74,84 @@ export class PermissionsEditComponent implements OnInit {
         private router: Router,
         private authService: AuthService) {
         this.userManagementService.loadRoles().then((roles: Model) => {
-        this.roles = roles;
-        this.intbtnDisable();
+            this.roles = roles;
+            this.intbtnDisable();
         });
         this.userManagementService.loadUsers().then(users => this.users = users);
+        this.methods = new FormGroup({
+            get: new FormControl(),
+            post: new FormControl(),
+            patch: new FormControl(),
+            delete: new FormControl(),
+            put: new FormControl()
+        });
     }
 
     ngOnInit() {
-      this.userIsAdmin = this.authService.userHasRole('admin');
+        this.userIsAdmin = this.authService.userHasRole('admin');
+        this.uris = this.kongService.loadUris();
+        this.subject = this.route.snapshot.paramMap.get('subject'); // Subject
+        this.actions = this.route.snapshot.paramMap.get('actions'); // Actions
+        this.id = this.route.snapshot.paramMap.get('id'); // id
+        this.resource = this.route.snapshot.paramMap.get(('resource')); // Resource
 
-      this.uris = this.kongService.loadUris();
+        this.checkactiveActions();
 
-      this.subject = this.route.snapshot.paramMap.get('subject'); // Subject
-      this.actions = this.route.snapshot.paramMap.get('actions'); // Actions
-      this.id = this.route.snapshot.paramMap.get('id'); // id
-      this.resource = this.route.snapshot.paramMap.get(('resource')); // Resource
-
-      this.addAction();
-      this.checkactiveActions();
-
-      // autocomplete filter
-      this.filteredOptions = this.myControl.valueChanges
+        // autocomplete filter
+        this.filteredOptions = this.myControl.valueChanges
           .pipe(
               startWith(''),
               map(value => this._filter(value))
           );
     }
 
-
-    addAction() {
-        const control = < FormArray > this.form.controls['actions'];
-        const addrCtrl = this.fb.group({
-            endpoint: ['', Validators.pattern('\w+')],
-            get: [''],
-            post: [''],
-            delete: [''],
-            patch: [''],
-            put: ['']
-        });
-        control.push(addrCtrl);
-    }
-
     checkactiveActions() {
         this.array_of_actions = this.actions.split(',');
-
+        console.log(this.array_of_actions);
         for (let i = 0; i < this.array_of_actions.length; i++) {
             if (this.array_of_actions[i] === 'GET') {
-                this.get = true;
+                this.methods.set('get', true);
             } else if (this.array_of_actions[i] === 'POST') {
-                this.post = true;
+                this.methods.set('post', true);
             } else if (this.array_of_actions[i] === 'PATCH') {
-                this.patch = true;
+                this.methods.set('patch', true);
             } else if (this.array_of_actions[i] === 'DELETE') {
-                this.delete = true;
+                this.methods.set('delete', true);
             } else if (this.array_of_actions[i] === 'PUT') {
-               this.put = true;
+                this.methods.set('put', true);
             }
         }
     }
     submit() {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
-        const form_value = this.form.value;
-
-        form_value['actions'].forEach(action => {
-            const policy = {
-                'Subjects': [this.subject],
-                'Actions': [],
-                'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
-                'Effect': 'allow',
-                'id': this.id
-            };
-
-            if (this.get) { policy['Actions'].push('GET'); }
-            if (this.post) { policy['Actions'].push('POST'); }
-            if (this.patch) { policy['Actions'].push('PATCH'); }
-            if (this.delete) { policy['Actions'].push('DELETE'); }
-            if (this.put) { policy['Actions'].push('PUT'); }
-
-            this.ladonService.deletePolicy(policy).then(response => {
-
-                this.ladonService.postPolicy(policy).then(res => {
-                    console.log(policy);
-                    this.submit_failed = res['Error'] !== '';
-                    }, error => {
-                    this.submit_failed = true;
-                });
-                this.loadPolicies();
-            });
-        });
+        if (this.methods.get('get').value === true) {this.pushPolicy('GET'); }
+        if (this.methods.get('post').value === true) {this.pushPolicy('POST'); }
+        if (this.methods.get('patch').value === true) {this.pushPolicy('PATCH'); }
+        if (this.methods.get('delete').value === true) {this.pushPolicy('DELETE'); }
+        if (this.methods.get('put').value === true) {this.pushPolicy('PUT'); }
     }
 
+    pushPolicy(method) {
+        const policy = {
+            'Subjects': [this.subject],
+            'Actions': [],
+            'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+            'Effect': 'allow',
+            'id': this.id
+        };
+        policy['Actions'].push(method);
 
+        this.ladonService.deletePolicy(policy).then(response => {
+            this.ladonService.postPolicy(policy).then(res => {
+                console.log(policy);
+                this.submit_failed = res['Error'] !== '';
+            }, error => {
+                this.submit_failed = true;
+            });
+            this.loadPolicies();
+        });
+    }
 
     loadPolicies() {
         this.ladonService.getAllPolicies().then(response => {
@@ -187,10 +168,6 @@ export class PermissionsEditComponent implements OnInit {
 
             this.policies = new MatTableDataSource(this.policies);
         });
-    }
-
-    showAll() {
-        this.router.navigate(['/permissions']);
     }
 
     // autocomplete filter
