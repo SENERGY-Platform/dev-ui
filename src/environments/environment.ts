@@ -23,8 +23,9 @@
 
 export const environment = {
   production: false,
-  kong: "http://localhost:8000",
+  kong: "https://api.sepl.infai.org",
   client: "frontend",
-  keycloak: 'http://localhost:3000/auth',
-  loginRequired: true
+  keycloak: 'https://auth.sepl.infai.org/auth',
+  loginRequired: true,
+  keycloakUrl: 'https://auth.sepl.infai.org/auth'
 };
