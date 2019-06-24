@@ -150,21 +150,7 @@ export class PermissionsEditComponent implements OnInit {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
         try {
-            if (this.methods.get('get').value === true) {
-                this.pushPolicy('GET');
-            }
-            if (this.methods.get('post').value === true) {
-                this.pushPolicy('POST');
-            }
-            if (this.methods.get('patch').value === true) {
-                this.pushPolicy('PATCH');
-            }
-            if (this.methods.get('delete').value === true) {
-                this.pushPolicy('DELETE');
-            }
-            if (this.methods.get('put').value === true) {
-                this.pushPolicy('PUT');
-            }
+            this.pushPolicy();
             this.dialogRef.close('yes');
         } catch (e) {
             this.dialogRef.close('error');
@@ -174,7 +160,7 @@ export class PermissionsEditComponent implements OnInit {
         this.dialogRef.close('no');
     }
 
-    pushPolicy(method) {
+    pushPolicy() {
         const policy = {
             'Subjects': [this.subject],
             'Actions': [],
@@ -182,7 +168,21 @@ export class PermissionsEditComponent implements OnInit {
             'Effect': 'allow',
             'id': this.id
         };
-        policy['Actions'].push(method);
+        if (this.methods.get('get').value === true) {
+            policy['Actions'].push('GET');
+        }
+        if (this.methods.get('post').value === true) {
+            policy['Actions'].push('POST');
+        }
+        if (this.methods.get('patch').value === true) {
+            policy['Actions'].push('PATCH');
+        }
+        if (this.methods.get('delete').value === true) {
+            policy['Actions'].push('DELETE');
+        }
+        if (this.methods.get('put').value === true) {
+            policy['Actions'].push('PUT');
+        }
 
         this.ladonService.deletePolicy(policy).then(response => {
             this.ladonService.postPolicy(policy).then(res => {
