@@ -16,102 +16,95 @@
  *
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {
-  UserManagementService
-} from '../../services/user-management/user-management.service';
-import {
-  AuthService
-} from '../../services/auth/auth.service';
-import {
-  LadonService
-} from '../../services/ladon/ladon.service';
-import {
-  Router
-} from '@angular/router';
-import {
-    FormBuilder,
-    Validators,
-    FormArray, FormControl
-} from '@angular/forms';
-import { KongService } from '../../services/kong/kong.service';
-import {map, startWith} from 'rxjs/operators';
+import { Component, OnInit, Inject } from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserManagementService} from '../../services/user-management/user-management.service';
+import { ActivatedRoute } from '@angular/router';
+import {KongService} from '../../services/kong/kong.service';
+import {LadonService} from '../../services/ladon/ladon.service';
+import {MatDialogRef, MatTableDataSource} from '@angular/material';
+import {Router} from '@angular/router';
+import {FormControl} from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
 import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
+
+export interface Model {
+  id: string;
+  name: string;
+}
+
 
 @Component({
-  selector: 'app-admin',
+  selector: 'app-permissions-add',
   templateUrl: './permissions-add.component.html',
   styleUrls: ['./permissions-add.component.css']
 })
 export class PermissionsAddComponent implements OnInit {
-  users: any
-  roles: any
-  uris: any 
-  submit_failed: any = false
-
-  userIsAdmin: false;
-  resource: string;
-  subject: string;
-
   myControl = new FormControl();
-
+  userIsAdmin: boolean;
+  subject: string;
+  actions: string;
+  id: string;
+  resource: string;
+  submit_failed: any = false;
+  // all roles and uris and users
+  roles: any;
+  uris: any;
+  users: any;
+  policies: any;
+  // options for autocomplete filter
+  filteredOptions: Observable<string[]>;
+  public btnDisable: boolean;
+  array_of_actions: string[];
 
   public form = this.fb.group({
-    subject: '',
+    role: this.route.snapshot.paramMap.get('subject'),
+    user: this.route.snapshot.paramMap.get('subject'),
     actions: this.fb.array([])
   });
 
-  // options for autocomplete filter
-  filteredOptions: Observable<string[]>;
-
-  public btnDisable: boolean;
-
-
-
-  constructor(private kongService: KongService,
-            private ladonService: LadonService,
-            private fb: FormBuilder,
-            private authService: AuthService,
-            private router: Router,
-            private userManagementService: UserManagementService,
-            private formBuilder: FormBuilder) {
-
-  this.userIsAdmin = this.authService.userHasRole("admin");
-
-
-  this.userManagementService.loadUsers().then(users => this.users = users)
-
-  this.userManagementService.loadRoles().then(roles => this.roles = roles)
-
-  this.uris = this.kongService.loadUris()
-
-  this.addAction();
-
-  this.btnDisable = false;
+  constructor(
+      public dialogRef: MatDialogRef<PermissionsAddComponent>,
+      private kongService: KongService,
+      private fb: FormBuilder,
+      private userManagementService: UserManagementService,
+      private route: ActivatedRoute,
+      private ladonService: LadonService,
+      private router: Router,
+      private authService: AuthService) {
+    try {
+      this.userManagementService.loadRoles().then((roles: Model) => {
+        this.roles = roles;
+        this.intbtnDisable();
+      });
+      this.userManagementService.loadUsers().then(users => this.users = users);
+    } catch (e) {
+      console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+      this.btnDisable = true;
+    }
   }
-
-  showAll() {
-    this.router.navigate(["/permissions"])
-  }
+  private methods = new FormGroup({
+    get: new FormControl(),
+    post: new FormControl(),
+    patch: new FormControl(),
+    delete: new FormControl(),
+    put: new FormControl()
+  });
 
   ngOnInit() {
-  }
-
-  addAction() {
-    var control = < FormArray > this.form.controls['actions'];
-    var addrCtrl = this.fb.group({
-      endpoint: ["", Validators.pattern("\w+")],
-      get: [""],
-      post: [""],
-      delete: [""],
-      patch: [""],
-      put: [""]
-    });
-
-    control.push(addrCtrl);
+    try {
+      this.userIsAdmin = this.authService.userHasRole('admin');
+    } catch (e) {
+      console.error('Could not check if user is admin: ' + e);
+      this.userIsAdmin = false;
+    }
+    try {
+      this.uris = this.kongService.loadUris();
+    } catch (e) {
+      console.error('Could not load Uris from kong: ' + e);
+    }
 
     // autocomplete filter
     this.filteredOptions = this.myControl.valueChanges
@@ -121,47 +114,71 @@ export class PermissionsAddComponent implements OnInit {
         );
   }
 
+  yes() {
+    try {
+      this.pushPolicy();
+      this.dialogRef.close('yes');
+    } catch (e) {
+      this.dialogRef.close('error');
+    }
+  }
+  no() {
+    this.dialogRef.close('no');
+  }
 
-  submit() {
-    // Send list of policies to Ladon
-    // Each Triple of Subject, Action and Resource become one policy
-    const form_value = this.form.value;
-      form_value["actions"].forEach(action => {
-      var policy = {
-        "Subjects": [form_value["subject"]],
-        "Actions": [],
-        "Resources": ["<^(endpoints:" + this.resource.substring(1) + ").*>"],
-        "Effect": "allow",
-        "ID": form_value["subject"] + "-" + action["endpoint"]
-      }
+  pushPolicy() {
+    const policy = {
+      'Subjects': [this.subject],
+      'Actions': [],
+      'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+      'Effect': 'allow',
+      'id':  this.subject + '-' + this.resource
+    };
+    if (this.methods.get('get').value === true) {
+      policy['Actions'].push('GET');
+    }
+    if (this.methods.get('post').value === true) {
+      policy['Actions'].push('POST');
+    }
+    if (this.methods.get('patch').value === true) {
+      policy['Actions'].push('PATCH');
+    }
+    if (this.methods.get('delete').value === true) {
+      policy['Actions'].push('DELETE');
+    }
+    if (this.methods.get('put').value === true) {
+      policy['Actions'].push('PUT');
+    }
 
-      if (action["get"]) policy["Actions"].push("GET")
-      if (action["post"]) policy["Actions"].push("POST")
-      if (action["patch"]) policy["Actions"].push("PATCH")
-      if (action["delete"]) policy["Actions"].push("DELETE")
-      if (action["put"]) policy["Actions"].push("PUT")
-
+    this.ladonService.deletePolicy(policy).then(response => {
       this.ladonService.postPolicy(policy).then(res => {
-        console.log(policy)
-        this.submit_failed = res["Error"] != ""
+        console.log(policy);
       }, error => {
-        this.submit_failed = true
-      })
+        throw error;
+      });
     });
   }
-    // autocomplete filter
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
 
-        return this.uris.filter(option => option.toLowerCase().includes(filterValue));
+  // autocomplete filter
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.uris.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  onChange(event) {
+    if (event === 'subject') {
+      this.btnDisable = false;
+    } else {
+      this.btnDisable = true;
     }
+  }
 
-
-    onChange(event) {
-      if (event === 'subject') {
-          this.btnDisable = false;
-      } else {
-          this.btnDisable = true;
-      }
+  intbtnDisable() {
+    const persons =  this.roles.find(x => x.name === this.subject);
+    if (persons === undefined) {
+      this.btnDisable = true;
+    } else {
+      this.btnDisable = false;
     }
+  }
 }

@@ -43,6 +43,7 @@ import {
 import {Sort} from '@angular/material';
 import { PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import { PermissionsEditComponent } from '../permissions-edit/permissions-edit.component';
+import { PermissionsAddComponent } from '../permissions-add/permissions-add.component';
 
 @Component({
   selector: 'list',
@@ -93,7 +94,16 @@ export class PermissionsListComponent implements OnInit {
     }
 
   createPolicy() {
-    this.router.navigate(['/permissions/add']);
+      const dialogRef = this.dialog.open(PermissionsAddComponent,
+          {width: '38.2%'});
+
+      dialogRef.afterClosed().subscribe(result => {
+          if (result === 'yes') {
+              this.loadPolicies();
+          } else if (result === 'error') {
+              window.alert('Could not create policy!');
+          }
+      });
   }
 
   editPolicy(policy) {
