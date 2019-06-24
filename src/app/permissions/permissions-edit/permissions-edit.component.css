@@ -20,34 +20,25 @@ admin {
     width:60%;
 }
 
-mat-select {
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
 .action_checkboxes {
     display: flex;
     justify-content: space-between;
-}
-
-mat-step:nth-child(1) buttton[matstepperprevious] {
-    visibility: hidden;
-}
-
-mat-step:nth-child(3) buttton[matsteppernext] {
-    visibility: hidden;
-}
-
-.rule {
-    margin-bottom:50px;
-}
-
-.mat-raised-button,
-.control_buttons{
-    color: white;
+    margin: auto;
 }
 
 .radio-button {
-    margin-top: 1.5%;
+    margin-top: 0.5%;
     margin-right: 5%;
-    margin-bottom: 1.5%;
+}
+
+.mat-dialog-actions{
+    margin: auto;
+}
+
+.endpoint {
+    margin-top: 0.5%;
+}
+
+.role-user {
+    margin-top: 0.5%;
 }

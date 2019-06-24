@@ -16,23 +16,31 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, Validators} from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserManagementService} from '../../services/user-management/user-management.service';
 import { ActivatedRoute } from '@angular/router';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
-import {MatTableDataSource} from '@angular/material';
+import {MatDialogRef, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 import {FormControl} from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import {MAT_DIALOG_DATA} from '@angular/material';
 
 
 export interface Model {
     id: string;
     name: string;
+}
+
+export interface DialogData {
+    id: string;
+    actions: string;
+    subject: string;
+    resource: string;
 }
 
 @Component({
@@ -41,173 +49,148 @@ export interface Model {
   styleUrls: ['./permissions-edit.component.css']
 })
 export class PermissionsEditComponent implements OnInit {
-
-  myControl = new FormControl();
-
-  userIsAdmin: false;
-
-
-  subject: string;
-  actions: string;
-  id: string;
-  resource: string;
-
-  submit_failed: any = false;
-
-  // all actions
-  get = false;
-  post = false;
-  patch = false;
-  delete = false;
-  put = false;
-
-  // all roles and uris and users
-  roles: any;
-  uris: any;
-  users: any;
-  policies: any;
-
-  // options for autocomplete filter
-  filteredOptions: Observable<string[]>;
-
-  public btnDisable: boolean;
-
-
-  array_of_actions: string[];
+    myControl = new FormControl();
+    userIsAdmin: boolean;
+    subject: string;
+    actions: string;
+    id: string;
+    resource: string;
+    submit_failed: any = false;
+    // all roles and uris and users
+    roles: any;
+    uris: any;
+    users: any;
+    policies: any;
+    // options for autocomplete filter
+    filteredOptions: Observable<string[]>;
+    public btnDisable: boolean;
+    array_of_actions: string[];
 
     public form = this.fb.group({
-        role: this.route.snapshot.paramMap.get('subject'),
-        user: this.route.snapshot.paramMap.get('subject'),
-        actions: this.fb.array([])
+      role: this.route.snapshot.paramMap.get('subject'),
+      user: this.route.snapshot.paramMap.get('subject'),
+      actions: this.fb.array([])
     });
 
-  constructor(
-      private kongService: KongService,
-      private fb: FormBuilder,
-      private userManagementService: UserManagementService,
-      private route: ActivatedRoute,
-      private ladonService: LadonService,
-      private router: Router,
-      private authService: AuthService){
-
-      this.userManagementService.loadRoles().then((roles: Model) => {
-          this.roles = roles;
-          this.intbtnDisable();
-      });
-      this.userManagementService.loadUsers().then(users => this.users = users);
-
-      
-  }
-
-  ngOnInit() {
-      this.userIsAdmin = this.authService.userHasRole("admin");
-
-      this.uris = this.kongService.loadUris();
-
-      this.subject = this.route.snapshot.paramMap.get('subject'); // Subject
-      this.actions = this.route.snapshot.paramMap.get('actions'); // Actions
-      this.id = this.route.snapshot.paramMap.get('id'); // id
-      this.resource = this.route.snapshot.paramMap.get(('resource')); // Resource
-
-      this.addAction();
-      this.checkactiveActions();
-
-      // autocomplete filter
-      this.filteredOptions = this.myControl.valueChanges
-          .pipe(
-              startWith(''),
-              map(value => this._filter(value))
-          );
-  }
-
-
-    addAction() {
-        var control = < FormArray > this.form.controls['actions'];
-        var addrCtrl = this.fb.group({
-            endpoint: ["", Validators.pattern("\w+")],
-            get: [""],
-            post: [""],
-            delete: [""],
-            patch: [""],
-            put: [""]
-        });
-        control.push(addrCtrl);
-    }
-
-    checkactiveActions(){
-
-        this.array_of_actions = this.actions.split(",");
-
-        for (let i = 0; i < this.array_of_actions.length; i++) {
-            if (this.array_of_actions[i] === 'GET') {
-                this.get = true;
-            } else if (this.array_of_actions[i] === 'POST') {
-                this.post = true;
-            } else if (this.array_of_actions[i] === 'PATCH') {
-                this.patch = true;
-            } else if (this.array_of_actions[i] === 'DELETE') {
-                this.delete = true;
-            } else if (this.array_of_actions[i] === 'PUT') {
-               this.put = true;
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: DialogData,
+        public dialogRef: MatDialogRef<PermissionsEditComponent>,
+        private kongService: KongService,
+        private fb: FormBuilder,
+        private userManagementService: UserManagementService,
+        private route: ActivatedRoute,
+        private ladonService: LadonService,
+        private router: Router,
+        private authService: AuthService) {
+            try {
+                this.userManagementService.loadRoles().then((roles: Model) => {
+                    this.roles = roles;
+                    this.intbtnDisable();
+                });
+                this.userManagementService.loadUsers().then(users => this.users = users);
+            } catch (e) {
+                console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+                this.btnDisable = true;
             }
         }
+        private methods = new FormGroup({
+            get: new FormControl(),
+            post: new FormControl(),
+            patch: new FormControl(),
+            delete: new FormControl(),
+            put: new FormControl()
+        });
+
+    ngOnInit() {
+        console.log(this.data);
+        try {
+            this.userIsAdmin = this.authService.userHasRole('admin');
+        } catch (e) {
+            console.error('Could not check if user is admin: ' + e);
+            this.userIsAdmin = false;
+        }
+        try {
+            this.uris = this.kongService.loadUris();
+        } catch (e) {
+            console.error('Could not load Uris from kong: ' + e);
+        }
+        this.subject = this.data.subject;
+        this.actions = this.data.actions;
+        this.id = this.data.id;
+        this.resource = this.data.resource;
+
+        this.checkactiveActions();
+
+        // autocomplete filter
+        this.filteredOptions = this.myControl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => this._filter(value))
+            );
     }
 
-    submit() {
+    checkactiveActions() {
+        this.array_of_actions = this.actions.split(',');
+        console.log(this.array_of_actions);
+        this.methods.patchValue({
+            get: this.array_of_actions.includes('GET'),
+            post: this.array_of_actions.includes('POST'),
+            patch: this.array_of_actions.includes('PATCH'),
+            delete: this.array_of_actions.includes('DELETE'),
+            put: this.array_of_actions.includes('PUT')
+        });
+        console.log('Status:\n'
+            + 'get: ' + this.methods.get('get').value + '\n'
+            + 'post: ' + this.methods.get('post').value + '\n'
+            + 'patch: ' + this.methods.get('patch').value + '\n'
+            + 'delete: ' + this.methods.get('delete').value + '\n'
+            + 'put: ' + this.methods.get('put').value);
+    }
+    yes() {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
-        const form_value = this.form.value;
+        try {
+            this.pushPolicy();
+            this.dialogRef.close('yes');
+        } catch (e) {
+            this.dialogRef.close('error');
+        }
+    }
+    no() {
+        this.dialogRef.close('no');
+    }
 
-        form_value["actions"].forEach(action => {
-            const policy = {
-                "Subjects": [this.subject],
-                "Actions": [],
-                "Resources": ["<^(endpoints:" + this.resource.substring(1) + ").*>"],
-                "Effect": "allow",
-                "id": this.id
-            };
+    pushPolicy() {
+        const policy = {
+            'Subjects': [this.subject],
+            'Actions': [],
+            'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+            'Effect': 'allow',
+            'id': this.id
+        };
+        if (this.methods.get('get').value === true) {
+            policy['Actions'].push('GET');
+        }
+        if (this.methods.get('post').value === true) {
+            policy['Actions'].push('POST');
+        }
+        if (this.methods.get('patch').value === true) {
+            policy['Actions'].push('PATCH');
+        }
+        if (this.methods.get('delete').value === true) {
+            policy['Actions'].push('DELETE');
+        }
+        if (this.methods.get('put').value === true) {
+            policy['Actions'].push('PUT');
+        }
 
-            if (this.get) policy["Actions"].push("GET")
-            if (this.post) policy["Actions"].push("POST")
-            if (this.patch) policy["Actions"].push("PATCH")
-            if (this.delete) policy["Actions"].push("DELETE")
-            if (this.put) policy["Actions"].push("PUT")
-
-            this.ladonService.deletePolicy(policy).then(response => {
-
-                this.ladonService.postPolicy(policy).then(res => {
-                    console.log(policy)
-                    this.submit_failed = res["Error"] != ""
-                }, error => {
-                    this.submit_failed = true
-                })
-                this.loadPolicies();
-            })
-
+        this.ladonService.deletePolicy(policy).then(response => {
+            this.ladonService.postPolicy(policy).then(res => {
+                console.log(policy);
+            }, error => {
+                throw error;
+            });
         });
-    }
-
-
-
-    loadPolicies() {
-        this.ladonService.getAllPolicies().then(response => {
-            this.policies = (<any>response).map(policy => {
-                policy["subject"] = policy["subjects"][0]
-                if (policy["resources"][0] == "<.*>") {
-                    policy["resource"] = policy["resources"][0]
-                } else {
-                    policy["resource"] = policy["resources"][0].split("(")[1].split(")")[0].replace(/:/g, "/").replace("endpoints", "")
-                }
-                policy["actions"] = policy["actions"].toString()
-                return policy
-            })
-
-            this.policies = new MatTableDataSource(this.policies)
-        })
-    }
-
-    showAll() {
-        this.router.navigate(["/permissions"])
     }
 
     // autocomplete filter
