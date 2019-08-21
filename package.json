@@ -38,7 +38,6 @@
     "remove-markdown": "^0.3.0",
     "request-promise": "^4.2.4",
     "rxjs": "^6.5.2",
-    "rxjs-compat": "^6.5.2",
     "swagger-ui": "^3.23.5",
     "swagger-ui-dist": "^3.23.5",
     "typescript": "^3.2.4",
