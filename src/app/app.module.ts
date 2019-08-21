@@ -26,7 +26,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { HttpModule, Http } from '@angular/http';
 
 import { SettingsModule } from './settings/settings.module';
 import { PlatformDocModule } from './platform-doc/platform-doc.module';
