@@ -30,17 +30,15 @@ import {
 import {
   Router
 } from '@angular/router';
-import {
-    MatDialog,
-    MatTableDataSource
-} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   LadonService
 } from '../../services/ladon/ladon.service';
 import {
   AuthService
 } from '../../services/auth/auth.service';
-import {Sort} from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import { PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import { PermissionsEditComponent } from '../permissions-edit/permissions-edit.component';
 import { PermissionsAddComponent } from '../permissions-add/permissions-add.component';

@@ -22,7 +22,7 @@ import { ResponsiveService } from './core/services/responsive.service';
 import { ApiService } from './services/api/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Dialog } from './dev-role-dialog/dialog.component';
-import { MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({

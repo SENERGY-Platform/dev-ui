@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { DeviceSimService } from '../../services/devicesim/device-sim.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
 

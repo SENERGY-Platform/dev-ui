@@ -18,7 +18,7 @@
  *
  */
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, ChangeDetectorRef, Inject } from '@angular/core';
 
 @Component({

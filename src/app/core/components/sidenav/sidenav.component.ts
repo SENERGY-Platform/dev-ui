@@ -17,11 +17,11 @@
  */
 
 import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
 import { AuthService} from '../../../services/auth/auth.service';
 import {Router, ActivatedRoute, NavigationEnd, ActivatedRouteSnapshot, RoutesRecognized, GuardsCheckEnd} from '@angular/router';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import {filter, map, mergeMap, take} from 'rxjs/operators';
 
 import {SidenavService} from './shared/sidenav.service';
@@ -29,7 +29,6 @@ import {SidenavSectionModel} from './shared/sidenav-section.model';
 import {ResponsiveService} from '../../services/responsive.service';
 import {forkJoin} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {projection} from '@angular/core/src/render3/instructions';
 import {not} from 'rxjs/internal-compatibility';
 
 

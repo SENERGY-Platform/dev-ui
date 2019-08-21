@@ -25,7 +25,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {SidenavService} from '../sidenav/shared/sidenav.service';
 import {ActivatedRoute, NavigationEnd, Router, RoutesRecognized} from '@angular/router';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
-import {MatSidenav} from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 // import markdownfiles
 import * as analytics from '!raw-loader!../../../../assets/docs/de/analytics.md';

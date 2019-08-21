@@ -22,13 +22,14 @@ import {UserManagementService} from '../../services/user-management/user-managem
 import { ActivatedRoute } from '@angular/router';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
-import {MatDialogRef, MatTableDataSource} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import {Router} from '@angular/router';
 import {FormControl} from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 export interface Model {
