@@ -127,6 +127,9 @@ export class PermissionsAddComponent implements OnInit {
   }
 
   pushPolicy() {
+    if (!this.resource.startsWith('/')) {
+      this.resource = '/' + this.resource;
+    }
     const policy = {
       'Subjects': [this.subject],
       'Actions': [],
