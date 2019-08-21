@@ -42,7 +42,7 @@ import {not} from 'rxjs/internal-compatibility';
 
 export class SidenavComponent implements OnInit, AfterViewInit{
 
-    @ViewChild('sidenav') sidenav!: MatSidenav;
+    @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
     @Output() mode = '';
     @Output() openSection: null | string = null;
     @Output() sections: SidenavSectionModel[] = [];

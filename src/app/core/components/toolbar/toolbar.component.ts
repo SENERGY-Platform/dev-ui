@@ -41,7 +41,7 @@ import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 })
 export class ToolbarComponent implements OnInit, AfterViewInit{
 
-    @ViewChild('sidenav') sidenav!: MatSidenav;
+    @ViewChild('sidenav', { static: false }) sidenav!: MatSidenav;
     @Output() sections: SidenavSectionModel[] = [];
     @Output() openSection: null | string = null;
     @Output() zIndex = -1;
