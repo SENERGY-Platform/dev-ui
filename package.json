@@ -37,8 +37,8 @@
     "remove-markdown": "^0.3.0",
     "request-promise": "^4.2.4",
     "rxjs": "^6.5.2",
-    "swagger-ui": "^3.23.5",
-    "swagger-ui-dist": "^3.23.5",
+    "swagger-ui": "^3.23.11",
+    "swagger-ui-dist": "^3.23.11",
     "typescript": "^3.5.3",
     "zone.js": "~0.9.1"
   },
