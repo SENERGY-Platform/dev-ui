@@ -91,7 +91,8 @@ export class PermissionsAddComponent implements OnInit {
     post: new FormControl(),
     patch: new FormControl(),
     delete: new FormControl(),
-    put: new FormControl()
+    put: new FormControl(),
+    head: new FormControl()
   });
 
   ngOnInit() {
@@ -152,6 +153,9 @@ export class PermissionsAddComponent implements OnInit {
     }
     if (this.methods.get('put').value === true) {
       policy['Actions'].push('PUT');
+    }
+    if (this.methods.get('head').value === true) {
+      policy['Actions'].push('HEAD');
     }
 
     this.ladonService.deletePolicy(policy).then(response => {

@@ -99,7 +99,8 @@ export class PermissionsEditComponent implements OnInit {
             post: new FormControl(),
             patch: new FormControl(),
             delete: new FormControl(),
-            put: new FormControl()
+            put: new FormControl(),
+            head: new FormControl()
         });
 
     ngOnInit() {
@@ -138,14 +139,16 @@ export class PermissionsEditComponent implements OnInit {
             post: this.array_of_actions.includes('POST'),
             patch: this.array_of_actions.includes('PATCH'),
             delete: this.array_of_actions.includes('DELETE'),
-            put: this.array_of_actions.includes('PUT')
+            put: this.array_of_actions.includes('PUT'),
+            head: this.array_of_actions.includes('HEAD')
         });
         console.log('Status:\n'
             + 'get: ' + this.methods.get('get').value + '\n'
             + 'post: ' + this.methods.get('post').value + '\n'
             + 'patch: ' + this.methods.get('patch').value + '\n'
             + 'delete: ' + this.methods.get('delete').value + '\n'
-            + 'put: ' + this.methods.get('put').value);
+            + 'put: ' + this.methods.get('put').value + '\n'
+            + 'head: '+ this.methods.get('headh').value);
     }
     yes() {
         // Send list of policies to Ladon
@@ -186,6 +189,9 @@ export class PermissionsEditComponent implements OnInit {
         }
         if (this.methods.get('put').value === true) {
             policy['Actions'].push('PUT');
+        }
+        if (this.methods.get('head').value === true) {
+            policy['Actions'].push('HEAD');
         }
 
         this.ladonService.deletePolicy(policy).then(response => {
