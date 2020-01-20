@@ -223,10 +223,9 @@ export class ToolbarComponent implements OnInit, AfterViewInit{
             let header3;
 
             for (let index = 0; index < markdowns.length; index++) {
-
-                header1 =  markdowns[index].match(regex1);
-                header2 =  markdowns[index].match(regex2);
-                header3 =  markdowns[index].match(regex3);
+                header1 =  markdowns[index]['default'].match(regex1);
+                header2 =  markdowns[index]['default'].match(regex2);
+                header3 =  markdowns[index]['default'].match(regex3);
 
                 header1.forEach(function (value) {
                     value = value.toString().replace(/#/g,'').replace(/^ /g,'');
