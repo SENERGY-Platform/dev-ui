@@ -16,3 +16,10 @@
  *
  */
 
+.customButton {
+    padding-top: 1em;
+}
+
+.right {
+    float: right;
+}

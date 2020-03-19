@@ -29,6 +29,7 @@ import {
 } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { TranslateModule } from '@ngx-translate/core';
+import {ClientService} from "./shared/client.service";
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -74,6 +75,9 @@ const routes: Routes = [
     ViewClientComponent,
     RoutingComponent,
     ViewClientsComponent
-  ]
+  ],
+  entryComponents: [
+      AddClientComponent
+  ],
 })
 export class ClientsModule { }
