@@ -57,4 +57,8 @@ export class ViewClientsComponent implements OnInit {
       }
     })
   }
+
+  viewClient(id: any) {
+    this.clientService.openViewClientDialog(id);
+  }
 }

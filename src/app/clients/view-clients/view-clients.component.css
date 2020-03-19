@@ -50,14 +50,14 @@
 }
 
 .client_header {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 mat-card {
     padding: 0;
 }
 .infos {
-    padding: 25px;
+    padding: 5px;
 }
 
 .buttons {

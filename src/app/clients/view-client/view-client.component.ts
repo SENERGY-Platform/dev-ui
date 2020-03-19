@@ -16,14 +16,15 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
 import {
   FormBuilder,
   Validators,
-  FormArray
+  FormArray, FormControl, Form
 } from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-view-client',
@@ -32,34 +33,41 @@ import {
 })
 export class ViewClientComponent implements OnInit {
   id: any;
-  client: any;
+  client: any = {'name': '', 'webOrigins': [], 'redirectUris':[]};
   form: any = this.fb.group({
-    name: [],
+    name: [Validators.required],
     redirectUris: this.fb.array([]),
     webOrigins: this.fb.array([]),
   });
 
-  constructor(private fb: FormBuilder,private apiService: ApiService,private route: ActivatedRoute) {}
+  constructor(private fb: FormBuilder, private apiService: ApiService,
+              private dialogRef: MatDialogRef<ViewClientComponent>, @Inject(MAT_DIALOG_DATA) data) {
+    this.id = data.id;
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-       this.id = params['id']; 
-       this.loadClientInformations();
-    });
+    this.loadClientInformations();
   }
 
   addWebOrigins(){
-    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
+    (this.form.get("webOrigins") as FormArray).push(new FormControl(undefined, Validators.required))
   }
 
 
   addRedirectUri() {
-    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
+    (this.form.get("redirectUris") as FormArray).push(new FormControl(undefined, Validators.required))
   }
 
   loadClientInformations() {
     this.apiService.get("/clients/client/" + this.id).then(response => {
       this.client = response;
+      (this.form.get("name") as FormControl).setValue(this.client.name);
+      for (let redirectUri of this.client.redirectUris) {
+        (this.form.get("redirectUris") as FormArray).push(new FormControl(redirectUri, Validators.required));
+      }
+      for (let webOrigin of this.client.webOrigins) {
+        (this.form.get("webOrigins") as FormArray).push(new FormControl(webOrigin, Validators.required))
+      }
     })
   }
 
@@ -67,8 +75,12 @@ export class ViewClientComponent implements OnInit {
     console.log(this.form.value);
     if(this.form.valid) {
       this.apiService.patch("/clients/client/" + this.id, this.form.value).then(response => {
+        this.dialogRef.close(true);
       })
     }
   }
 
+  close() {
+    this.dialogRef.close(false);
+  }
 }
