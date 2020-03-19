@@ -24,6 +24,7 @@ import {
 import { environment } from '../../../environments/environment';
 import {KeycloakService} from "keycloak-angular";
 
+declare var KEYCLOAK_URL: any;
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     if (!environment.loginRequired) {
       return true
     }
-    return this.keycloakService.isUserInRole(role); //AuthService.auth.authz.hasRealmRole(role);
+    return this.keycloakService.isUserInRole(role);
   }
 
   getUserProfile() {
@@ -65,7 +66,7 @@ export class AuthService {
           "Authorization": "Bearer " + token
         });
     
-        this.httpClient.get(environment.keycloakUrl + path, {'headers': headers}).subscribe(result => resolve(result))
+        this.httpClient.get(KEYCLOAK_URL + "/auth" + path, {'headers': headers}).subscribe(result => resolve(result))
       })
     })
   }
