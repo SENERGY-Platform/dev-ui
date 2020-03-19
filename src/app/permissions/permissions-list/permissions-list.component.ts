@@ -51,7 +51,7 @@ import { PermissionsAddComponent } from '../permissions-add/permissions-add.comp
 export class PermissionsListComponent implements OnInit {
   displayedColumns = ['subject', 'actions', 'resource', 'delete', 'edit'];
   policies: any;
-  userIsAdmin: false;
+  userIsAdmin = false;
 
   sortedData: any[];
   mat_policies: any;

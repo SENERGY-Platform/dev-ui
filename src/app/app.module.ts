@@ -17,9 +17,8 @@
  */
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -49,6 +48,8 @@ import { Dialog } from './dev-role-dialog/dialog.component';
 import { StartComponent } from './start/start.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {PermissionsDialogDeleteComponent} from './permissions/permissions-dialog-delete/permissions-dialog-delete.component';
+import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
+import {init} from "./services/auth/auth-init";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -91,10 +92,16 @@ const appRoutes: Routes = [
           deps: [HttpClient]
       }
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    KeycloakAngularModule
   ],
   entryComponents: [Dialog, PermissionsDialogDeleteComponent],
-  providers: [ApiService, AuthService, ValidTokenGuard, SwaggerService, LadonService, UserManagementService, DeviceSimService],
+  providers: [ApiService, AuthService, ValidTokenGuard, SwaggerService, LadonService, UserManagementService, DeviceSimService, {
+    provide: APP_INITIALIZER,
+    useFactory: init,
+    multi: true,
+    deps: [KeycloakService]
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

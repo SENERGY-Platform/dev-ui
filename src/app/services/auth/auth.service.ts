@@ -22,91 +22,39 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import {KeycloakService} from "keycloak-angular";
 
-declare var Keycloak: any;
-declare var KEYCLOAK_URL: any;
-declare var CLIENT_ID: any;
 
 @Injectable()
 export class AuthService {
-  static auth: any = {};
-
-  constructor(private httpClient: HttpClient) {}
-
-  static init(): Promise<any> {
-    if (!environment.loginRequired) {
-      AuthService.auth.loggedIn = true;
-      return new Promise(resolve => {
-        resolve()
-      })
-    }
-
-    let keycloakConfig = {
-      realm: 'master',
-      redirectUri: window.location.href
-    };
-
-    if (!environment.production) {
-      keycloakConfig["url"] = environment["keycloak"];
-      keycloakConfig["clientId"] =  environment["client"]
-    } else {
-      keycloakConfig["url"] = KEYCLOAK_URL + "/auth";
-      keycloakConfig["clientId"] =  CLIENT_ID
-    }
-
-    let keycloakAuth: any = new Keycloak(keycloakConfig);
-    AuthService.auth.loggedIn = false;
-
-      return new Promise((resolve, reject) => {
-        keycloakAuth.init({ onLoad: 'login-required' })
-          .success(() => {
-            AuthService.auth.loggedIn = true;
-            AuthService.auth.authz = keycloakAuth;
-            AuthService.auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/master/protocol/openid-connect/logout?redirect_uri=" + window.location.href;
-            keycloakAuth.loadUserProfile().success(userInfo => sessionStorage.setItem('id_token', JSON.stringify(userInfo)));
-            resolve();
-          })
-          .error(() => {
-            reject();
-          });
-      });
-    }
+  constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {}
 
   userHasRole(role) {
     if (!environment.loginRequired) {
       return true
     }
-    return AuthService.auth.authz.hasRealmRole(role);
+    return this.keycloakService.isUserInRole(role); //AuthService.auth.authz.hasRealmRole(role);
   }
 
   getUserProfile() {
-    var id_token = sessionStorage.getItem("id_token");
+    const id_token = sessionStorage.getItem("id_token");
     return JSON.parse(id_token)
   }
 
   logout() {
-    console.log('*** LOGOUT');
-    AuthService.auth.loggedIn = false;
-    AuthService.auth.authz = null;
-
-    window.location.href = AuthService.auth.logoutUrl;
+    this.keycloakService.logout();
   }
 
   userIsAuthenticated() {
-    return AuthService.auth.loggedIn
+    if (!environment.loginRequired) {
+      return true;
+    }
+    return this.keycloakService.isLoggedIn();
   }
 
   getToken(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (AuthService.auth.authz.token) {
-        AuthService.auth.authz.updateToken(5)
-          .success(() => {
-            resolve(<string>AuthService.auth.authz.token);
-          })
-          .error(() => {
-            reject('Failed to refresh token');
-          });
-      }
+    return this.keycloakService.getToken().then((resp) => {
+      return 'bearer ' + resp;
     });
   }
 
@@ -117,7 +65,7 @@ export class AuthService {
           "Authorization": "Bearer " + token
         });
     
-        this.httpClient.get(KEYCLOAK_URL + "/auth" + path, {'headers': headers}).subscribe(result => resolve(result))
+        this.httpClient.get(environment.keycloakUrl + path, {'headers': headers}).subscribe(result => resolve(result))
       })
     })
   }
