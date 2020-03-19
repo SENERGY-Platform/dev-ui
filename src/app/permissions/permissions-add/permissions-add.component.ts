@@ -48,7 +48,6 @@ export class PermissionsAddComponent implements OnInit {
   subject: string;
   actions: string;
   id: string;
-  resource: string;
   submit_failed: any = false;
   // all roles and uris and users
   roles: any;
@@ -129,15 +128,16 @@ export class PermissionsAddComponent implements OnInit {
   }
 
   pushPolicy() {
-    if (!this.resource.startsWith('/')) {
-      this.resource = '/' + this.resource;
+    let resource = this.myControl.value;
+    if (!resource.startsWith('/')) {
+      resource = '/' + resource;
     }
     const policy = {
       'Subjects': [this.subject],
       'Actions': [],
-      'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+      'Resources': ['<^(endpoints:' + resource.substring(1) + ').*>'],
       'Effect': 'allow',
-      'id':  this.subject + '-' + this.resource
+      'id':  this.subject + '-' + resource
     };
     if (this.methods.get('get').value === true) {
       policy['Actions'].push('GET');
