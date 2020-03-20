@@ -21,13 +21,11 @@ import {
   FormBuilder,
   Validators,
   FormArray,
-  FormControl, FormGroup
+  FormControl
 } from '@angular/forms';
 import { ApiService } from '../../services/api/api.service';
-import {
-  Router
-} from '@angular/router';
 import {MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-add-client',
@@ -42,7 +40,7 @@ export class AddClientComponent implements OnInit {
   });
 
   constructor(private dialogRef: MatDialogRef<AddClientComponent>,
-              private fb: FormBuilder, private apiService: ApiService) {
+              private fb: FormBuilder, private apiService: ApiService, private snackBar: MatSnackBar) {
     this.addRedirectUri();
     this.addWebOrigins()
   }
@@ -60,9 +58,14 @@ export class AddClientComponent implements OnInit {
 
   submit() {
     if(this.form.valid) {
-      this.apiService.post("/clients/clients",this.form.value).then(result => {
+      this.apiService.post("/clients/clients",this.form.value).then(() => {
         this.dialogRef.close(true);
-      })
+        this.snackBar.open("Added client", undefined, {
+          duration: 1 * 1000,
+        })
+      }).catch(() => this.snackBar.open("Could not add client", undefined, {
+        duration: 3 * 1000,
+      }))
     }
   }
 

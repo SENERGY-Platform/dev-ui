@@ -17,14 +17,14 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
 import {
   FormBuilder,
   Validators,
-  FormArray, FormControl, Form
+  FormArray, FormControl
 } from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-view-client',
@@ -41,7 +41,7 @@ export class ViewClientComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder, private apiService: ApiService,
-              private dialogRef: MatDialogRef<ViewClientComponent>, @Inject(MAT_DIALOG_DATA) data) {
+              private dialogRef: MatDialogRef<ViewClientComponent>, @Inject(MAT_DIALOG_DATA) data, private snackBar: MatSnackBar) {
     this.id = data.id;
   }
 
@@ -72,15 +72,45 @@ export class ViewClientComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.form.value);
     if(this.form.valid) {
-      this.apiService.patch("/clients/client/" + this.id, this.form.value).then(response => {
+      this.apiService.patch("/clients/client/" + this.id, this.form.value).then(() => {
         this.dialogRef.close(true);
-      })
+        this.snackBar.open("Updated client", undefined, {
+          duration: 1 * 1000,
+        })
+      }).catch(() => this.snackBar.open("Could not update client!", undefined, {duration: 3 * 1000}))
     }
   }
 
   close() {
     this.dialogRef.close(false);
+  }
+
+  redirectUrisLenght(): number {
+    return this.getRedirectUrisArray().length;
+  }
+
+  webOriginsLenght(): number {
+    return this.getWebOriginsArray().length
+  }
+
+  getRedirectUrisArray(): FormArray {
+    return (this.form.get("redirectUris") as FormArray)
+  }
+
+  getWebOriginsArray(): FormArray {
+    return (this.form.get("webOrigins") as FormArray)
+  }
+
+  removeWebOrigin(i: number) {
+    if (this.webOriginsLenght() > 1) {
+      this.getWebOriginsArray().controls.splice(i, 1);
+    }
+  }
+
+  removeRedirectUri(i: number) {
+    if (this.redirectUrisLenght() > 1) {
+      this.getRedirectUrisArray().controls.splice(i, 1);
+    }
   }
 }

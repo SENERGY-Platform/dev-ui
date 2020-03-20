@@ -45,32 +45,32 @@ export class ApiService {
   }
 
   get(path) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject)=> {
       this.authService.getToken().then(token => {
         var headers = new HttpHeaders({
           "Authorization": "Bearer " + token
          
         });
   
-        this.httpClient.get(this.platformUrl + path, {'headers': headers}).subscribe(result => resolve(result))
+        this.httpClient.get(this.platformUrl + path, {'headers': headers}).subscribe(result => resolve(result), error => reject(error))
       })
     })
   }
 
   post(path, payload) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.authService.getToken().then(token => {
         var headers = new HttpHeaders({
           "Authorization": "Bearer " + token
          
         });
-        this.httpClient.post(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result));
+        this.httpClient.post(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result), error => reject(error));
       })
     })
   }
 
   put(path, payload) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.authService.getToken().then(token => {
         var headers = new HttpHeaders({
           "Authorization": "Bearer " + token
@@ -78,32 +78,32 @@ export class ApiService {
         });
         this.httpClient.put(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => {
             resolve(result);
-        });
+        }, error => reject(error));
 
-      }) 
+      })
     })
   }
 
   delete(path) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject)=> {
       this.authService.getToken().then(token => {
         var headers = new HttpHeaders({
           "Authorization": "Bearer " + token
          
         });
-        this.httpClient.delete(this.platformUrl  + path, {'headers': headers}).subscribe(result => resolve(result));
+        this.httpClient.delete(this.platformUrl  + path, {'headers': headers}).subscribe(result => resolve(result), error => reject(error));
       })
     })
   }
 
   patch(path, payload) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.authService.getToken().then(token => {
         var headers = new HttpHeaders({
           "Authorization": "Bearer " + token
          
         });
-        this.httpClient.patch(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result))
+        this.httpClient.patch(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result), error => reject(error))
       })
     })
   }

@@ -22,10 +22,10 @@
       <div class="client_header">
           <h2>{{client.name}}</h2>
           <span *ngIf="client.enabled" class="status">
-            <div class="status_circle enabled"></div><p>{{'ACTIVE' | translate}}</p>
+            <span class="status_circle enabled"></span><p>{{'ACTIVE' | translate}}</p>
           </span>
           <span *ngIf="!client.enabled" class="status">
-            <div class="status_circle disabled"></div><p>{{'NOTACTIVE' | translate}}</p>
+            <span class="status_circle disabled"></span><p>{{'NOTACTIVE' | translate}}</p>
           </span>
       </div>
       <div class="">
@@ -35,7 +35,7 @@
     </div>
 
     <div class="buttons">
-      <span  class="edit" matTooltip="Not implemented yet"> <!---click)="viewClient(client.id)" -->
+      <span  class="edit" (click)="viewClient(client.id)">
         <i class="material-icons">edit</i>
         <p>{{'EDIT' | translate}}</p>
       </span>

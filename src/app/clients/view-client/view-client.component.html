@@ -17,52 +17,70 @@
   -->
 <h2 mat-dialog-title>Edit Client {{client.name}}</h2>
 <mat-dialog-content>
-  <div class="infos">
-    <div class="client_header">
+    <div class="infos">
+        <div class="client_header">
       <span *ngIf="client.enabled" class="status">
-        <div class="status_circle enabled"></div>
+        <span class="status_circle enabled"></span>
         <p>{{'ACTIVE' | translate}}</p>
       </span>
-      <span *ngIf="!client.enabled" class="status">
-        <div class="status_circle disabled"></div>
+            <span *ngIf="!client.enabled" class="status">
+        <span class="status_circle disabled"></span>
         <p>{{'NOTACTIVE' | translate}}</p>
       </span>
+        </div>
+        <div class="">
+            <h3>Client ID:</h3>
+            <p>{{client.id}}</p>
+            <h3>Client Secret:</h3>
+            <p>{{client.secret}}</p>
+        </div>
     </div>
-    <div class="">
-      <h3>Client ID:</h3>
-      <p>{{client.id}}</p>
-      <h3>Client Secret:</h3>
-      <p>{{client.secret}}</p>
-    </div>
-  </div>
-  <form [formGroup]="form">
-    <mat-form-field class="example-full-width">
-      <input matInput formControlName="name" placeholder="Client Name">
-    </mat-form-field>
-
-    <div formArrayName="redirectUris">
-      <div *ngFor="let redirectUri of form['controls'].redirectUris.controls; index as i">
+    <form [formGroup]="form">
         <mat-form-field class="example-full-width">
-          <input matInput [formControlName]="i" placeholder="Redirect URI">
+            <input matInput required formControlName="name" placeholder="Client Name">
         </mat-form-field>
-      </div>
-    </div>
-    <button (click)="addRedirectUri()" color="primary" type="submit" mat-raised-button>Add Redirect URI</button>
 
-    <div formArrayName="webOrigins">
-      <div *ngFor="let webOrigin of form['controls'].webOrigins.controls; index as i">
-        <mat-form-field class="example-full-width">
-          <input matInput [formControlName]="i" placeholder="CORS Origin">
-        </mat-form-field>
-      </div>
-    </div>
-    <button (click)="addWebOrigins()" color="primary" type="submit" mat-raised-button>Add Access-Control-Allow-Origin</button>
-
-  </form>
+        <table formArrayName="redirectUris">
+            <tr *ngFor="let redirectUri of form['controls'].redirectUris.controls; index as i">
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <input matInput required [formControlName]="i" placeholder="Redirect URI">
+                    </mat-form-field>
+                </td>
+                <td class="customButton" *ngIf="redirectUrisLenght() > 1">
+                    <span>
+                        <button mat-icon-button color="accent" (click)="removeRedirectUri(i)" class="right">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <button (click)="addRedirectUri()" color="primary" type="submit" mat-stroked-button>Add Redirect URI</button>
+        <div class="spacer-vertical"></div>
+        <table formArrayName="webOrigins">
+            <tr *ngFor="let webOrigin of form['controls'].webOrigins.controls; index as i">
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <input matInput required [formControlName]="i" placeholder="CORS Origin">
+                    </mat-form-field>
+                </td>
+                <td class="customButton" *ngIf="webOriginsLenght() > 1">
+                    <button mat-icon-button color="accent" (click)="removeWebOrigin(i)" class="right">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <button (click)="addWebOrigins()" color="primary" type="submit" mat-stroked-button>
+            Add Access-Control-Allow-Origin
+        </button>
+    </form>
 </mat-dialog-content>
-
-<mat-dialog-actions fxLayoutAlign="end center">
-  <button class="mat-raised-button color-accent" (click)="close()">Cancel</button>
-  <button class="mat-raised-button mat-accent" [disabled]="form.invalid"
-          (click)="submit()">{{'UPDATE' | translate}}</button>
+<div class="spacer-vertical"></div>
+<mat-dialog-actions class="right">
+    <button class="mat-raised-button color-accent" (click)="close()">Cancel</button>
+    <div class="spacer"></div>
+    <button class="mat-raised-button mat-accent" [disabled]="form.invalid"
+            (click)="submit()">{{'UPDATE' | translate}}</button>
 </mat-dialog-actions>

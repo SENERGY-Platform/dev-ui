@@ -19,9 +19,10 @@
 
 <mat-dialog-content>
     <form [formGroup]="form">
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <input matInput required formControlName="name" placeholder="Client Name">
         </mat-form-field>
+        <div class="spacer-vertical"></div>
 
         <table formArrayName="redirectUris">
             <tr *ngFor="let redirectUri of getRedirectUrisArray().controls; index as i">
@@ -30,21 +31,19 @@
                         <input matInput required [formControlName]="i" placeholder="Redirect URI">
                     </mat-form-field>
                 </td>
-                <td class="customButton">
+                <td class="customButton" *ngIf="redirectUrisLenght() > 1">
                     <span>
                         <button mat-icon-button color="accent" (click)="removeRedirectUri(i)" class="right">
-                            <mat-icon>remove</mat-icon>
+                            <mat-icon>delete</mat-icon>
                         </button>
                     </span>
                 </td>
-                <td *ngIf="i === redirectUrisLenght()-1" class="customButton">
-                    <button mat-icon-button color="accent" (click)="addRedirectUri()" class="right">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </td>
             </tr>
         </table>
-
+        <button mat-stroked-button color="accent" (click)="addRedirectUri()">
+            Add Redirect URI
+        </button>
+        <div class="spacer-vertical"></div>
         <table formArrayName="webOrigins">
             <tr *ngFor="let webOrigin of getWebOriginsArray().controls; index as i">
                 <td>
@@ -52,25 +51,23 @@
                         <input matInput required [formControlName]="i" placeholder="Access-Control-Allow-Origin">
                     </mat-form-field>
                 </td>
-                <td class="customButton">
+                <td class="customButton" *ngIf="webOriginsLenght() > 1">
                     <button mat-icon-button color="accent" (click)="removeWebOrigin(i)" class="right">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                </td>
-                <td *ngIf="i === webOriginsLenght()-1" class="customButton">
-                    <button mat-icon-button color="accent" (click)="addWebOrigins()" class="right">
-                        <mat-icon>add</mat-icon>
+                        <mat-icon>delete</mat-icon>
                     </button>
                 </td>
             </tr>
         </table>
-
+        <button mat-stroked-button color="accent" (click)="addWebOrigins()">
+            Add Access-Control-Allow-Origin
+        </button>
 
     </form>
 </mat-dialog-content>
-
-<mat-dialog-actions fxLayoutAlign="end center">
+<div class="spacer-vertical"></div>
+<mat-dialog-actions class="right">
     <button class="mat-raised-button color-accent" (click)="close()">Cancel</button>
+    <div class="spacer"></div>
     <button class="mat-raised-button mat-accent" [disabled]="form.invalid"
             (click)="submit()">{{'CREATE' | translate}}</button>
 </mat-dialog-actions>
