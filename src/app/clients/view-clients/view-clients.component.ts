@@ -21,6 +21,7 @@ import { ApiService } from '../../services/api/api.service';
 import {
   Router
 } from '@angular/router';
+import {ClientService} from "../shared/client.service";
 @Component({
   selector: 'app-view-clients',
   templateUrl: './view-clients.component.html',
@@ -30,7 +31,7 @@ import {
 export class ViewClientsComponent implements OnInit {
   clients: any;
 
-  constructor(private router: Router, private apiService: ApiService) { 
+  constructor(private router: Router, private apiService: ApiService, private clientService: ClientService) {
   }
 
   ngOnInit() {
@@ -47,5 +48,17 @@ export class ViewClientsComponent implements OnInit {
     this.apiService.delete("/clients/client/" + client_id).then(clients => {
       this.loadClients()
     })
+  }
+
+  addClient() {
+    this.clientService.openAddClientDialog().subscribe(b => {
+      if (b) {
+        this.loadClients();
+      }
+    })
+  }
+
+  viewClient(id: any) {
+    this.clientService.openViewClientDialog(id);
   }
 }

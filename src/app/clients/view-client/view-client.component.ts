@@ -16,14 +16,15 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Inject, OnInit} from '@angular/core';
 import { ApiService } from '../../services/api/api.service';
 import {
   FormBuilder,
   Validators,
-  FormArray
+  FormArray, FormControl
 } from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-view-client',
@@ -32,43 +33,84 @@ import {
 })
 export class ViewClientComponent implements OnInit {
   id: any;
-  client: any;
+  client: any = {'name': '', 'webOrigins': [], 'redirectUris':[]};
   form: any = this.fb.group({
-    name: [],
+    name: [Validators.required],
     redirectUris: this.fb.array([]),
     webOrigins: this.fb.array([]),
   });
 
-  constructor(private fb: FormBuilder,private apiService: ApiService,private route: ActivatedRoute) {}
+  constructor(private fb: FormBuilder, private apiService: ApiService,
+              private dialogRef: MatDialogRef<ViewClientComponent>, @Inject(MAT_DIALOG_DATA) data, private snackBar: MatSnackBar) {
+    this.id = data.id;
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-       this.id = params['id']; 
-       this.loadClientInformations();
-    });
+    this.loadClientInformations();
   }
 
   addWebOrigins(){
-    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
+    (this.form.get("webOrigins") as FormArray).push(new FormControl(undefined, Validators.required))
   }
 
 
   addRedirectUri() {
-    window.alert('Diese Funktion ist noch nicht implementiert.\nThis function is not yet implemented.');
+    (this.form.get("redirectUris") as FormArray).push(new FormControl(undefined, Validators.required))
   }
 
   loadClientInformations() {
     this.apiService.get("/clients/client/" + this.id).then(response => {
       this.client = response;
+      (this.form.get("name") as FormControl).setValue(this.client.name);
+      for (let redirectUri of this.client.redirectUris) {
+        (this.form.get("redirectUris") as FormArray).push(new FormControl(redirectUri, Validators.required));
+      }
+      for (let webOrigin of this.client.webOrigins) {
+        (this.form.get("webOrigins") as FormArray).push(new FormControl(webOrigin, Validators.required))
+      }
     })
   }
 
   submit() {
-    console.log(this.form.value);
     if(this.form.valid) {
-      this.apiService.patch("/clients/client/" + this.id, this.form.value).then(response => {
-      })
+      this.apiService.patch("/clients/client/" + this.id, this.form.value).then(() => {
+        this.dialogRef.close(true);
+        this.snackBar.open("Updated client", undefined, {
+          duration: 1 * 1000,
+        })
+      }).catch(() => this.snackBar.open("Could not update client!", undefined, {duration: 3 * 1000}))
     }
   }
 
+  close() {
+    this.dialogRef.close(false);
+  }
+
+  redirectUrisLenght(): number {
+    return this.getRedirectUrisArray().length;
+  }
+
+  webOriginsLenght(): number {
+    return this.getWebOriginsArray().length
+  }
+
+  getRedirectUrisArray(): FormArray {
+    return (this.form.get("redirectUris") as FormArray)
+  }
+
+  getWebOriginsArray(): FormArray {
+    return (this.form.get("webOrigins") as FormArray)
+  }
+
+  removeWebOrigin(i: number) {
+    if (this.webOriginsLenght() > 1) {
+      this.getWebOriginsArray().controls.splice(i, 1);
+    }
+  }
+
+  removeRedirectUri(i: number) {
+    if (this.redirectUrisLenght() > 1) {
+      this.getRedirectUrisArray().controls.splice(i, 1);
+    }
+  }
 }

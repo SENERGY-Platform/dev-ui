@@ -24,9 +24,8 @@ import {
   FormControl
 } from '@angular/forms';
 import { ApiService } from '../../services/api/api.service';
-import {
-  Router
-} from '@angular/router';
+import {MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-add-client',
@@ -34,13 +33,14 @@ import {
   styleUrls: ['./add-client.component.css']
 })
 export class AddClientComponent implements OnInit {
-  form: any = this.fb.group({
+  form = this.fb.group({
     name: ["", Validators.required],
     redirectUris: this.fb.array([]),
     webOrigins: this.fb.array([]),
   });
 
-  constructor(private router: Router, private fb: FormBuilder, private apiService: ApiService) { 
+  constructor(private dialogRef: MatDialogRef<AddClientComponent>,
+              private fb: FormBuilder, private apiService: ApiService, private snackBar: MatSnackBar) {
     this.addRedirectUri();
     this.addWebOrigins()
   }
@@ -49,19 +49,55 @@ export class AddClientComponent implements OnInit {
   }
 
   addRedirectUri() { 
-    this.form.get('redirectUris').push(new FormControl()); 
+    (this.form.get('redirectUris') as FormArray).push(new FormControl(undefined, Validators.required));
   }
 
   addWebOrigins() { 
-    this.form.get('webOrigins').push(new FormControl()); 
+    (this.form.get('webOrigins') as FormArray).push(new FormControl(undefined, Validators.required));
   }
 
   submit() {
     if(this.form.valid) {
-      this.apiService.post("/clients/clients",this.form.value).then(result => {
-        this.router.navigate(["/developer/clients"])
-      })
+      this.apiService.post("/clients/clients",this.form.value).then(() => {
+        this.dialogRef.close(true);
+        this.snackBar.open("Added client", undefined, {
+          duration: 1 * 1000,
+        })
+      }).catch(() => this.snackBar.open("Could not add client", undefined, {
+        duration: 3 * 1000,
+      }))
     }
   }
 
+  close() {
+    this.dialogRef.close(false);
+  }
+
+  redirectUrisLenght(): number {
+    return this.getRedirectUrisArray().length;
+  }
+
+  webOriginsLenght(): number {
+    return this.getWebOriginsArray().length
+  }
+
+  getRedirectUrisArray(): FormArray {
+    return (this.form.get("redirectUris") as FormArray)
+  }
+
+  getWebOriginsArray(): FormArray {
+    return (this.form.get("webOrigins") as FormArray)
+  }
+
+  removeWebOrigin(i: number) {
+    if (this.webOriginsLenght() > 1) {
+      this.getWebOriginsArray().controls.splice(i, 1);
+    }
+  }
+
+  removeRedirectUri(i: number) {
+    if (this.redirectUrisLenght() > 1) {
+      this.getRedirectUrisArray().controls.splice(i, 1);
+    }
+  }
 }

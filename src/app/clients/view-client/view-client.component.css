@@ -17,7 +17,7 @@
  */
 
 .infos {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 .status {
     display: flex;
@@ -41,4 +41,20 @@
 
 h3 {
     font-weight: 700;
+}
+
+.customButton {
+    padding-top: 1em;
+}
+
+.right {
+    float: right;
+}
+
+.spacer {
+    margin-right: 1em;
+}
+
+.spacer-vertical {
+    margin-top: 1em;
 }

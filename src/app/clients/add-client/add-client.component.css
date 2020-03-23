@@ -16,3 +16,18 @@
  *
  */
 
+.customButton {
+    padding-top: 1em;
+}
+
+.right {
+    float: right;
+}
+
+.spacer {
+    margin-right: 1em;
+}
+
+.spacer-vertical {
+    margin-top: 1em;
+}
