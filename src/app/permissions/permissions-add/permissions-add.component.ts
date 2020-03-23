@@ -16,14 +16,13 @@
  *
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {UserManagementService} from '../../services/user-management/user-management.service';
 import { ActivatedRoute } from '@angular/router';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import {Router} from '@angular/router';
 import {FormControl} from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
@@ -117,8 +116,7 @@ export class PermissionsAddComponent implements OnInit {
 
   yes() {
     try {
-      this.pushPolicy();
-      this.dialogRef.close('yes');
+      this.pushPolicy().then(() => this.dialogRef.close('yes'));
     } catch (e) {
       this.dialogRef.close('error');
     }
@@ -158,13 +156,7 @@ export class PermissionsAddComponent implements OnInit {
       policy['Actions'].push('HEAD');
     }
 
-    this.ladonService.deletePolicy(policy).then(response => {
-      this.ladonService.postPolicy(policy).then(res => {
-        console.log(policy);
-      }, error => {
-        throw error;
-      });
-    });
+     return this.ladonService.postPolicy(policy);
   }
 
   // autocomplete filter
