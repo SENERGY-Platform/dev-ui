@@ -17,16 +17,8 @@
  */
 
 import {
-    Component, OnInit, AfterViewInit
+    Component, OnInit
 } from '@angular/core';
-import {
-  DatePipe
-} from '@angular/common';
-import {
-  HttpClient,
-  HttpHeaders
-} from '@angular/common/http';
-
 import {
   Router
 } from '@angular/router';
@@ -42,6 +34,9 @@ import { Sort } from '@angular/material/sort';
 import { PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import { PermissionsEditComponent } from '../permissions-edit/permissions-edit.component';
 import { PermissionsAddComponent } from '../permissions-add/permissions-add.component';
+import {DomSanitizer} from "@angular/platform-browser";
+import {PermissionsDialogImportComponent} from "../permissions-dialog-import/permissions-dialog-import.component";
+import {PermissionImportModel} from "../permissions-dialog-import/permissions-dialog-import.model";
 
 @Component({
   selector: 'list',
@@ -61,6 +56,7 @@ export class PermissionsListComponent implements OnInit {
                 private ladonService: LadonService,
                 private router: Router,
                 public dialog: MatDialog,
+                private sanitizer: DomSanitizer
     ) {
     }
 
@@ -77,7 +73,11 @@ export class PermissionsListComponent implements OnInit {
                 if (policy['resources'][0] === '<.*>') {
                   policy['resource'] = policy['resources'][0];
                 } else {
-                  policy['resource'] = policy['resources'][0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
+                    try {
+                        policy['resource'] = policy['resources'][0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
+                    } catch (e) {
+                        console.error("Could not prepare policy resource for policy", policy)
+                    }
                 }
                 policy['actions'] = policy['actions'].toString();
                 return policy;
@@ -118,7 +118,7 @@ export class PermissionsListComponent implements OnInit {
   }
 
   deletePolicy(policy) {
-    this.ladonService.deletePolicy(policy).then(response => {
+    this.ladonService.deletePolicy(policy).then(() => {
       this.loadPolicies();
     });
   }
@@ -154,6 +154,28 @@ export class PermissionsListComponent implements OnInit {
                     this.deletePolicy(policy);
                 }
             });
+    }
+
+    export() {
+        const theJSON = JSON.stringify(this.policies);
+        return this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
+    }
+
+    import() {
+        const dialogRef = this.dialog.open(PermissionsDialogImportComponent,
+            {minWidth: '850px', minHeight: '200px'});
+
+        dialogRef.afterClosed().subscribe((result: PermissionImportModel) => {
+            if (result.overwrite) {
+                this.policies.forEach(policy => {
+                    if (policy.id !== 'admin-all') { // Don't ever delete this policy
+                        this.ladonService.deletePolicy(policy)
+                    }
+                });
+            }
+            result.policies.forEach(policy => this.ladonService.postPolicy(policy));
+            this.loadPolicies();
+        });
     }
 }
 

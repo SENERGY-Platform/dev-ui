@@ -57,8 +57,17 @@
     </mat-table>
 </section>
 
-<a class="add" (click)=createPolicy()>
-    <div>
-        <i class="material-icons">add</i>
-    </div>
+<a class="add">
+    <button mat-fab (click)="createPolicy()" class="spacer-right">
+        <mat-icon>add</mat-icon>
+    </button>
+    <a [href]="export()" download="permissions.json" class="spacer-right">
+    <button mat-fab >
+        <mat-icon>cloud_download</mat-icon>
+    </button>
+    </a>
+    <button mat-fab (click)="import()">
+        <mat-icon>cloud_upload</mat-icon>
+    </button>
 </a>
+

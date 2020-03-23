@@ -28,6 +28,7 @@ import { MaterialModule } from '../material/material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
 import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
+import {PermissionsDialogImportComponent} from "./permissions-dialog-import/permissions-dialog-import.component";
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -57,7 +58,7 @@ const routes: Routes = [
       }
     ]
   }
-]
+];
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ const routes: Routes = [
     PermissionsEditComponent,
     RoutingComponent,
     PermissionsEditComponent,
-    PermissionsDialogDeleteComponent
+    PermissionsDialogDeleteComponent,
+    PermissionsDialogImportComponent
   ]
 })
 export class PermissionsModule { }

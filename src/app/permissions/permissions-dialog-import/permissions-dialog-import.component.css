@@ -1,6 +1,6 @@
 /*
  *
- *     Copyright 2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -16,32 +16,28 @@
  *
  */
 
-.button {
-    width: -100%;
-}
-
-.mat-raised-button{
+.mat-raised-button,
+.control_buttons{
     color: white;
 }
 
-.add div {
-    height: 48px;
-    width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background:  rgb(68, 132, 206);
-    border-radius: 50%;
+.radio {
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
 
-.add {
-    position: fixed;
-    bottom: 30px;
-    right: 40px;
-    text-decoration: none;
-    color: white;
+.radio-but {
+    margin-right: 10px;
 }
 
-.spacer-right {
-    margin-right: 5px;
+.medium-text {
+    font-size: medium;
+}
+
+.warn-text {
+    color: #F19F4D;
+}
+
+.mat-column-select {
+    max-width: 90px;
 }

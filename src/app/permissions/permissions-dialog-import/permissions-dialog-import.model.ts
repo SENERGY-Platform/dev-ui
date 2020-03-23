@@ -16,32 +16,7 @@
  *
  */
 
-.button {
-    width: -100%;
-}
-
-.mat-raised-button{
-    color: white;
-}
-
-.add div {
-    height: 48px;
-    width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background:  rgb(68, 132, 206);
-    border-radius: 50%;
-}
-
-.add {
-    position: fixed;
-    bottom: 30px;
-    right: 40px;
-    text-decoration: none;
-    color: white;
-}
-
-.spacer-right {
-    margin-right: 5px;
+export interface PermissionImportModel {
+    policies: any[];
+    overwrite: boolean;
 }
