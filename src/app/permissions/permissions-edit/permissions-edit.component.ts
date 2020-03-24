@@ -16,20 +16,22 @@
  *
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserManagementService} from '../../services/user-management/user-management.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {FormControl} from '@angular/forms';
-import { AuthService } from '../../services/auth/auth.service';
-import {Observable} from 'rxjs';
+import {AuthService} from '../../services/auth/auth.service';
+import {Observable, of} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {async} from "rxjs/internal/scheduler/async";
 
 
 export interface Model {
@@ -45,9 +47,9 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-permissions-edit',
-  templateUrl: './permissions-edit.component.html',
-  styleUrls: ['./permissions-edit.component.css']
+    selector: 'app-permissions-edit',
+    templateUrl: './permissions-edit.component.html',
+    styleUrls: ['./permissions-edit.component.css']
 })
 export class PermissionsEditComponent implements OnInit {
     myControl = new FormControl();
@@ -68,9 +70,9 @@ export class PermissionsEditComponent implements OnInit {
     array_of_actions: string[];
 
     public form = this.fb.group({
-      role: this.route.snapshot.paramMap.get('subject'),
-      user: this.route.snapshot.paramMap.get('subject'),
-      actions: this.fb.array([])
+        role: this.route.snapshot.paramMap.get('subject'),
+        user: this.route.snapshot.paramMap.get('subject'),
+        actions: this.fb.array([])
     });
 
     constructor(
@@ -82,29 +84,30 @@ export class PermissionsEditComponent implements OnInit {
         private route: ActivatedRoute,
         private ladonService: LadonService,
         private router: Router,
-        private authService: AuthService) {
-            try {
-                this.userManagementService.loadRoles().then((roles: Model) => {
-                    this.roles = roles;
-                    this.intbtnDisable();
-                });
-                this.userManagementService.loadUsers().then(users => this.users = users);
-            } catch (e) {
-                console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
-                this.btnDisable = true;
-            }
+        private authService: AuthService,
+        private snackBar: MatSnackBar) {
+        try {
+            this.userManagementService.loadRoles().then((roles: Model) => {
+                this.roles = roles;
+                this.intbtnDisable();
+            });
+            this.userManagementService.loadUsers().then(users => this.users = users);
+        } catch (e) {
+            console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+            this.btnDisable = true;
         }
-        private methods = new FormGroup({
-            get: new FormControl(),
-            post: new FormControl(),
-            patch: new FormControl(),
-            delete: new FormControl(),
-            put: new FormControl(),
-            head: new FormControl()
-        });
+    }
+
+    private methods = new FormGroup({
+        get: new FormControl(),
+        post: new FormControl(),
+        patch: new FormControl(),
+        delete: new FormControl(),
+        put: new FormControl(),
+        head: new FormControl()
+    });
 
     ngOnInit() {
-        console.log(this.data);
         try {
             this.userIsAdmin = this.authService.userHasRole('admin');
         } catch (e) {
@@ -133,7 +136,6 @@ export class PermissionsEditComponent implements OnInit {
 
     checkactiveActions() {
         this.array_of_actions = this.actions.split(',');
-        console.log(this.array_of_actions);
         this.methods.patchValue({
             get: this.array_of_actions.includes('GET'),
             post: this.array_of_actions.includes('POST'),
@@ -142,6 +144,7 @@ export class PermissionsEditComponent implements OnInit {
             put: this.array_of_actions.includes('PUT'),
             head: this.array_of_actions.includes('HEAD')
         });
+        /*
         console.log('Status:\n'
             + 'get: ' + this.methods.get('get').value + '\n'
             + 'post: ' + this.methods.get('post').value + '\n'
@@ -149,22 +152,29 @@ export class PermissionsEditComponent implements OnInit {
             + 'delete: ' + this.methods.get('delete').value + '\n'
             + 'put: ' + this.methods.get('put').value + '\n'
             + 'head: '+ this.methods.get('headh').value);
+         */
     }
+
     yes() {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
-        try {
-            this.pushPolicy();
-            this.dialogRef.close('yes');
-        } catch (e) {
-            this.dialogRef.close('error');
-        }
+
+        this.pushPolicy().then(res => {
+            if (res === true) {
+                this.dialogRef.close('yes');
+            } else {
+                this.snackBar.open("Could not update policy", undefined, {
+                    duration: 3 * 1000,
+                });
+            }
+        });
     }
+
     no() {
         this.dialogRef.close('no');
     }
 
-    pushPolicy() {
+    pushPolicy(): Promise<boolean> {
         if (!this.resource.startsWith('/')) {
             this.resource = '/' + this.resource;
         }
@@ -194,12 +204,13 @@ export class PermissionsEditComponent implements OnInit {
             policy['Actions'].push('HEAD');
         }
 
-        this.ladonService.deletePolicy(policy).then(response => {
-            this.ladonService.postPolicy(policy).then(res => {
-                console.log(policy);
-            }, error => {
-                throw error;
-            });
+        return new Promise<boolean>(resolve => {
+            return this.ladonService.deletePolicy(policy)
+                .then(() => {
+                    return this.ladonService.postPolicy(policy)
+                }).then(() => {
+                    resolve(true);
+                })
         });
     }
 
@@ -218,11 +229,11 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     intbtnDisable() {
-        const persons =  this.roles.find(x => x.name === this.subject);
+        const persons = this.roles.find(x => x.name === this.subject);
         if (persons === undefined) {
-          this.btnDisable = true;
+            this.btnDisable = true;
         } else {
-          this.btnDisable = false;
+            this.btnDisable = false;
         }
     }
 }

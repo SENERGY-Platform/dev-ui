@@ -16,6 +16,22 @@
  *
  */
 
+.search {
+    display: flex;
+    align-items: center;
+    font-size:1.3rem;
+    margin-bottom: 20px;
+}
+.search i {
+    font-size: 1.5rem;
+    margin-right: 20px;
+    color: grey;
+}
+
+.search mat-card:hover {
+    background: white;
+}
+
 .button {
     width: -100%;
 }

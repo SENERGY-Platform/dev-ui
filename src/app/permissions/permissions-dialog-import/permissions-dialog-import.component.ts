@@ -70,7 +70,7 @@ export class PermissionsDialogImportComponent {
                 this.policies = JSON.parse(reader.result as string);
                 this.selections = [];
                 this.policies.forEach(policy => {
-                    policy.actions = policy.actions.split(',');
+                    policy.actions = policy.actions.split(', ');
                     this.selections.push(true);
                 });
                 this.fileValid = true;

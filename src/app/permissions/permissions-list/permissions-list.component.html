@@ -17,6 +17,18 @@
   -->
 
 <section *ngIf="userIsAdmin" class="outer">
+
+    <mat-card class="search">
+        <i class="material-icons">search</i>
+        <mat-form-field>
+            <input type="text" matInput (keyup)="search()" [(ngModel)]="query" [placeholder]="'Search (for users, roles, actions or resources)'">
+            <button mat-icon-button matSuffix (click)="clearSearch()">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </mat-form-field>
+
+    </mat-card>
+
     <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
 
         <!-- Name Column -->
