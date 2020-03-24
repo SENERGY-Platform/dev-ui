@@ -17,57 +17,60 @@
   -->
 
 <section *ngIf="userIsAdmin" class="outer">
-  <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
+    <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="subject">
-          <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
-      </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="subject">
+            <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
+        </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="actions">
-          <mat-header-cell mat-sort-header="actions" *matHeaderCellDef>Actions</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.actions}}</mat-cell>
-      </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="actions">
+            <mat-header-cell mat-sort-header="actions" *matHeaderCellDef>Actions</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.actions}}</mat-cell>
+        </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="resource">
-          <mat-header-cell mat-sort-header="resource" *matHeaderCellDef>Resource</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.resource}}</mat-cell>
-      </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="resource">
+            <mat-header-cell mat-sort-header="resource" *matHeaderCellDef>Resource</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.resource}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="delete">
-          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-              <button (click)="askfordelete(element)"><i class="material-icons" >delete</i></button>
-          </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="delete">
+            <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button (click)="askfordelete(element)"><i class="material-icons">delete</i></button>
+            </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="edit">
-          <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-              <button (click)="editPolicy(element)"><i class="material-icons" >edit</i></button>
-          </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button (click)="editPolicy(element)"><i class="material-icons">edit</i></button>
+            </mat-cell>
+        </ng-container>
 
-      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"> </mat-row>
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
     </mat-table>
 </section>
 
-<a class="add">
-    <button mat-fab (click)="createPolicy()" class="spacer-right">
+<a class="fabs add" matTooltip="Hinzufügen">
+    <button mat-fab (click)="createPolicy()">
         <mat-icon>add</mat-icon>
     </button>
-    <a [href]="export()" download="permissions.json" class="spacer-right">
-    <button mat-fab >
+</a>
+<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren">
+    <button mat-fab>
         <mat-icon>cloud_download</mat-icon>
     </button>
-    </a>
-    <button mat-fab (click)="import()">
+</a>
+<a class="upload">
+    <button mat-fab (click)="import()" class="fabs upload" matTooltip="Importieren">
         <mat-icon>cloud_upload</mat-icon>
     </button>
 </a>
+
 
