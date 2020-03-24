@@ -59,8 +59,43 @@ $senergy-blue: (
     A700: $light-primary-text,
   )
 );
+
+$md-custom-color-sidenav: (
+        50 : #fdf3ea,
+        100 : #fbe2ca,
+        200 : #f8cfa6,
+        300 : #f5bc82,
+        400 : #f3ad68,
+        500 : #f19f4d,
+        600 : #ef9746,
+        700 : #ed8d3d,
+        800 : #eb8334,
+        900 : #e77225,
+        A100 : #ffffff,
+        A200 : #fff4ee,
+        A400 : #ffd4bb,
+        A700 : #ffc4a1,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #000000,
+                600 : #000000,
+                700 : #000000,
+                800 : #000000,
+                900 : #000000,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
+);
+
 $candy-app-primary: mat-palette($senergy-blue, A200);
 $candy-app-accent:  mat-palette($senergy-blue, A200, A100, A400);
+$my-app-sidenav: mat-palette($md-custom-color-sidenav);
 
 // The warn palette is optional (defaults to red).
 $candy-app-warn:    mat-palette($mat-red);
@@ -93,4 +128,13 @@ $my-app-theme: mat-light-theme($candy-app-primary, $my-app-accent, $candy-app-wa
 
 .color-accent {
   color: mat-color($my-app-accent) !important;
+}
+
+.background-color-sidenav {
+  color: white;
+  background-color: mat-color($my-app-sidenav);
+}
+
+.color-sidenav {
+  color: mat-color($my-app-sidenav) !important;
 }

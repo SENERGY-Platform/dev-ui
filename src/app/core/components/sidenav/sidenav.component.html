@@ -29,7 +29,7 @@
                 <button mat-button
                         type=button
                         routerLink="{{section.state}}"
-                        routerLinkActive="background-color-accent"
+                        routerLinkActive="background-color-sidenav"
                         *ngIf="section.type === 'link'"
                         (click)="toggleSection(section)"
                         class="md-button-toggle">
@@ -41,7 +41,7 @@
                         *ngIf="section.type === 'toggle'"
                         [ngClass]="{'background-color-accent': isSectionOpen(section)}"
                         routerLink="{{section.state}}"
-                        routerLinkActive="background-color-accent"
+                        routerLinkActive="background-color-sidenav"
                         class="md-button-toggle">
                     <div fxLayout="row"
                          fxLayoutAlign=" center">
@@ -64,7 +64,7 @@
                     <li *ngFor="let page of section.pages">
                         <button mat-button
                                 routerLink="{{page.state}}"
-                                routerLinkActive="background-color-accent"
+                                routerLinkActive="background-color-sidenav"
                                 (click)="closeSidenav()" class="md-button-toggle">
                             <mat-icon>{{page.icon}}</mat-icon>
                             {{page.name}}
