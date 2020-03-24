@@ -28,7 +28,7 @@
 
 
   <div class="service-container">
-    <mat-card [routerLink]="['/api/', element.info.title]" class="hover-mat-card entry-card" *ngFor="let element of swaggerListShown; let i = index">
+    <mat-card [routerLink]="['/api/', element.info.title]" class="hover-mat-card entry-card api-card" *ngFor="let element of swaggerListShown; let i = index">
       <mat-card-header>
         <mat-card-title>{{ element.info.title }}</mat-card-title>
         <mat-card-subtitle>{{ element.info.version }}</mat-card-subtitle>

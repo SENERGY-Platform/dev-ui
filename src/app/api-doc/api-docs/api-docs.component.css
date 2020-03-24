@@ -17,63 +17,68 @@
  */
 
 .entry-header-image {
-  background-image: url('http://placebear.com/300/200');
-  background-size: cover;
+    background-image: url('http://placebear.com/300/200');
+    background-size: cover;
 }
 
 .service-container {
-  grid-template-columns: repeat(auto-fit, minmax(33%, 1fr));
-  grid-gap: 5px;
-  display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(33%, 1fr));
+    grid-gap: 5px;
+    display: grid;
 }
 
 mat-card-title {
-  font-weight: bold!important;
-  font-size: 1.4rem!important;
+    font-weight: bold !important;
+    font-size: 1.4rem !important;
 }
 
 mat-card-subtitle {
-  font-size: 1rem!important;
+    font-size: 1rem !important;
 }
 
 mat-card p {
-  font-family: Roboto,Helvetica Neue,sans-serif;
-  font-size: 1rem;
+    font-family: Roboto, Helvetica Neue, sans-serif;
+    font-size: 1rem;
 }
 
 mat-card-actions {
-  position: absolute;
-  bottom: 25px;
+    position: absolute;
+    bottom: 25px;
 }
 
 .search {
-  display: flex;
-  align-items: center;
-  font-size:1.3rem;
-  margin-bottom: 20px;
-}
-.search i {
-  font-size: 1.5rem;
-margin-right: 20px;
-color: grey;
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
 }
 
-.search mat-card:hover {
-  background: white;
+.search i {
+    font-size: 1.5rem;
+    margin-right: 20px;
+    color: grey;
+}
+
+.api-card:hover {
+    /*background: #c7daf0;*/
+}
+
+.search {
+    background: white;
 }
 
 @media (max-width: 1000px) {
-  .service-container {
-    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
-  }
+    .service-container {
+        grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
+    }
 }
 
 @media (max-width: 800px) {
-  .service-container {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-  }
+    .service-container {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
 }
 
 .api-description {
-  margin-left: 15px;
+    margin-left: 15px;
 }
