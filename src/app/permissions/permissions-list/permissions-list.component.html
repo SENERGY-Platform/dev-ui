@@ -31,24 +31,70 @@
 
     <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
 
-        <!-- Name Column -->
+        <!-- Subject Column -->
         <ng-container matColumnDef="subject">
             <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
         </ng-container>
 
-        <!-- Weight Column -->
+        <!-- Actions Column
         <ng-container matColumnDef="actions">
             <mat-header-cell mat-sort-header="actions" *matHeaderCellDef>Actions</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.actions}}</mat-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('GET')">GET</mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('POST')">POST</mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PATCH')">PATCH</mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('DELETE')">DELETE</mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PUT')">PUT</mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('HEAD')">HEAD</mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        -->
+
+        <ng-container matColumnDef="GET">
+            <mat-header-cell mat-sort-header="GET" *matHeaderCellDef>GET</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('GET')"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="POST">
+            <mat-header-cell mat-sort-header="POST" *matHeaderCellDef>POST</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('POST')"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="PATCH">
+            <mat-header-cell mat-sort-header="PATCH" *matHeaderCellDef>PATCH</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PATCH')"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="DELETE">
+            <mat-header-cell mat-sort-header="DELETE" *matHeaderCellDef>DELETE</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('DELETE')"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="PUT">
+            <mat-header-cell mat-sort-header="PUT" *matHeaderCellDef>PUT</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PUT')"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="HEAD">
+            <mat-header-cell mat-sort-header="HEAD" *matHeaderCellDef>HEAD</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('HEAD')"></mat-checkbox>
+            </mat-cell>
         </ng-container>
 
-        <!-- Name Column -->
+        <!-- Resource Column -->
         <ng-container matColumnDef="resource">
             <mat-header-cell mat-sort-header="resource" *matHeaderCellDef>Resource</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.resource}}</mat-cell>
         </ng-container>
 
+        <!-- Delete Column -->
         <ng-container matColumnDef="delete">
             <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -56,6 +102,7 @@
             </mat-cell>
         </ng-container>
 
+        <!-- Edit Column -->
         <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
             <mat-cell *matCellDef="let element">

@@ -44,7 +44,7 @@ import {PermissionImportModel} from "../permissions-dialog-import/permissions-di
     styleUrls: ['./permissions-list.component.css']
 })
 export class PermissionsListComponent implements OnInit {
-    displayedColumns = ['subject', 'actions', 'resource', 'delete', 'edit'];
+    displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
     policies: any;
     userIsAdmin = false;
 
@@ -145,8 +145,18 @@ export class PermissionsListComponent implements OnInit {
             switch (sort.active) {
                 case 'subject':
                     return compare(a.subject, b.subject, isAsc);
-                case 'actions':
-                    return compare(a.actions, b.actions, isAsc);
+                case 'GET':
+                    return compare(a.actions.includes('GET'), b.actions.includes('GET'), isAsc);
+                case 'POST':
+                    return compare(a.actions.includes('POST'), b.actions.includes('POST'), isAsc);
+                case 'PUT':
+                    return compare(a.actions.includes('PUT'), b.actions.includes('PUT'), isAsc);
+                case 'PATCH':
+                    return compare(a.actions.includes('PATCH'), b.actions.includes('PATCH'), isAsc);
+                case 'DELETE':
+                    return compare(a.actions.includes('DELETE'), b.actions.includes('DELETE'), isAsc);
+                case 'HEAD':
+                    return compare(a.actions.includes('HEAD'), b.actions.includes('HEAD'), isAsc);
                 case 'resource':
                     return compare(a.resource, b.resource, isAsc);
 

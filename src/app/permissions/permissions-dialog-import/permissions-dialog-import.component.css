@@ -38,6 +38,10 @@
     color: #F19F4D;
 }
 
-.mat-column-select {
-    max-width: 90px;
+.mat-column-select, .mat-column-GET, .mat-column-POST, .mat-column-PUT,
+.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
+    max-width: 60px;
+}
+.mat-column-subject {
+    max-width: 120px;
 }

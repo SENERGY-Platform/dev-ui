@@ -73,6 +73,7 @@
     margin-right: 5px;
 }
 
-.mat-column-edit, .mat-column-delete{
+.mat-column-edit, .mat-column-delete, .mat-column-GET, .mat-column-POST, .mat-column-PUT,
+.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
     max-width: 90px;
 }
