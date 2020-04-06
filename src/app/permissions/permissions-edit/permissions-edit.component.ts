@@ -175,13 +175,15 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     pushPolicy(): Promise<boolean> {
-        if (!this.resource.startsWith('/')) {
-            this.resource = '/' + this.resource;
+        let resource = this.resource;
+        if (resource.startsWith('/')) {
+            resource = resource.substring(1);
         }
+        resource = resource.split('/').join(':');
         const policy = {
             'Subjects': [this.subject],
             'Actions': [],
-            'Resources': ['<^(endpoints:' + this.resource.substring(1) + ').*>'],
+            'Resources': ['<^(endpoints:' + resource + ').*>'],
             'Effect': 'allow',
             'id': this.id
         };

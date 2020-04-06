@@ -127,15 +127,16 @@ export class PermissionsAddComponent implements OnInit {
 
   pushPolicy() {
     let resource = this.myControl.value;
-    if (!resource.startsWith('/')) {
-      resource = '/' + resource;
+    if (resource.startsWith('/')) {
+      resource = resource.substring(1);
     }
+    resource = resource.split('/').join(':');
     const policy = {
       'Subjects': [this.subject],
       'Actions': [],
-      'Resources': ['<^(endpoints:' + resource.substring(1) + ').*>'],
+      'Resources': ['<^(endpoints:' + resource + ').*>'],
       'Effect': 'allow',
-      'id':  this.subject + '-' + resource
+      'id':  this.subject + '-' + this.myControl.value
     };
     if (this.methods.get('get').value === true) {
       policy['Actions'].push('GET');
