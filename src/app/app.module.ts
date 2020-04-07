@@ -37,7 +37,6 @@ import { SettingsModule } from './settings/settings.module';
 import { ApiService } from './services/api/api.service';
 import { AuthService } from './services/auth/auth.service';
 import { ValidTokenGuard } from './services/auth/guard.service';
-import { DeviceSimService } from './services/devicesim/device-sim.service';
 import { LadonService } from './services/ladon/ladon.service';
 import { SwaggerService } from './services/swagger/swagger.service';
 import { UserManagementService } from './services/user-management/user-management.service';
@@ -103,7 +102,6 @@ const keycloakService = new KeycloakService();
     SwaggerService,
     LadonService,
     UserManagementService,
-    DeviceSimService,
     {
       provide: KeycloakService,
       useValue: keycloakService,
