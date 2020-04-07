@@ -21,6 +21,7 @@ import {
   Router,
 } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
+import {ClientModel} from '../shared/client.model';
 import {ClientService} from '../shared/client.service';
 @Component({
   selector: 'app-view-clients',
@@ -29,7 +30,7 @@ import {ClientService} from '../shared/client.service';
 })
 
 export class ViewClientsComponent implements OnInit {
-  public clients: any;
+  public clients: ClientModel[];
 
   constructor(private router: Router, private apiService: ApiService, private clientService: ClientService) {
   }
@@ -40,7 +41,7 @@ export class ViewClientsComponent implements OnInit {
 
   public loadClients() {
     this.apiService.get('/clients/clients').then((clients) => {
-      this.clients = clients;
+      this.clients = clients as ClientModel[];
     });
   }
 
@@ -58,7 +59,7 @@ export class ViewClientsComponent implements OnInit {
     });
   }
 
-  public viewClient(id: any) {
-    this.clientService.openViewClientDialog(id);
+  public viewClient(client: ClientModel) {
+    this.clientService.openViewClientDialog(client);
   }
 }

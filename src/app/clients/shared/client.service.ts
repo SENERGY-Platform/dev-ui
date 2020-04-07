@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {AddClientComponent} from '../add-client/add-client.component';
-import {ViewClientComponent} from '../view-client/view-client.component';
+import {AddEditClientComponent} from '../add-edit-client/add-edit-client.component';
+import {ClientModel} from './client.model';
 
 @Injectable({
     providedIn: 'root',
@@ -14,22 +14,19 @@ export class ClientService {
 
     public openAddClientDialog(): Observable<boolean> {
         const dialogConfig = new MatDialogConfig();
-        dialogConfig.minWidth = '500px';
-        const editDialogRef = this.dialog.open(AddClientComponent, dialogConfig);
-
-        return new Observable<boolean>((obs) => {
-            editDialogRef.afterClosed().subscribe((b) => {
-                obs.next(b);
-                obs.complete();
-            });
-        });
+        dialogConfig.data = {} as ClientModel;
+        return this.openDialog(dialogConfig);
     }
 
-    public openViewClientDialog(id): Observable<boolean> {
+    public openViewClientDialog(client: ClientModel): Observable<boolean> {
         const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = client;
+        return this.openDialog(dialogConfig);
+    }
+
+    private openDialog(dialogConfig: MatDialogConfig): Observable<boolean> {
         dialogConfig.minWidth = '500px';
-        dialogConfig.data = {id};
-        const editDialogRef = this.dialog.open(ViewClientComponent, dialogConfig);
+        const editDialogRef = this.dialog.open(AddEditClientComponent, dialogConfig);
 
         return new Observable<boolean>((obs) => {
             editDialogRef.afterClosed().subscribe((b) => {

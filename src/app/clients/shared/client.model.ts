@@ -1,6 +1,6 @@
 /*
  *
- *     Copyright 2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -16,18 +16,11 @@
  *
  */
 
-.customButton {
-    padding-top: 1em;
-}
-
-.right {
-    float: right;
-}
-
-.spacer {
-    margin-right: 1em;
-}
-
-.spacer-vertical {
-    margin-top: 1em;
+export interface ClientModel {
+    enabled: boolean;
+    id: string;
+    secret: string;
+    name: string;
+    webOrigins: string[];
+    redirectUris: string[];
 }

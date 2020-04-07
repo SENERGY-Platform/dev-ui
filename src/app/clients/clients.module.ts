@@ -26,8 +26,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
-import { AddClientComponent } from './add-client/add-client.component';
-import { ViewClientComponent } from './view-client/view-client.component';
+import { AddEditClientComponent } from './add-edit-client/add-edit-client.component';
 import { ViewClientsComponent } from './view-clients/view-clients.component';
 
 @Component({
@@ -42,13 +41,8 @@ const routes: Routes = [
     canActivate: [ValidTokenGuard],
     children: [
       {
-        path: 'add',
-        component: AddClientComponent,
-        canActivate: [ValidTokenGuard],
-      },
-      {
         path: ':id',
-        component: ViewClientComponent,
+        component: AddEditClientComponent,
         canActivate: [ValidTokenGuard],
       },
       {
@@ -70,13 +64,12 @@ const routes: Routes = [
     FormsModule,
   ],
   declarations: [
-    AddClientComponent,
-    ViewClientComponent,
+    AddEditClientComponent,
     RoutingComponent,
     ViewClientsComponent,
   ],
   entryComponents: [
-      AddClientComponent,
+
   ],
 })
 export class ClientsModule { }
