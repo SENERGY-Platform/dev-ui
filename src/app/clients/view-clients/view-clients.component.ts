@@ -60,6 +60,6 @@ export class ViewClientsComponent implements OnInit {
   }
 
   public viewClient(client: ClientModel) {
-    this.clientService.openViewClientDialog(client);
+    this.clientService.openViewClientDialog(JSON.parse(JSON.stringify(client))); // Work on copy
   }
 }
