@@ -34,13 +34,13 @@ import {ClientModel} from '../shared/client.model';
 })
 export class AddEditClientComponent implements OnInit {
     private client: ClientModel = {} as ClientModel;
-    private isEditMode = false;
-    private form: FormGroup = this.fb.group({
+    public isEditMode = false;
+    public form: FormGroup = this.fb.group({
         name: ['', Validators.required],
         redirectUris: this.fb.array([]),
         webOrigins: this.fb.array([]),
     });
-    private title: string;
+    public title: string;
 
     constructor(private fb: FormBuilder, private apiService: ApiService,
                 private dialogRef: MatDialogRef<AddEditClientComponent>, @Inject(MAT_DIALOG_DATA) data, private snackBar: MatSnackBar) {
