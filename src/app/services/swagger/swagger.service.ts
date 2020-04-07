@@ -17,17 +17,14 @@
  */
 
 import {
-  Injectable,
+    Injectable,
 } from '@angular/core';
-import { ApiService } from '../api/api.service';
-import {
-  AuthService,
-} from '../auth/auth.service';
+import {ApiService} from '../api/api.service';
 
 @Injectable()
 export class SwaggerService {
-  constructor(private apiService: ApiService,
-              private authService: AuthService) {}
+    constructor(private apiService: ApiService) {
+    }
 
     /**
      * Get all Swagger files from the service.
@@ -35,17 +32,15 @@ export class SwaggerService {
      * and add it to the list using currently unavailable descriptions.
      */
     public getSwagger() {
-    return new Promise((resolve) => {
-        this.authService.getToken().then(() => {
-          this.apiService.get('/swagger')
-            .then((res) => {
-                resolve(res);
-              },
-                () => {
-                console.log('Error occured');
-              },
-            );
+        return new Promise((resolve) => {
+            this.apiService.get('/swagger')
+                .subscribe((res) => {
+                        resolve(res);
+                    },
+                    () => {
+                        console.log('Error occured');
+                    },
+                );
         });
-    });
-  }
+    }
 }

@@ -69,10 +69,9 @@ export class AppComponent implements OnInit {
 
             dialogRef.afterClosed().subscribe(() => {
                 console.log('The dialog was closed');
-                this.apiService.patch('/role', '').then(() => {
+                this.apiService.patch('/role', '').subscribe(() => {
                     location.reload();
                 });
-
             });
         }
     }

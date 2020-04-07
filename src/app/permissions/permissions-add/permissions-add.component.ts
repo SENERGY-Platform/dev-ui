@@ -112,7 +112,7 @@ export class PermissionsAddComponent implements OnInit {
 
   public yes() {
     try {
-      this.pushPolicy().then(() => this.dialogRef.close('yes'));
+      this.pushPolicy().subscribe(() => this.dialogRef.close('yes'));
     } catch (e) {
       this.dialogRef.close('error');
     }

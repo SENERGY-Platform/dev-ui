@@ -67,7 +67,7 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public loadPolicies() {
-        this.ladonService.getAllPolicies().then((response) => {
+        this.ladonService.getAllPolicies().subscribe((response) => {
             this.policies = (response as any).map((policy) => {
                 policy.subject = policy.subjects[0];
                 if (policy.resources[0] === '<.*>') {
@@ -122,7 +122,7 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public deletePolicy(policy) {
-        this.ladonService.deletePolicy(policy).then(() => {
+        this.ladonService.deletePolicy(policy).subscribe(() => {
             this.loadPolicies();
         });
     }

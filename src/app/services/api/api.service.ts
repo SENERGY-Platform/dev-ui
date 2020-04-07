@@ -16,18 +16,13 @@
  *
  */
 
-import {
-  HttpClient,
-  HttpHeaders,
-} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {
   Injectable,
 } from '@angular/core';
+import {Observable} from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import {
-  AuthService,
-} from '../auth/auth.service';
 
 declare var KONG_URL: string;
 
@@ -35,7 +30,7 @@ declare var KONG_URL: string;
 export class ApiService {
   public platformUrl: string;
 
-  constructor(private httpClient: HttpClient, private authService: AuthService) {
+  constructor(private httpClient: HttpClient) {
     if (environment.production) {
       this.platformUrl = KONG_URL;
     } else {
@@ -43,72 +38,24 @@ export class ApiService {
     }
   }
 
-  public get(path) {
-    return new Promise((resolve, reject) => {
-      this.authService.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-
-        });
-
-        this.httpClient.get(this.platformUrl + path, {headers}).subscribe((result) => resolve(result), (error) => reject(error));
-      });
-    });
+  public get(path: string): Observable<unknown> {
+    return this.httpClient.get(this.platformUrl + path);
   }
 
-  public post(path, payload) {
-    return new Promise((resolve, reject) => {
-      this.authService.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-
-        });
-        this.httpClient.post(this.platformUrl + path, payload, {headers}).subscribe(
-            (result) => resolve(result),
-            (error) => reject(error));
-      });
-    });
+  public post(path: string, payload: any): Observable<unknown> {
+    return this.httpClient.post(this.platformUrl + path, payload);
   }
 
-  public put(path, payload) {
-    return new Promise((resolve, reject) => {
-      this.authService.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-
-        });
-        this.httpClient.put(this.platformUrl + path, payload, {headers}).subscribe((result) => {
-            resolve(result);
-        }, (error) => reject(error));
-
-      });
-    });
+  public put(path: string, payload: any): Observable<unknown> {
+    return this.httpClient.put(this.platformUrl + path, payload);
   }
 
-  public delete(path) {
-    return new Promise((resolve, reject) => {
-      this.authService.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
+  public delete(path: string): Observable<unknown> {
+    return this.httpClient.delete(this.platformUrl  + path);
 
-        });
-        this.httpClient.delete(this.platformUrl  + path, {headers}).subscribe((result) => resolve(result), (error) => reject(error));
-      });
-    });
   }
 
-  public patch(path, payload) {
-    return new Promise((resolve, reject) => {
-      this.authService.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-
-        });
-        this.httpClient.patch(this.platformUrl + path, payload, {headers}).subscribe(
-            (result) => resolve(result),
-            (error) => reject(error),
-        );
-      });
-    });
+  public patch(path: string, payload: any): Observable<unknown> {
+    return this.httpClient.patch(this.platformUrl + path, payload);
   }
 }

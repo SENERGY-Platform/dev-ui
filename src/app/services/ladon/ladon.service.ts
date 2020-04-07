@@ -19,6 +19,7 @@
 import {
   Injectable,
 } from '@angular/core';
+import {Observable} from 'rxjs';
 import { ApiService } from '../api/api.service';
 
 @Injectable()
@@ -28,7 +29,7 @@ export class LadonService {
     this.baseUrl = '/ladon';
   }
 
-  public postPolicy(policy) {
+  public postPolicy(policy): Observable<unknown> {
     return this.apiService.post(this.baseUrl + '/policies', policy);
   }
 
@@ -36,15 +37,15 @@ export class LadonService {
     return this.apiService.get(this.baseUrl + '/policies');
   }
 
-  public deletePolicy(policy) {
+  public deletePolicy(policy): Observable<unknown> {
     return this.apiService.delete(this.baseUrl + '/policies?id=' + policy.id);
   }
 
-  public putPolicy(policy) {
+  public putPolicy(policy): Observable<unknown> {
     return this.apiService.put(this.baseUrl + '/policies?id=' + policy.id, policy);
     }
 
-  public patchPolicy(policy) {
+  public patchPolicy(policy): Observable<unknown> {
       return this.apiService.patch(this.baseUrl + '/policies?id=' + policy.id, policy);
   }
 

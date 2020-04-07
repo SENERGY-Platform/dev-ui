@@ -24,6 +24,7 @@ import {
 } from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Observable} from 'rxjs';
 import {ApiService} from '../../services/api/api.service';
 import {ClientModel} from '../shared/client.model';
 
@@ -77,18 +78,18 @@ export class AddEditClientComponent implements OnInit {
 
     public submit() {
         if (this.form.valid) {
-            let action;
+            let action: Observable<unknown>;
             if (this.isEditMode) {
                 action = this.apiService.patch('/clients/client/' + this.client.id, this.form.value);
             } else {
                 action = this.apiService.post('/clients/clients', this.form.value);
             }
-            action.then(() => {
+            action.subscribe(() => {
                 this.dialogRef.close(true);
                 this.snackBar.open((this.isEditMode ? 'Updated' : 'Added') + ' client', undefined, {
                     duration: 1000,
                 });
-            }).catch(() => this.snackBar.open('Could not add client', undefined, {
+            }, () => this.snackBar.open('Could not add client', undefined, {
                 duration: 3000,
             }));
         }

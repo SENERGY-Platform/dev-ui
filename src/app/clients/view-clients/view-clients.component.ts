@@ -40,13 +40,13 @@ export class ViewClientsComponent implements OnInit {
   }
 
   public loadClients() {
-    this.apiService.get('/clients/clients').then((clients) => {
+    this.apiService.get('/clients/clients').subscribe((clients) => {
       this.clients = clients as ClientModel[];
     });
   }
 
   public deleteClient(clientId) {
-    this.apiService.delete('/clients/client/' + clientId).then(() => {
+    this.apiService.delete('/clients/client/' + clientId).subscribe(() => {
       this.loadClients();
     });
   }

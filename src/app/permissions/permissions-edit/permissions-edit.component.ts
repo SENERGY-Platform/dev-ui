@@ -204,10 +204,8 @@ export class PermissionsEditComponent implements OnInit {
 
         return new Promise<boolean>((resolve) => {
             return this.ladonService.deletePolicy(policy)
-                .then(() => {
-                    return this.ladonService.postPolicy(policy);
-                }).then(() => {
-                    resolve(true);
+                .subscribe(() => {
+                    return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
                 });
         });
     }
