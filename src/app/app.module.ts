@@ -17,7 +17,7 @@
  */
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -63,8 +63,9 @@ const appRoutes: Routes = [
   },
 ];
 
+const keycloakService = new KeycloakService();
+
 @NgModule({
-  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
     StartComponent,
@@ -97,11 +98,26 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     KeycloakAngularModule,
   ],
-  providers: [ApiService, AuthService, ValidTokenGuard, SwaggerService, LadonService, UserManagementService, DeviceSimService, {
-    deps: [KeycloakService],
-    multi: true,
-    provide: APP_INITIALIZER,
-    useFactory: init,
-  }],
+  providers: [
+    ApiService,
+    AuthService,
+    ValidTokenGuard,
+    SwaggerService,
+    LadonService,
+    UserManagementService,
+    DeviceSimService,
+    {
+      provide: KeycloakService,
+      useValue: keycloakService,
+    },
+  ],
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap {
+  public ngDoBootstrap(appRef: ApplicationRef) {
+    init(keycloakService)
+        .then(() => {
+          appRef.bootstrap(AppComponent);
+        })
+        .catch((error) => console.error('[ngDoBootstrap] init Keycloak failed', error));
+  }
+}

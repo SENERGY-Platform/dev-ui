@@ -22,17 +22,15 @@ import {environment} from '../../../environments/environment';
 declare var KEYCLOAK_URL: any;
 declare var CLIENT_ID: any;
 
-export function init(keycloak: KeycloakService): () => Promise<any> {
+export function init(keycloak: KeycloakService): Promise<boolean> {
     if (!environment.loginRequired) {
-        return () => {
-            return new Promise<any>((resolve) => {
-                resolve();
-            });
-        };
+        return new Promise<boolean>((resolve) => {
+            resolve(true);
+        });
     }
 
-    let url = '';
-    let clientId = '';
+    let url: string;
+    let clientId: string;
     if (!environment.production) {
         url = environment.keycloak;
         clientId = environment.client;
@@ -41,7 +39,7 @@ export function init(keycloak: KeycloakService): () => Promise<any> {
         clientId = CLIENT_ID;
     }
 
-    return (): Promise<any> => keycloak.init({
+    return keycloak.init({
         config: {
             url,
             realm: 'master',
