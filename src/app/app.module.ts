@@ -32,7 +32,6 @@ import { CoreModule } from './core/core.module';
 import { MaterialModule } from './material/material.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { PlatformDocModule } from './platform-doc/platform-doc.module';
-import { PlaygroundModule } from './playground/playground.module';
 import { SettingsModule } from './settings/settings.module';
 
 import { ApiService } from './services/api/api.service';
@@ -81,7 +80,6 @@ const keycloakService = new KeycloakService();
     SettingsModule,
     PermissionsModule,
     ClientsModule,
-    PlaygroundModule,
     ApiDocModule,
     HttpClientModule,
     ReactiveFormsModule,
