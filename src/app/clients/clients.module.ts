@@ -16,20 +16,19 @@
  *
  */
 
-import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { MaterialModule } from '../material/material.module';
+import { ValidTokenGuard } from '../services/auth/guard.service';
 import { AddClientComponent } from './add-client/add-client.component';
 import { ViewClientComponent } from './view-client/view-client.component';
 import { ViewClientsComponent } from './view-clients/view-clients.component';
-import { RouterModule, Routes } from '@angular/router';
-import { ValidTokenGuard } from '../services/auth/guard.service';
-import { FormsModule } from '@angular/forms';
-import {
-  ReactiveFormsModule
-} from '@angular/forms';
-import { MaterialModule } from '../material/material.module';
-import { TranslateModule } from '@ngx-translate/core';
-import {ClientService} from "./shared/client.service";
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -45,20 +44,20 @@ const routes: Routes = [
       {
         path: 'add',
         component: AddClientComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: ':id',
         component: ViewClientComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: '',
         component: ViewClientsComponent,
-        canActivate: [ValidTokenGuard]
-      }
-    ]
-  }
+        canActivate: [ValidTokenGuard],
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -68,16 +67,16 @@ const routes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     TranslateModule.forRoot(),
-    FormsModule
+    FormsModule,
   ],
   declarations: [
     AddClientComponent,
     ViewClientComponent,
     RoutingComponent,
-    ViewClientsComponent
+    ViewClientsComponent,
   ],
   entryComponents: [
-      AddClientComponent
+      AddClientComponent,
   ],
 })
 export class ClientsModule { }

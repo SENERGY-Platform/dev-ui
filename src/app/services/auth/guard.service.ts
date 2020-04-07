@@ -18,15 +18,15 @@
 
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ValidTokenGuard implements CanActivate {
 
   constructor(private authService: AuthService) {}
 
-  canActivate(): Observable<boolean>|Promise<boolean>|boolean {
-    return this.authService.userIsAuthenticated()
+  public canActivate(): Observable<boolean>|Promise<boolean>|boolean {
+    return this.authService.userIsAuthenticated();
   }
 }

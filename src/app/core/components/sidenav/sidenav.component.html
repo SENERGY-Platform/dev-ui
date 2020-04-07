@@ -21,8 +21,7 @@
                  disableClose
                  role="navigation"
                  [fixedInViewport]='true'
-                 class="sidenav"
-                 class="mat-elevation-z1"
+                 class="sidenav mat-elevation-z1"
                 >
         <ul class="side-menu">
             <li *ngFor="let section of sections">
@@ -43,20 +42,20 @@
                         routerLink="{{section.state}}"
                         routerLinkActive="background-color-sidenav"
                         class="md-button-toggle">
-                    <div fxLayout="row"
+                    <span fxLayout="row"
                          fxLayoutAlign=" center">
                         <mat-icon>
                             {{section.icon}}
                         </mat-icon>
-                        <div fxFlexOffset="5px">
+                        <span fxFlexOffset="5px">
                             {{section.name | uppercase}}
-                        </div>
+                        </span>
 
                         <mat-icon class="md-toggle-icon"
                                   [ngClass]="{'toggled': isSectionOpen(section)}">
                             keyboard_arrow_down
                         </mat-icon>
-                    </div>
+                    </span>
                 </button>
 
                 <ul [ngClass]="{'toggled': isSectionOpen(section)}"

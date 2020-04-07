@@ -16,18 +16,18 @@
  *
  */
 
-import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DevicesimListComponent } from './devicesim-list/devicesim-list.component';
-import { DevicesimAddComponent } from './devicesim-add/devicesim-add.component';
+import { Component, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { ValidTokenGuard } from '../services/auth/guard.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../material/material.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ValidTokenGuard } from '../services/auth/guard.service';
 import { DevicesimAddActuatorComponent } from './devicesim-add-actuator/devicesim-add-actuator.component';
+import { DevicesimAddComponent } from './devicesim-add/devicesim-add.component';
+import { DevicesimListComponent } from './devicesim-list/devicesim-list.component';
 import { EditActuatorComponent } from './edit-actuator/edit-actuator.component';
 import { EditSensorComponent } from './edit-sensor/edit-sensor.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -47,13 +47,13 @@ const routes: Routes = [
         children: [
           {
             component: EditSensorComponent,
-            path: 'edit'
+            path: 'edit',
           },
           {
             component: DevicesimAddComponent,
-            path: 'add'
-          }
-        ]
+            path: 'add',
+          },
+        ],
       },
       {
         path: 'actuator',
@@ -62,23 +62,22 @@ const routes: Routes = [
         children: [
           {
             component: EditActuatorComponent,
-            path: 'edit'
+            path: 'edit',
           },
           {
             component: DevicesimAddActuatorComponent,
-            path: 'add'
-          }
-        ]
+            path: 'add',
+          },
+        ],
       },
       {
         path: '',
         component: DevicesimListComponent,
-        canActivate: [ValidTokenGuard]
-      }
-    ]
-  }
-]
-
+        canActivate: [ValidTokenGuard],
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [
@@ -87,8 +86,15 @@ const routes: Routes = [
     FormsModule,
     TranslateModule.forRoot(),
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
-  declarations: [DevicesimListComponent, DevicesimAddComponent, RoutingComponent, DevicesimAddActuatorComponent, EditActuatorComponent, EditSensorComponent]
+  declarations: [
+    DevicesimListComponent,
+    DevicesimAddComponent,
+    RoutingComponent,
+    DevicesimAddActuatorComponent,
+    EditActuatorComponent,
+    EditSensorComponent,
+  ],
 })
 export class PlaygroundModule { }

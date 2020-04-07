@@ -24,11 +24,11 @@ export class UserManagementService {
 
   constructor(private authService: AuthService) { }
 
-  loadUsers() {
-    return this.authService.get("/admin/realms/master/users")
+  public loadUsers() {
+    return this.authService.get('/admin/realms/master/users');
   }
 
-  loadRoles() {
-    return this.authService.get("/admin/realms/master/roles")
+  public loadRoles() {
+    return this.authService.get('/admin/realms/master/roles');
   }
 }

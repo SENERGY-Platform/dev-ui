@@ -16,19 +16,19 @@
  *
  */
 
-import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PermissionsAddComponent } from './permissions-add/permissions-add.component';
-import { PermissionsListComponent } from './permissions-list/permissions-list.component';
-import { RouterModule, Routes } from '@angular/router';
-import { ValidTokenGuard } from '../services/auth/guard.service';
+import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '../material/material.module';
+import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
+import { MaterialModule } from '../material/material.module';
+import { ValidTokenGuard } from '../services/auth/guard.service';
+import { PermissionsAddComponent } from './permissions-add/permissions-add.component';
 import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
-import {PermissionsDialogImportComponent} from "./permissions-dialog-import/permissions-dialog-import.component";
+import {PermissionsDialogImportComponent} from './permissions-dialog-import/permissions-dialog-import.component';
+import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
+import { PermissionsListComponent } from './permissions-list/permissions-list.component';
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -44,20 +44,20 @@ const routes: Routes = [
       {
         path: 'add',
         component: PermissionsAddComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: '',
         component: PermissionsListComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
           path: 'edit',
           component: PermissionsEditComponent,
-          canActivate: [ValidTokenGuard]
-      }
-    ]
-  }
+          canActivate: [ValidTokenGuard],
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -76,7 +76,7 @@ const routes: Routes = [
     RoutingComponent,
     PermissionsEditComponent,
     PermissionsDialogDeleteComponent,
-    PermissionsDialogImportComponent
-  ]
+    PermissionsDialogImportComponent,
+  ],
 })
 export class PermissionsModule { }

@@ -17,48 +17,48 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../services/api/api.service';
 import {
-  Router
+  Router,
 } from '@angular/router';
-import {ClientService} from "../shared/client.service";
+import { ApiService } from '../../services/api/api.service';
+import {ClientService} from '../shared/client.service';
 @Component({
   selector: 'app-view-clients',
   templateUrl: './view-clients.component.html',
-  styleUrls: ['./view-clients.component.css']
+  styleUrls: ['./view-clients.component.css'],
 })
 
 export class ViewClientsComponent implements OnInit {
-  clients: any;
+  public clients: any;
 
   constructor(private router: Router, private apiService: ApiService, private clientService: ClientService) {
   }
 
-  ngOnInit() {
-    this.loadClients()
+  public ngOnInit() {
+    this.loadClients();
   }
 
-  loadClients() {
-    this.apiService.get("/clients/clients").then(clients => {
-      this.clients = clients
-    })
+  public loadClients() {
+    this.apiService.get('/clients/clients').then((clients) => {
+      this.clients = clients;
+    });
   }
 
-  deleteClient(client_id) {
-    this.apiService.delete("/clients/client/" + client_id).then(clients => {
-      this.loadClients()
-    })
+  public deleteClient(clientId) {
+    this.apiService.delete('/clients/client/' + clientId).then(() => {
+      this.loadClients();
+    });
   }
 
-  addClient() {
-    this.clientService.openAddClientDialog().subscribe(b => {
+  public addClient() {
+    this.clientService.openAddClientDialog().subscribe((b) => {
       if (b) {
         this.loadClients();
       }
-    })
+    });
   }
 
-  viewClient(id: any) {
+  public viewClient(id: any) {
     this.clientService.openViewClientDialog(id);
   }
 }

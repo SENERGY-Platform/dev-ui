@@ -22,19 +22,19 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css']
+  styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent implements OnInit {
-  language: string;
+  public language: string;
 
   constructor(private translateService: TranslateService) { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
-  setLanguage() {
+  public setLanguage() {
     console.log(this.language);
-    this.translateService.use(this.language)
+    this.translateService.use(this.language);
   }
 
 }

@@ -18,52 +18,42 @@
 
 import {
   Component,
-  ViewChild,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import {
-  NgModule
-} from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import {
-  Observable
-} from 'rxjs';
-import {
-  Router
+  Router,
 } from '@angular/router';
-import {
-  SwaggerService
-} from '../../services/swagger/swagger.service';
 import { TranslateService } from '@ngx-translate/core';
+import {
+  SwaggerService,
+} from '../../services/swagger/swagger.service';
 
 @Component({
   selector: 'app-docs',
   templateUrl: './api-docs.component.html',
-  styleUrls: ['./api-docs.component.css']
+  styleUrls: ['./api-docs.component.css'],
 })
 export class ApiDocsComponent implements OnInit {
-  title = 'SEPL API Documentation';
-  swaggerList: any;
-  swaggerListShown: any;
-  query: any;
-  searchPlaceholder: any;
+  public title = 'SEPL API Documentation';
+  public swaggerList: any;
+  public swaggerListShown: any;
+  public query: any;
+  public searchPlaceholder: any;
 
+  constructor(private translateService: TranslateService, private router: Router, private swaggerService: SwaggerService) {}
 
-  constructor(private translateService: TranslateService,private router: Router, private swaggerService: SwaggerService) {}
-
-  ngOnInit(): void {
-    this.translateService.get("SEARCH").subscribe(name => this.searchPlaceholder = name);
-    this.swaggerService.getSwagger().then(swaggerList => {
+  public ngOnInit(): void {
+    this.translateService.get('SEARCH').subscribe((name) => this.searchPlaceholder = name);
+    this.swaggerService.getSwagger().then((swaggerList) => {
       this.swaggerList = swaggerList;
       this.swaggerListShown = swaggerList;
     });
   }
 
-  search() {
-    const insensitiveQuery = new RegExp(this.query, 'gi')
-    this.swaggerListShown = this.swaggerList.filter(api => {
-      return insensitiveQuery.test(api['info']['description']) || insensitiveQuery.test(api['info']['title']);
+  public search() {
+    const insensitiveQuery = new RegExp(this.query, 'gi');
+    this.swaggerListShown = this.swaggerList.filter((api) => {
+      return insensitiveQuery.test(api.info.description) || insensitiveQuery.test(api.info.title);
     });
   }
 }

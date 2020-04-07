@@ -18,53 +18,45 @@
 
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 
-import {throwIfAlreadyLoaded} from './module-import-guard';
-import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {RouterModule} from '@angular/router';
-import {MaterialModule} from '../material/material.module';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient} from '@angular/common/http';
-import {HttpLoaderFactory} from '../app.module';
 import {CommonModule} from '@angular/common';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import {FormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {MaterialModule} from '../material/material.module';
+import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {ToolbarComponent} from './components/toolbar/toolbar.component';
+import {throwIfAlreadyLoaded} from './module-import-guard';
+
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     imports: [
-
         CommonModule,
         RouterModule,
         MaterialModule,
         FormsModule,
         FlexLayoutModule,
-        TranslateModule.forRoot({
+        TranslateModule.forChild({
             loader: {
+                deps: [HttpClient],
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-                }
-            }),
-
-
-
+            },
+        }),
     ],
     declarations: [
-
         SidenavComponent,
-
         ToolbarComponent,
-
-
     ],
     exports: [
-
         SidenavComponent,
-
         ToolbarComponent,
-
     ],
-
 })
 
 export class CoreModule {

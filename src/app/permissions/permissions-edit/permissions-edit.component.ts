@@ -16,23 +16,20 @@
  *
  */
 
-import {Component, OnInit, Inject} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserManagementService} from '../../services/user-management/user-management.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormControl} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+import {AuthService} from '../../services/auth/auth.service';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
-import {Router} from '@angular/router';
-import {FormControl} from '@angular/forms';
-import {AuthService} from '../../services/auth/auth.service';
-import {Observable, of} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {async} from "rxjs/internal/scheduler/async";
-
+import {UserManagementService} from '../../services/user-management/user-management.service';
 
 export interface Model {
     id: string;
@@ -49,30 +46,29 @@ export interface DialogData {
 @Component({
     selector: 'app-permissions-edit',
     templateUrl: './permissions-edit.component.html',
-    styleUrls: ['./permissions-edit.component.css']
+    styleUrls: ['./permissions-edit.component.css'],
 })
 export class PermissionsEditComponent implements OnInit {
-    myControl = new FormControl();
-    userIsAdmin: boolean;
-    subject: string;
-    actions: string;
-    id: string;
-    resource: string;
-    submit_failed: any = false;
+    public myControl = new FormControl();
+    public userIsAdmin: boolean;
+    public subject: string;
+    public actions: string;
+    public id: string;
+    public resource: string;
     // all roles and uris and users
-    roles: any;
-    uris: any;
-    users: any;
-    policies: any;
+    public roles: any;
+    public uris: any;
+    public users: any;
+    public policies: any;
     // options for autocomplete filter
-    filteredOptions: Observable<string[]>;
+    public filteredOptions: Observable<string[]>;
     public btnDisable: boolean;
-    array_of_actions: string[];
+    public arrayOfActions: string[];
 
     public form = this.fb.group({
         role: this.route.snapshot.paramMap.get('subject'),
         user: this.route.snapshot.paramMap.get('subject'),
-        actions: this.fb.array([])
+        actions: this.fb.array([]),
     });
 
     constructor(
@@ -91,7 +87,7 @@ export class PermissionsEditComponent implements OnInit {
                 this.roles = roles;
                 this.intbtnDisable();
             });
-            this.userManagementService.loadUsers().then(users => this.users = users);
+            this.userManagementService.loadUsers().then((users) => this.users = users);
         } catch (e) {
             console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
             this.btnDisable = true;
@@ -104,10 +100,10 @@ export class PermissionsEditComponent implements OnInit {
         patch: new FormControl(),
         delete: new FormControl(),
         put: new FormControl(),
-        head: new FormControl()
+        head: new FormControl(),
     });
 
-    ngOnInit() {
+    public ngOnInit() {
         try {
             this.userIsAdmin = this.authService.userHasRole('admin');
         } catch (e) {
@@ -130,19 +126,19 @@ export class PermissionsEditComponent implements OnInit {
         this.filteredOptions = this.myControl.valueChanges
             .pipe(
                 startWith(''),
-                map(value => this._filter(value))
+                map((value) => this._filter(value)),
             );
     }
 
-    checkactiveActions() {
-        this.array_of_actions = this.actions.split(',');
+    public checkactiveActions() {
+        this.arrayOfActions = this.actions.split(',');
         this.methods.patchValue({
-            get: this.array_of_actions.includes('GET'),
-            post: this.array_of_actions.includes('POST'),
-            patch: this.array_of_actions.includes('PATCH'),
-            delete: this.array_of_actions.includes('DELETE'),
-            put: this.array_of_actions.includes('PUT'),
-            head: this.array_of_actions.includes('HEAD')
+            get: this.arrayOfActions.includes('GET'),
+            post: this.arrayOfActions.includes('POST'),
+            patch: this.arrayOfActions.includes('PATCH'),
+            delete: this.arrayOfActions.includes('DELETE'),
+            put: this.arrayOfActions.includes('PUT'),
+            head: this.arrayOfActions.includes('HEAD'),
         });
         /*
         console.log('Status:\n'
@@ -155,87 +151,79 @@ export class PermissionsEditComponent implements OnInit {
          */
     }
 
-    yes() {
+    public yes() {
         // Send list of policies to Ladon
         // Each Triple of Subject, Action and Resource become one policy
 
-        this.pushPolicy().then(res => {
+        this.pushPolicy().then((res) => {
             if (res === true) {
                 this.dialogRef.close('yes');
             } else {
-                this.snackBar.open("Could not update policy", undefined, {
+                this.snackBar.open('Could not update policy', undefined, {
                     duration: 3 * 1000,
                 });
             }
         });
     }
 
-    no() {
+    public no() {
         this.dialogRef.close('no');
     }
 
-    pushPolicy(): Promise<boolean> {
+    public pushPolicy(): Promise<boolean> {
         let resource = this.resource;
         if (resource.startsWith('/')) {
             resource = resource.substring(1);
         }
         resource = resource.split('/').join(':');
         const policy = {
-            'Subjects': [this.subject],
-            'Actions': [],
-            'Resources': ['<^(endpoints:' + resource + ').*>'],
-            'Effect': 'allow',
-            'id': this.id
+            Subjects: [this.subject],
+            Actions: [],
+            Resources: ['<^(endpoints:' + resource + ').*>'],
+            Effect: 'allow',
+            id: this.id,
         };
         if (this.methods.get('get').value === true) {
-            policy['Actions'].push('GET');
+            policy.Actions.push('GET');
         }
         if (this.methods.get('post').value === true) {
-            policy['Actions'].push('POST');
+            policy.Actions.push('POST');
         }
         if (this.methods.get('patch').value === true) {
-            policy['Actions'].push('PATCH');
+            policy.Actions.push('PATCH');
         }
         if (this.methods.get('delete').value === true) {
-            policy['Actions'].push('DELETE');
+            policy.Actions.push('DELETE');
         }
         if (this.methods.get('put').value === true) {
-            policy['Actions'].push('PUT');
+            policy.Actions.push('PUT');
         }
         if (this.methods.get('head').value === true) {
-            policy['Actions'].push('HEAD');
+            policy.Actions.push('HEAD');
         }
 
-        return new Promise<boolean>(resolve => {
+        return new Promise<boolean>((resolve) => {
             return this.ladonService.deletePolicy(policy)
                 .then(() => {
-                    return this.ladonService.postPolicy(policy)
+                    return this.ladonService.postPolicy(policy);
                 }).then(() => {
                     resolve(true);
-                })
+                });
         });
     }
 
     // autocomplete filter
     private _filter(value: string): string[] {
         const filterValue = value.toLowerCase();
-        return this.uris.filter(option => option.toLowerCase().includes(filterValue));
+        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
     }
 
-    onChange(event) {
-        if (event === 'subject') {
-            this.btnDisable = false;
-        } else {
-            this.btnDisable = true;
-        }
+    public onChange(event) {
+        this.btnDisable = event !== 'subject';
     }
 
-    intbtnDisable() {
-        const persons = this.roles.find(x => x.name === this.subject);
-        if (persons === undefined) {
-            this.btnDisable = true;
-        } else {
-            this.btnDisable = false;
-        }
+    public intbtnDisable() {
+        const persons = this.roles.find((x) => x.name === this.subject);
+        this.btnDisable = persons === undefined;
     }
 }

@@ -17,80 +17,76 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { DeviceSimService } from '../../services/devicesim/device-sim.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
+import { DeviceSimService } from '../../services/devicesim/device-sim.service';
 
 @Component({
   selector: 'app-devicesim-list',
   templateUrl: './devicesim-list.component.html',
-  styleUrls: ['./devicesim-list.component.css']
+  styleUrls: ['./devicesim-list.component.css'],
 })
 export class DevicesimListComponent implements OnInit {
-  devices: any = [];
-  displayedColumns: any;
-  loading: boolean = true;
+  public devices: any = [];
+  public displayedColumns: any;
+  public loading = true;
 
   constructor(private devicesimService: DeviceSimService, private router: Router, private apiService: ApiService) { }
 
-  ngOnInit() {
-    this.load()
+  public ngOnInit() {
+    this.load();
   }
 
-  load() {
+  public load() {
     this.devices = [];
     this.displayedColumns = ['name', 'class', 'id', 'status', 'actions'];
 
-    this.devicesimService.loadDevices().then(devices => {
-      (<any>devices).actuators.forEach(actuator => {
-        actuator["class"] = "Actuator";
-        this.devices.push(actuator)
+    this.devicesimService.loadDevices().then((devices) => {
+      (devices as any).actuators.forEach((actuator) => {
+        actuator.class = 'Actuator';
+        this.devices.push(actuator);
       });
 
-      (<any>devices).sensors.forEach(sensor => {
-        sensor["class"] = "Sensor";
-        this.devices.push(sensor)
-      
+      (devices as any).sensors.forEach((sensor) => {
+        sensor.class = 'Sensor';
+        this.devices.push(sensor);
+
       });
       this.devices = new MatTableDataSource(this.devices);
-      this.loading = false
-    })
+      this.loading = false;
+    });
   }
 
-  deleteDevice(device) {
-    this.devicesimService.deleteDevice(device).then(res => this.load())
+  public deleteDevice(device) {
+    this.devicesimService.deleteDevice(device).then(() => this.load());
   }
 
-  openEdit(device) {
-    if(device.class == "Sensor") {
-      this.router.navigate(["/devicesim/sensor/edit"], { queryParams: { id: device.id , type: device.class} })
+  public openEdit(device) {
+    if (device.class === 'Sensor') {
+      this.router.navigate(['/devicesim/sensor/edit'], { queryParams: { id: device.id , type: device.class} });
     } else {
-      this.router.navigate(["/devicesim/actuator/edit"], { queryParams: { id: device.id, type: device.class} })
+      this.router.navigate(['/devicesim/actuator/edit'], { queryParams: { id: device.id, type: device.class} });
     }
   }
 
-  export(device) {
-    var valuePath = "value.reading.value";
-    var timePath = "value.reading.time";
-    var exportData = {
-      "sd": valuePath,
-      "sdd": timePath
+  public export() {
+    const valuePath = 'value.reading.value';
+    const timePath = 'value.reading.time';
+    const exportData = {
+      sd: valuePath,
+      sdd: timePath,
     };
-    this.apiService.post("/serving-service", exportData).then(result => {})
+    this.apiService.post('/serving-service', exportData).then(() => {});
   }
 
-  toggleStatus(device) {
-    if(device.active) {
-      device.active = false
-    } else {
-      device.active = true
-    }
+  public toggleStatus(device) {
+    device.active = !device.active;
 
-    if(device.class == "Sensor") {
-      this.devicesimService.updateSensor(device)
+    if (device.class === 'Sensor') {
+      this.devicesimService.updateSensor(device);
     } else {
-      this.devicesimService.updateActuator(device)
+      this.devicesimService.updateActuator(device);
     }
   }
 

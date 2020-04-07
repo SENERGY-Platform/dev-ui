@@ -1,5 +1,4 @@
 
-
 /*
  *
  *     Copyright 2018 InfAI (CC SES)
@@ -18,21 +17,21 @@
  *
  */
 
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'dialog-dev-role',
+    selector: 'app-dialog-dev-role',
     templateUrl: 'dialog-dev-role.component.html',
   })
-  export class Dialog {
-  
+  export class DialogComponent {
+
     constructor(
-      public dialogRef: MatDialogRef<Dialog>,
+      public dialogRef: MatDialogRef<DialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
-  
-    onNoClick(): void {
-      window.location.href = "https://ui.sepl.infai.org"
+
+    public onNoClick(): void {
+      window.location.href = 'https://ui.sepl.infai.org';
     }
-  
+
   }

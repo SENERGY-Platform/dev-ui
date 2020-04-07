@@ -16,14 +16,14 @@
  * /
  */
 
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
 import { KongService } from './kong.service';
 
 describe('KongService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [KongService]
+      providers: [KongService],
     });
   });
 

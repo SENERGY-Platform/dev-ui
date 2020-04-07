@@ -17,94 +17,98 @@
  */
 
 import {
-  Injectable
-} from '@angular/core';
-import {
   HttpClient,
-  HttpHeaders
+  HttpHeaders,
 } from '@angular/common/http';
-
 import {
-  AuthService
-} from '../auth/auth.service';
+  Injectable,
+} from '@angular/core';
+
 import { environment } from '../../../environments/environment';
+import {
+  AuthService,
+} from '../auth/auth.service';
 
 declare var KONG_URL: string;
 
-
 @Injectable()
 export class ApiService {
-  platformUrl: string;
+  public platformUrl: string;
 
   constructor(private httpClient: HttpClient, private authService: AuthService) {
-    if(environment.production) {
-      this.platformUrl = KONG_URL
+    if (environment.production) {
+      this.platformUrl = KONG_URL;
     } else {
-      this.platformUrl = environment["kong"]
+      this.platformUrl = environment.kong;
     }
   }
 
-  get(path) {
-    return new Promise((resolve, reject)=> {
-      this.authService.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
-         
+  public get(path) {
+    return new Promise((resolve, reject) => {
+      this.authService.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+
         });
-  
-        this.httpClient.get(this.platformUrl + path, {'headers': headers}).subscribe(result => resolve(result), error => reject(error))
-      })
-    })
+
+        this.httpClient.get(this.platformUrl + path, {headers}).subscribe((result) => resolve(result), (error) => reject(error));
+      });
+    });
   }
 
-  post(path, payload) {
+  public post(path, payload) {
     return new Promise((resolve, reject) => {
-      this.authService.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
-         
+      this.authService.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+
         });
-        this.httpClient.post(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result), error => reject(error));
-      })
-    })
+        this.httpClient.post(this.platformUrl + path, payload, {headers}).subscribe(
+            (result) => resolve(result),
+            (error) => reject(error));
+      });
+    });
   }
 
-  put(path, payload) {
+  public put(path, payload) {
     return new Promise((resolve, reject) => {
-      this.authService.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
-         
+      this.authService.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+
         });
-        this.httpClient.put(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => {
+        this.httpClient.put(this.platformUrl + path, payload, {headers}).subscribe((result) => {
             resolve(result);
-        }, error => reject(error));
+        }, (error) => reject(error));
 
-      })
-    })
+      });
+    });
   }
 
-  delete(path) {
-    return new Promise((resolve, reject)=> {
-      this.authService.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
-         
-        });
-        this.httpClient.delete(this.platformUrl  + path, {'headers': headers}).subscribe(result => resolve(result), error => reject(error));
-      })
-    })
-  }
-
-  patch(path, payload) {
+  public delete(path) {
     return new Promise((resolve, reject) => {
-      this.authService.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
-         
+      this.authService.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+
         });
-        this.httpClient.patch(this.platformUrl + path, payload, {'headers': headers}).subscribe(result => resolve(result), error => reject(error))
-      })
-    })
+        this.httpClient.delete(this.platformUrl  + path, {headers}).subscribe((result) => resolve(result), (error) => reject(error));
+      });
+    });
+  }
+
+  public patch(path, payload) {
+    return new Promise((resolve, reject) => {
+      this.authService.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+
+        });
+        this.httpClient.patch(this.platformUrl + path, payload, {headers}).subscribe(
+            (result) => resolve(result),
+            (error) => reject(error),
+        );
+      });
+    });
   }
 }

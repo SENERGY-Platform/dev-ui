@@ -26,7 +26,7 @@ describe('IotRepoDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IotRepoDocComponent ]
+      declarations: [ IotRepoDocComponent ],
     })
     .compileComponents();
   }));

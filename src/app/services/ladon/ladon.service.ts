@@ -17,36 +17,35 @@
  */
 
 import {
-  Injectable
+  Injectable,
 } from '@angular/core';
 import { ApiService } from '../api/api.service';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class LadonService {
-  baseUrl: string;
+  public baseUrl: string;
   constructor(private apiService: ApiService) {
-    this.baseUrl = "/ladon"
+    this.baseUrl = '/ladon';
   }
 
-  postPolicy(policy) {
-    return this.apiService.post(this.baseUrl + "/policies", policy)
+  public postPolicy(policy) {
+    return this.apiService.post(this.baseUrl + '/policies', policy);
   }
 
-  getAllPolicies() {
-    return this.apiService.get(this.baseUrl + "/policies")
+  public getAllPolicies() {
+    return this.apiService.get(this.baseUrl + '/policies');
   }
 
-  deletePolicy(policy) {
-    return this.apiService.delete(this.baseUrl + "/policies?id=" + policy["id"]);
+  public deletePolicy(policy) {
+    return this.apiService.delete(this.baseUrl + '/policies?id=' + policy.id);
   }
 
-  putPolicy(policy) {
-    return this.apiService.put(this.baseUrl + "/policies?id=" + policy["id"], policy);
+  public putPolicy(policy) {
+    return this.apiService.put(this.baseUrl + '/policies?id=' + policy.id, policy);
     }
 
-  patchPolicy(policy) {
-      return this.apiService.patch(this.baseUrl + "/policies?id=" + policy["id"], policy);
+  public patchPolicy(policy) {
+      return this.apiService.patch(this.baseUrl + '/policies?id=' + policy.id, policy);
   }
 
 }

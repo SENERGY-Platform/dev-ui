@@ -23,7 +23,7 @@ import {Observable} from 'rxjs';
 const mqAliases: string[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 
 export class ResponsiveService {
@@ -31,21 +31,24 @@ export class ResponsiveService {
     constructor(private observableMedia: MediaObserver) {
     }
 
-    getActiveMqAlias(): string {
+    public getActiveMqAlias(): string {
         let mqAlias = '';
-        for (let i = 0; i < mqAliases.length; i++) {
-            if (this.observableMedia.isActive(mqAliases[i])) {
-                mqAlias = mqAliases[i];
-                break;
+        mqAliases.forEach((_, index) => {
+            if (this.observableMedia.isActive(mqAliases[index])) {
+                mqAlias = mqAliases[index];
+                return mqAlias;
             }
-        }
+        });
         return mqAlias;
     }
 
-    observeMqAlias(): Observable<string> {
+    public observeMqAlias(): Observable<string> {
         return new Observable<string>((observer) => {
-            this.observableMedia.media$.subscribe((media: MediaChange) => {
-                observer.next(media.mqAlias);
+            this.observableMedia.asObservable().subscribe({
+                next: (mediaArr: MediaChange[]) => {
+                    mediaArr.forEach((media) => observer.next(media.mqAlias));
+                },
+                complete: () => observer.complete(),
             });
         });
     }

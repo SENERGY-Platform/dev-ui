@@ -22,16 +22,16 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-dashboard-doc',
   templateUrl: './dashboard-doc.component.html',
-  styleUrls: ['./dashboard-doc.component.css']
+  styleUrls: ['./dashboard-doc.component.css'],
 })
 export class DashboardDocComponent implements OnInit {
-  path: string 
+  public path: string;
 
-  constructor(private translate: TranslateService) { 
-    var lang = this.translate.currentLang || 'de'
-    this.path = "assets/docs/" + lang + "/dashboard.md"
+  constructor(private translate: TranslateService) {
+    const lang = this.translate.currentLang || 'de';
+    this.path = 'assets/docs/' + lang + '/dashboard.md';
   }
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

@@ -8,7 +8,7 @@ describe('PermissionsDialogImportComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PermissionsDialogImportComponent ]
+      declarations: [ PermissionsDialogImportComponent ],
     })
     .compileComponents();
   }));

@@ -26,7 +26,7 @@ describe('ProcessDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProcessDocComponent ]
+      declarations: [ ProcessDocComponent ],
     })
     .compileComponents();
   }));

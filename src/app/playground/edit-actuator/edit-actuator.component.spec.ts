@@ -26,7 +26,7 @@ describe('EditActuatorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditActuatorComponent ]
+      declarations: [ EditActuatorComponent ],
     })
     .compileComponents();
   }));

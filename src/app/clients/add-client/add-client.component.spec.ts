@@ -1,5 +1,4 @@
 
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddClientComponent } from './add-client.component';
@@ -10,7 +9,7 @@ describe('AddClientComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddClientComponent ]
+      declarations: [ AddClientComponent ],
     })
     .compileComponents();
   }));

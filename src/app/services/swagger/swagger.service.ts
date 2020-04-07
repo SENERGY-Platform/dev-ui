@@ -17,37 +17,35 @@
  */
 
 import {
-  Injectable
+  Injectable,
 } from '@angular/core';
-import {
-  HttpClient
-} from '@angular/common/http';
-import {
-  AuthService
-} from '../auth/auth.service';
 import { ApiService } from '../api/api.service';
+import {
+  AuthService,
+} from '../auth/auth.service';
 
 @Injectable()
 export class SwaggerService {
   constructor(private apiService: ApiService,
               private authService: AuthService) {}
 
-  getSwagger() {
-    /*
-      Get all Swagger files from the service.
-      giIterate through the array and retrieve necessary information(name, version) and add it to the list using currently unavailable descriptions.
-    */
-    return new Promise(resolve => {
-        this.authService.getToken().then(token => {
+    /**
+     * Get all Swagger files from the service.
+     * giIterate through the array and retrieve necessary information(name, version)
+     * and add it to the list using currently unavailable descriptions.
+     */
+    public getSwagger() {
+    return new Promise((resolve) => {
+        this.authService.getToken().then(() => {
           this.apiService.get('/swagger')
-            .then(res => {
+            .then((res) => {
                 resolve(res);
               },
-              err => {
-                console.log("Error occured");
-              }
+                () => {
+                console.log('Error occured');
+              },
             );
-        })
-    })
+        });
+    });
   }
 }

@@ -17,42 +17,41 @@
  */
 
 import {
-    Component, isDevMode, OnInit
+    Component, isDevMode, OnInit,
 } from '@angular/core';
-import {
-    Router
-} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
-import {
-    LadonService
-} from '../../services/ladon/ladon.service';
-import {
-    AuthService
-} from '../../services/auth/auth.service';
 import {Sort} from '@angular/material/sort';
-import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
-import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.component';
+import {MatTableDataSource} from '@angular/material/table';
+import {DomSanitizer} from '@angular/platform-browser';
+import {
+    Router,
+} from '@angular/router';
+import {
+    AuthService,
+} from '../../services/auth/auth.service';
+import {
+    LadonService,
+} from '../../services/ladon/ladon.service';
 import {PermissionsAddComponent} from '../permissions-add/permissions-add.component';
-import {DomSanitizer} from "@angular/platform-browser";
-import {PermissionsDialogImportComponent} from "../permissions-dialog-import/permissions-dialog-import.component";
-import {PermissionImportModel} from "../permissions-dialog-import/permissions-dialog-import.model";
+import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
+import {PermissionsDialogImportComponent} from '../permissions-dialog-import/permissions-dialog-import.component';
+import {PermissionImportModel} from '../permissions-dialog-import/permissions-dialog-import.model';
+import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.component';
 
 @Component({
-    selector: 'list',
+    selector: 'app-permissions-list',
     templateUrl: './permissions-list.component.html',
-    styleUrls: ['./permissions-list.component.css']
+    styleUrls: ['./permissions-list.component.css'],
 })
 export class PermissionsListComponent implements OnInit {
-    displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
-    policies: any;
-    userIsAdmin = false;
+    public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
+    public policies: any;
+    public userIsAdmin = false;
 
-    sortedData: any[];
-    mat_policies: any;
-    query = '';
-    sort: Sort = undefined;
-
+    public sortedData: any[];
+    public matPolicies: any;
+    public query = '';
+    public sort: Sort = undefined;
 
     constructor(private authService: AuthService,
                 private ladonService: LadonService,
@@ -62,26 +61,25 @@ export class PermissionsListComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.loadPolicies();
         this.userIsAdmin = this.authService.userHasRole('admin');
     }
 
-
-    loadPolicies() {
-        this.ladonService.getAllPolicies().then(response => {
-            this.policies = (<any>response).map(policy => {
-                policy['subject'] = policy['subjects'][0];
-                if (policy['resources'][0] === '<.*>') {
-                    policy['resource'] = policy['resources'][0];
+    public loadPolicies() {
+        this.ladonService.getAllPolicies().then((response) => {
+            this.policies = (response as any).map((policy) => {
+                policy.subject = policy.subjects[0];
+                if (policy.resources[0] === '<.*>') {
+                    policy.resource = policy.resources[0];
                 } else {
                     try {
-                        policy['resource'] = policy['resources'][0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
+                        policy.resource = policy.resources[0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
                     } catch (e) {
-                        console.error("Could not prepare policy resource for policy", policy)
+                        console.error('Could not prepare policy resource for policy', policy);
                     }
                 }
-                policy['actions'] = policy['actions'].join(",");
+                policy.actions = policy.actions.join(',');
                 return policy;
             });
 
@@ -89,16 +87,16 @@ export class PermissionsListComponent implements OnInit {
             this.sortedData = this.policies.slice();
 
             // data for mata table
-            this.mat_policies = new MatTableDataSource(this.sortedData);
+            this.matPolicies = new MatTableDataSource(this.sortedData);
             this.search();
         });
     }
 
-    createPolicy() {
+    public createPolicy() {
         const dialogRef = this.dialog.open(PermissionsAddComponent,
             {width: '38.2%'});
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result) => {
             if (result === 'yes') {
                 this.loadPolicies();
             } else if (result === 'error') {
@@ -107,15 +105,15 @@ export class PermissionsListComponent implements OnInit {
         });
     }
 
-    editPolicy(policy) {
+    public editPolicy(policy) {
         const dialogRef = this.dialog.open(PermissionsEditComponent,
             {
                 data: {
-                    id: policy['id'],
-                    actions: policy['actions'],
-                    subject: policy['subject'],
-                    resource: policy['resource']
-                }, width: '38.2%'
+                    id: policy.id,
+                    actions: policy.actions,
+                    subject: policy.subject,
+                    resource: policy.resource,
+                }, width: '38.2%',
             });
 
         dialogRef.afterClosed().subscribe(() => {
@@ -123,13 +121,13 @@ export class PermissionsListComponent implements OnInit {
         });
     }
 
-    deletePolicy(policy) {
+    public deletePolicy(policy) {
         this.ladonService.deletePolicy(policy).then(() => {
             this.loadPolicies();
         });
     }
 
-    sortData(sort: Sort) {
+    public sortData(sort: Sort) {
         this.sort = sort;
         if (sort == null) {
             return;
@@ -166,45 +164,45 @@ export class PermissionsListComponent implements OnInit {
         });
     }
 
-    askfordelete(policy) {
+    public askfordelete(policy) {
         // user does not have developer role but wants to use developer portal -> give him developer role
         const dialogRef = this.dialog.open(PermissionsDialogDeleteComponent, {
-            width: '450px'
+            width: '450px',
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result) => {
             if (result === 'yes') {
                 this.deletePolicy(policy);
             }
         });
     }
 
-    export() {
+    public export() {
         const theJSON = JSON.stringify(this.sortedData);
-        return this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
+        return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
     }
 
-    import() {
+    public import() {
         const dialogRef = this.dialog.open(PermissionsDialogImportComponent,
             {minWidth: '850px', minHeight: '200px'});
 
         dialogRef.afterClosed().subscribe((result: PermissionImportModel) => {
             if (result.overwrite) {
-                this.policies.forEach(policy => {
+                this.policies.forEach((policy) => {
                     if (policy.id !== 'admin-all') { // Don't ever delete this policy
-                        this.ladonService.deletePolicy(policy)
+                        this.ladonService.deletePolicy(policy);
                     }
                 });
             }
-            result.policies.forEach(policy => this.ladonService.postPolicy(policy));
+            result.policies.forEach((policy) => this.ladonService.postPolicy(policy));
             this.loadPolicies();
         });
     }
 
-    search() {
+    public search() {
         const filtered = [];
         const query = new RegExp(this.query, 'i');
-        this.policies.forEach(policy => {
+        this.policies.forEach((policy) => {
             try {
                 if (query.test(policy.subject)
                     || query.test(policy.actions)
@@ -214,8 +212,8 @@ export class PermissionsListComponent implements OnInit {
             } catch (e) {
                 // Probably invalid regex, ignore in prod mode
                 if (isDevMode()) {
-                    console.error("Error filtering policies",
-                        "This is most likely due to an invalid regex and you can ignore this error", e);
+                    console.error('Error filtering policies',
+                        'This is most likely due to an invalid regex and you can ignore this error', e);
                 }
             }
         });
@@ -223,7 +221,7 @@ export class PermissionsListComponent implements OnInit {
         this.sortData(this.sort);
     }
 
-    clearSearch() {
+    public clearSearch() {
         this.query = '';
         this.sortedData = this.policies;
         this.sortData(this.sort);

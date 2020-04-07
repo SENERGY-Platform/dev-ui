@@ -17,23 +17,23 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-process-doc',
   templateUrl: './process-doc.component.html',
-  styleUrls: ['./process-doc.component.css']
+  styleUrls: ['./process-doc.component.css'],
 })
 export class ProcessDocComponent implements OnInit {
-  path: string 
+  public path: string;
 
-  constructor(private translate: TranslateService) { 
-    var lang = this.translate.currentLang || 'de'
-    this.path = "assets/docs/" + lang + "/process.md"
+  constructor(private translate: TranslateService) {
+    const lang = this.translate.currentLang || 'de';
+    this.path = 'assets/docs/' + lang + '/process.md';
   }
 
-  ngOnInit() {
-    
+  public ngOnInit() {
+
   }
 
 }

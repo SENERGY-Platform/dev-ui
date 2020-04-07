@@ -16,8 +16,8 @@
  *
  */
 
-import {KeycloakService} from "keycloak-angular";
-import {environment} from "../../../environments/environment";
+import {KeycloakService} from 'keycloak-angular';
+import {environment} from '../../../environments/environment';
 
 declare var KEYCLOAK_URL: any;
 declare var CLIENT_ID: any;
@@ -25,28 +25,27 @@ declare var CLIENT_ID: any;
 export function init(keycloak: KeycloakService): () => Promise<any> {
     if (!environment.loginRequired) {
         return () => {
-            return new Promise<any>(resolve => {
-                resolve()
-            })
-        }
+            return new Promise<any>((resolve) => {
+                resolve();
+            });
+        };
     }
 
     let url = '';
     let clientId = '';
     if (!environment.production) {
-        url = environment["keycloak"];
-        clientId = environment["client"]
+        url = environment.keycloak;
+        clientId = environment.client;
     } else {
-        url = KEYCLOAK_URL + "/auth";
-        clientId = CLIENT_ID
+        url = KEYCLOAK_URL + '/auth';
+        clientId = CLIENT_ID;
     }
-
 
     return (): Promise<any> => keycloak.init({
         config: {
-            url: url,
+            url,
             realm: 'master',
-            clientId: clientId
+            clientId,
         },
         initOptions: {
             onLoad: 'login-required',
@@ -56,4 +55,3 @@ export function init(keycloak: KeycloakService): () => Promise<any> {
         bearerPrefix: 'Bearer',
     });
 }
-

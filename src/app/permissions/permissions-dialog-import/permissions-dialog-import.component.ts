@@ -17,16 +17,15 @@
  */
 
 import {Component, ViewChild} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {FormControl, Validators} from "@angular/forms";
-import {PermissionImportModel} from "./permissions-dialog-import.model";
-import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {PermissionImportModel} from './permissions-dialog-import.model';
 
 @Component({
     selector: 'app-permissions-dialog-import',
     templateUrl: './permissions-dialog-import.component.html',
-    styleUrls: ['./permissions-dialog-import.component.css']
+    styleUrls: ['./permissions-dialog-import.component.css'],
 })
 export class PermissionsDialogImportComponent {
 
@@ -34,14 +33,14 @@ export class PermissionsDialogImportComponent {
                 private snackBar: MatSnackBar) {
     }
 
-    @ViewChild('fileInput') fileInput: HTMLInputElement;
-    overwrite = new FormControl(undefined, Validators.required);
-    policies: any[] = [];
-    fileValid = false;
-    selections: boolean[] = [];
-    isAllSelected = true;
+    @ViewChild('fileInput') public fileInput: HTMLInputElement;
+    public overwrite = new FormControl(undefined, Validators.required);
+    public policies: any[] = [];
+    public fileValid = false;
+    public selections: boolean[] = [];
+    public isAllSelected = true;
 
-    yes() {
+    public yes() {
         const imports: any[] = [];
         this.policies.forEach((policy, index) => {
             if (this.selections[index]) {
@@ -50,32 +49,32 @@ export class PermissionsDialogImportComponent {
         });
         const result: PermissionImportModel = {
             policies: imports,
-            overwrite: this.overwrite.value === "true"
+            overwrite: this.overwrite.value === 'true',
         };
         this.dialogRef.close(result);
     }
 
-    no() {
+    public no() {
         const result: PermissionImportModel = {
             policies: [],
-            overwrite: false
+            overwrite: false,
         };
         this.dialogRef.close(result);
     }
 
-    onFileSelected() {
+    public onFileSelected() {
         const reader = new FileReader();
         reader.onload = () => {
             try {
                 this.policies = JSON.parse(reader.result as string);
                 this.selections = [];
-                this.policies.forEach(policy => {
+                this.policies.forEach((policy) => {
                     policy.actions = policy.actions.split(', ');
                     this.selections.push(true);
                 });
                 this.fileValid = true;
             } catch (e) {
-                this.snackBar.open("Could not import permissions: Invalid JSON", undefined, {
+                this.snackBar.open('Could not import permissions: Invalid JSON', undefined, {
                     duration: 3 * 1000,
                 });
                 this.fileValid = false;
@@ -84,14 +83,13 @@ export class PermissionsDialogImportComponent {
         };
         try {
             // @ts-ignore
-            reader.readAsText(this.fileInput.nativeElement.files[0])
+            reader.readAsText(this.fileInput.nativeElement.files[0]);
         } catch (e) {
-            console.error("fileInput undefined: Could not read file")
+            console.error('fileInput undefined: Could not read file');
         }
     }
 
-
-    hasValidFileSelected() {
+    public hasValidFileSelected() {
         try {
             // @ts-ignore
             return this.fileInput.nativeElement.files.length !== 0 && this.fileValid;
@@ -100,12 +98,12 @@ export class PermissionsDialogImportComponent {
         }
     }
 
-    appendSelected() {
+    public appendSelected() {
         const value = this.overwrite.value;
-        return value === "false";
+        return value === 'false';
     }
 
-    masterToggle(checked: boolean) {
+    public masterToggle(checked: boolean) {
         if (checked) {
             this.selections.forEach((_, index) => this.selections[index] = true);
             this.isAllSelected = true;
@@ -115,16 +113,15 @@ export class PermissionsDialogImportComponent {
         }
     }
 
-
-    indeterminate() {
+    public indeterminate() {
         if (!this.isAllSelected) {
-            for (let i in this.selections) {
+            for (const i in this.selections) {
                 if (this.selections[i] === true) {
                     return true;
                 }
             }
         } else {
-            for (let i in this.selections) {
+            for (const i in this.selections) {
                 if (this.selections[i] === false) {
                     return true;
                 }
@@ -132,4 +129,3 @@ export class PermissionsDialogImportComponent {
         }
     }
 }
-

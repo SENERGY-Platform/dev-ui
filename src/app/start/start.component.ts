@@ -18,24 +18,24 @@
 
 import {
   Component,
-  OnInit
-} from '@angular/core'
+  OnInit,
+} from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-start',
   templateUrl: './start.component.html',
-  styleUrls: ['./start.component.css']
+  styleUrls: ['./start.component.css'],
 })
   export class StartComponent implements OnInit {
-  userIsAdmin: boolean = false;
-  userIsDev: boolean = false;
-  
+  public userIsAdmin = false;
+  public userIsDev = false;
+
   constructor(private authService: AuthService) {
-    this.userIsDev = this.authService.userHasRole("developer");
-    this.userIsAdmin = this.authService.userHasRole("admin")
+    this.userIsDev = this.authService.userHasRole('developer');
+    this.userIsAdmin = this.authService.userHasRole('admin');
   }
 
-  ngOnInit() {}
+  public ngOnInit() {}
 
 }

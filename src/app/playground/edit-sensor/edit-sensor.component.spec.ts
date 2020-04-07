@@ -26,7 +26,7 @@ describe('EditSensorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditSensorComponent ]
+      declarations: [ EditSensorComponent ],
     })
     .compileComponents();
   }));

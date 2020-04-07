@@ -16,16 +16,16 @@
  *
  */
 
-import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
 import { SingleServiceDocComponent } from './single-service-doc/single-service-doc.component';
 
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { ApiDocsComponent } from './api-docs/api-docs.component';
-import { MaterialModule } from '../material/material.module';
-import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   template: '<router-outlet></router-outlet>',
@@ -33,22 +33,22 @@ import { TranslateModule } from '@ngx-translate/core';
 export class RoutingComponent {}
 
 const routes: Routes = [
-  { 
+  {
     path: 'api',
     component: RoutingComponent,
     canActivate: [ValidTokenGuard],
     children: [{
       path: ':id',
       component: SingleServiceDocComponent,
-      canActivate: [ValidTokenGuard]
+      canActivate: [ValidTokenGuard],
     },
     {
       path: '',
       component: ApiDocsComponent,
-      canActivate: [ValidTokenGuard]
-    }
-    ]
-  }
+      canActivate: [ValidTokenGuard],
+    },
+    ],
+  },
 ];
 @NgModule({
   imports: [
@@ -61,7 +61,7 @@ const routes: Routes = [
   declarations: [
    SingleServiceDocComponent,
    ApiDocsComponent,
-   RoutingComponent
-  ]
+   RoutingComponent,
+  ],
 })
 export class ApiDocModule { }

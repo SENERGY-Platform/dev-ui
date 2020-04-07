@@ -22,10 +22,10 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  kong: "https://api.sepl.infai.org",
-  client: "frontend",
-  keycloak: 'https://auth.sepl.infai.org/auth',
+  client: '',
+  keycloak: '',
+  keycloakUrl: '',
+  kong: '',
   loginRequired: true,
-  keycloakUrl: 'https://auth.sepl.infai.org/auth'
+  production: false,
 };

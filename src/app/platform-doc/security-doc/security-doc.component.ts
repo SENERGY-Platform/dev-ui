@@ -16,55 +16,55 @@
  *
  */
 
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { SwaggerService } from '../../services/swagger/swagger.service';
-import { AuthService } from '../../services/auth/auth.service';
-import {SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
+import { Component, OnInit} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import {SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
+import { AuthService } from '../../services/auth/auth.service';
+import { SwaggerService } from '../../services/swagger/swagger.service';
 
 @Component({
   selector: 'app-security-doc',
   templateUrl: './security-doc.component.html',
-  styleUrls: ['./security-doc.component.css']
+  styleUrls: ['./security-doc.component.css'],
 })
 export class SecurityDocComponent implements OnInit {
-  swagger: any
-  ui: any 
-  path: string 
+  public swagger: any;
+  public ui: any;
+  public path: string;
 
-  constructor(private translate: TranslateService, private swaggerService: SwaggerService, private authService: AuthService) { 
-    var lang = this.translate.currentLang || 'de'
-    this.path = "assets/docs/" + lang + "/security.md"
+  constructor(private translate: TranslateService, private swaggerService: SwaggerService, private authService: AuthService) {
+    const lang = this.translate.currentLang || 'de';
+    this.path = 'assets/docs/' + lang + '/security.md';
 
-    this.swaggerService.getSwagger().then(swaggerFiles => {
-      (<any>swaggerFiles).forEach(api => {
-        if(api.basePath == "/auth") {
-          this.swagger = api
+    this.swaggerService.getSwagger().then((swaggerFiles) => {
+      (swaggerFiles as any).forEach((api) => {
+        if (api.basePath === '/auth') {
+          this.swagger = api;
         }
       });
 
-      this.authService.getToken().then(token => {
+      this.authService.getToken().then((token) => {
         this.ui = SwaggerUIBundle({
           spec: this.swagger,
           dom_id: '#swagger',
           presets: [
             SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset
+            SwaggerUIStandalonePreset,
           ],
           configs: {
-            preFetch: function(req) {
-                    req.headers["Authorization"] = "Bearer " + token;
+            preFetch(req) {
+                    req.headers.Authorization = 'Bearer ' + token;
                     return req;
-            }
+            },
           },
-          layout: "StandaloneLayout"
-        })
-      })
-     
-    })
+          layout: 'StandaloneLayout',
+        });
+      });
+
+    });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

@@ -16,22 +16,22 @@
  *
  */
 
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-iot-repo-doc',
   templateUrl: './iot-repo-doc.component.html',
-  styleUrls: ['./iot-repo-doc.component.css']
+  styleUrls: ['./iot-repo-doc.component.css'],
 })
 export class IotRepoDocComponent implements OnInit {
-  path: string 
+  public path: string;
 
-  constructor(private translate: TranslateService) { 
-    var lang = this.translate.currentLang || 'de'
-    this.path = "assets/docs/" + lang + "/iot.md"
+  constructor(private translate: TranslateService) {
+    const lang = this.translate.currentLang || 'de';
+    this.path = 'assets/docs/' + lang + '/iot.md';
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 }

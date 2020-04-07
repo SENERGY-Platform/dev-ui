@@ -17,6 +17,10 @@
  */
 
 export const environment = {
+  loginRequired: true,
   production: true,
-  loginRequired: true
+  client: '',
+  keycloak: '',
+  keycloakUrl: '',
+  kong: '',
 };

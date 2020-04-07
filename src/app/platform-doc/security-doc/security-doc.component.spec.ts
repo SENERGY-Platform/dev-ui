@@ -26,7 +26,7 @@ describe('SecurityDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SecurityDocComponent ]
+      declarations: [ SecurityDocComponent ],
     })
     .compileComponents();
   }));

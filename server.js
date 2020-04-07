@@ -34,12 +34,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //get kong endpoint
 app.get("/settings.js", (req, res) => {
-  var keycloak = process.env.KEYCLOAK_URL || "http://keycloak";
-  var client_id = process.env.CLIENT_ID || "auth-frontend";
-  var kong_url = process.env.KONG_URL || "http://kong";
-  var kong_admin_url = process.env.KONG_ADMIN_URL || "http://kongadmin";
-  var kong_username = process.env.KONG_ADMIN_USERNAME;
-  var kong_password = process.env.KONG_ADMIN_PASSWORD;
+  const keycloak = process.env.KEYCLOAK_URL || "http://keycloak";
+  const client_id = process.env.CLIENT_ID || "auth-frontend";
+  const kong_url = process.env.KONG_URL || "http://kong";
+  const kong_admin_url = process.env.KONG_ADMIN_URL || "http://kongadmin";
+  const kong_username = process.env.KONG_ADMIN_USERNAME;
+  const kong_password = process.env.KONG_ADMIN_PASSWORD;
   request({
     headers: {
       'Authorization' : 'Basic ' + Buffer.from(kong_username+ ":" + kong_password).toString('base64')
@@ -49,11 +49,11 @@ app.get("/settings.js", (req, res) => {
   }).then(function(kong_uris) {
     kong_uris = JSON.parse(kong_uris)["data"].map(function(uri) {
       return uri["paths"][0]
-    })
+    });
 
     res.send("var KEYCLOAK_URL = '" + keycloak + "';var CLIENT_ID = '" + client_id + "';var KONG_URL = '" + kong_url + "';var KONG_URIS = '" + JSON.stringify(kong_uris) + "';");
   })
-})
+});
 
 
 // This will load all static files ("/" -> /dist/index.html, "/styles/styles.css" -> /dist/styles/styles.css) 

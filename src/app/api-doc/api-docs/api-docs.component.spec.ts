@@ -1,5 +1,4 @@
 
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApiDocsComponent } from './api-docs.component';
@@ -10,7 +9,7 @@ describe('ApiDocsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApiDocsComponent ]
+      declarations: [ ApiDocsComponent ],
     })
     .compileComponents();
   }));

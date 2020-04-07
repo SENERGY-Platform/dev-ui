@@ -20,32 +20,32 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 
 interface Device {
-  displayName: string,
-  id: string,
+  displayName: string;
+  id: string;
   protocolConf: {
     conf: {
       method: string,
       url: string,
       headers: {
-        contentType: string
+        contentType: string,
       },
       topic: string,
       level: string,
       user: string,
       password: string,
       responseTopic: string,
-      path: string
+      path: string,
     },
-    type: string
-  },
-  requestFormat: string,
-  contentCreator: string,
+    type: string,
+  };
+  requestFormat: string;
+  contentCreator: string;
   interval: {
     value: string,
-    unit: string
-  },
-  active: boolean,
-  parser: string
+    unit: string,
+  };
+  active: boolean;
+  parser: string;
 }
 
 @Injectable()
@@ -53,57 +53,57 @@ export class DeviceSimService {
 
   constructor(private apiService: ApiService) { }
 
-  deleteDevice(device) {
-    if(device.class == "Sensor") {
-      return this.apiService.delete("/devicesim/sensors/" + device.id)
+  public deleteDevice(device) {
+    if (device.class === 'Sensor') {
+      return this.apiService.delete('/devicesim/sensors/' + device.id);
     } else {
-      return this.apiService.delete("/devicesim/actuators/" + device.id)
+      return this.apiService.delete('/devicesim/actuators/' + device.id);
     }
   }
 
-  createSensor(device) {
-    return this.apiService.post("/devicesim/sensors", device)
+  public createSensor(device) {
+    return this.apiService.post('/devicesim/sensors', device);
   }
 
-  createActuator(device) {
-    return this.apiService.post("/devicesim/actuators", device)
+  public createActuator(device) {
+    return this.apiService.post('/devicesim/actuators', device);
   }
 
-  updateSensor(device) {
-      return this.apiService.post("/devicesim/sensors/" + device["id"], device)
+  public updateSensor(device) {
+      return this.apiService.post('/devicesim/sensors/' + device.id, device);
   }
 
-  updateActuator(device) {
-    return this.apiService.post("/devicesim/actuators/" + device["id"], device)
+  public updateActuator(device) {
+    return this.apiService.post('/devicesim/actuators/' + device.id, device);
   }
 
-  getDevice(id, type) {
-    return new Promise<Device>(resolve => {
-      this.loadDevices().then(devices => {
-        if(type == "Sensor") {
-          devices["sensors"].forEach(sensor => {
-            if(id == sensor.id) resolve(sensor) 
-          })
+  public getDevice(id, type) {
+    return new Promise<Device>((resolve) => {
+      this.loadDevices().then((devices: any) => {
+        if (type === 'Sensor') {
+          devices.sensors.forEach((sensor) => {
+            if (id === sensor.id) { resolve(sensor); }
+          });
         } else {
-          devices["actuators"].forEach(actuator => {
-            if(id == actuator.id) resolve(actuator)
-          })
+          devices.actuators.forEach((actuator) => {
+            if (id === actuator.id) { resolve(actuator); }
+          });
         }
-      })
-    })
-    
+      });
+    });
+
   }
 
-  loadDevices() {
-    return new Promise(resolve => {
-      this.apiService.get("/devicesim/actuators").then(actuators => {
-        this.apiService.get("/devicesim/sensors").then(sensors => {
+  public loadDevices() {
+    return new Promise((resolve) => {
+      this.apiService.get('/devicesim/actuators').then((actuators) => {
+        this.apiService.get('/devicesim/sensors').then((sensors) => {
           resolve({
-            "actuators": (<any>actuators).devices,
-            "sensors": (<any>sensors).devices
-          })
-        })
-      })
-    })
+            actuators: (actuators as any).devices,
+            sensors: (sensors as any).devices,
+          });
+        });
+      });
+    });
   }
 }

@@ -26,7 +26,7 @@ describe('DashboardDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarketplaceDocComponent ]
+      declarations: [ MarketplaceDocComponent ],
     })
     .compileComponents();
   }));

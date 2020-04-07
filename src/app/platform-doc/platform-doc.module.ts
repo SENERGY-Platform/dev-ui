@@ -16,24 +16,23 @@
  *
  */
 
-import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AnalyticsDocComponent } from '../platform-doc/analytics-doc/analytics-doc.component';
-import { IotRepoDocComponent } from '../platform-doc/iot-repo-doc/iot-repo-doc.component';
-import { MarketplaceDocComponent } from '../platform-doc/marketplace-doc/marketplace-doc.component';
-import { ProcessDocComponent } from '../platform-doc/process-doc/process-doc.component';
-import { SecurityDocComponent } from '../platform-doc/security-doc/security-doc.component';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ValidTokenGuard } from '../services/auth/guard.service';
+import { AnalyticsDocComponent } from './analytics-doc/analytics-doc.component';
+import { IotRepoDocComponent } from './iot-repo-doc/iot-repo-doc.component';
+import { MarketplaceDocComponent } from './marketplace-doc/marketplace-doc.component';
+import { ProcessDocComponent } from './process-doc/process-doc.component';
+import { SecurityDocComponent } from './security-doc/security-doc.component';
 
-import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule} from '@angular/common/http';
 import { HttpClient} from '@angular/common/http';
+import { MarkdownModule } from 'ngx-markdown';
 
-
-import { GettingStartedComponent } from './getting-started/getting-started.component';
 import { TranslateModule } from '@ngx-translate/core';
 import {DashboardDocComponent} from './dashboard-doc/dashboard-doc.component';
+import { GettingStartedComponent } from './getting-started/getting-started.component';
 
 @Component({
   templateUrl: './routing.component.html',
@@ -42,57 +41,57 @@ export class RoutingComponent {}
 
 const routes: Routes = [
   {
-    path: "doc",
+    path: 'doc',
     component: RoutingComponent,
     canActivate: [ValidTokenGuard],
     children: [
-      { 
-        path: '', 
-        redirectTo: 'start', 
+      {
+        path: '',
+        redirectTo: 'start',
         pathMatch: 'full' },
       {
         path: 'start',
         component: GettingStartedComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'security',
         component: SecurityDocComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'iot',
         component: IotRepoDocComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'dashboard',
         component: DashboardDocComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'process',
         component: ProcessDocComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'analytics',
         component: AnalyticsDocComponent,
-        canActivate: [ValidTokenGuard]
+        canActivate: [ValidTokenGuard],
       },
       {
         path: 'marketplace',
         component: MarketplaceDocComponent,
-        canActivate: [ValidTokenGuard]
-      }
-    ]
-  }
-]
+        canActivate: [ValidTokenGuard],
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(routes),    
+    RouterModule.forRoot(routes),
     TranslateModule.forRoot(),
      MarkdownModule.forRoot(),
       HttpClientModule,
@@ -106,7 +105,7 @@ const routes: Routes = [
     SecurityDocComponent,
     GettingStartedComponent,
     RoutingComponent,
-    DashboardDocComponent
-  ]
+    DashboardDocComponent,
+  ],
 })
 export class PlatformDocModule { }

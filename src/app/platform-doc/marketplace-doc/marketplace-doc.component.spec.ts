@@ -26,7 +26,7 @@ describe('MarketplaceDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarketplaceDocComponent ]
+      declarations: [ MarketplaceDocComponent ],
     })
     .compileComponents();
   }));

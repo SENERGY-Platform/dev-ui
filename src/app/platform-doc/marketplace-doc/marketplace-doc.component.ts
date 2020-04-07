@@ -22,16 +22,16 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-marketplace-doc',
   templateUrl: './marketplace-doc.component.html',
-  styleUrls: ['./marketplace-doc.component.css']
+  styleUrls: ['./marketplace-doc.component.css'],
 })
 export class MarketplaceDocComponent implements OnInit {
-  path: string 
+  public path: string;
 
-  constructor(private translate: TranslateService) { 
-    var lang = this.translate.currentLang || 'de'
-    this.path = "assets/docs/" + lang + "/marketplace.md"
+  constructor(private translate: TranslateService) {
+    const lang = this.translate.currentLang || 'de';
+    this.path = 'assets/docs/' + lang + '/marketplace.md';
   }
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

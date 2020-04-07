@@ -17,81 +17,80 @@
  */
 
 import {
-  Component,
-  OnInit
+  Component, OnDestroy,
+  OnInit,
 } from '@angular/core';
 import {
-  Validators,
+  FormArray,
   FormBuilder,
-  FormGroup,
-  FormArray
+  Validators,
 } from '@angular/forms';
 import {
-  DeviceSimService
-} from '../../services/devicesim/device-sim.service';
-import {
+  ActivatedRoute,
   Router,
-  ActivatedRoute
 } from '@angular/router';
+import {
+  DeviceSimService,
+} from '../../services/devicesim/device-sim.service';
 
 @Component({
   selector: 'app-edit-actuator',
   templateUrl: './edit-actuator.component.html',
-  styleUrls: ['./edit-actuator.component.css']
+  styleUrls: ['./edit-actuator.component.css'],
 })
-export class EditActuatorComponent implements OnInit {
-  form = this.fb.group({
-    displayName: ["", Validators.required],
-    id: ["", Validators.required],
-    parser: ["", Validators.required],
+export class EditActuatorComponent implements OnInit, OnDestroy {
+  public form = this.fb.group({
+    displayName: ['', Validators.required],
+    id: ['', Validators.required],
+    parser: ['', Validators.required],
     active: [true],
     states: this.fb.array([]),
   });
-  sub: any;
-  device: any;
-  formIsValid: boolean = false;
+  public sub: any;
+  public device: any;
+  public formIsValid = false;
 
   constructor(private fb: FormBuilder, private devicesimService: DeviceSimService, private router: Router, private route: ActivatedRoute) {
-    this.form.statusChanges.subscribe(status => {
-      this.formIsValid = status == "VALID"
-    })
+    this.form.statusChanges.subscribe((status) => {
+      this.formIsValid = status === 'VALID';
+    });
 
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.sub = this.route
       .queryParams
-      .subscribe(params => {
-          this.devicesimService.getDevice(params['id'], params['type']).then(device => {
+      .subscribe((params) => {
+          this.devicesimService.getDevice(params.id, params.type).then((device) => {
             this.device = device;
-            this.form.get("displayName").setValue(device.displayName);
-            this.form.get("id").setValue(device.id);
-            this.form.get("parser").setValue(device.parser);
-            this.form.get("active").setValue(device.active)
-          })
-        })
+            this.form.get('displayName').setValue(device.displayName);
+            this.form.get('id').setValue(device.id);
+            this.form.get('parser').setValue(device.parser);
+            this.form.get('active').setValue(device.active);
+          });
+        });
   }
 
-  addState() {
-    var states = < FormArray > this.form.get('states');
+  public addState() {
+    const states = this.form.get('states') as FormArray;
     states.push(this.fb.group({
       adopt: [false],
-      regex: [""],
-      response: [""]
+      regex: [''],
+      response: [''],
     }));
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
-  update() {
+  public update() {
     if (this.form.valid) {
-      this.devicesimService.updateActuator(this.form.value).then(result => {
-        this.router.navigate(['/devicesim'])
-      }).catch(error => {
-        console.log(error)
-      })
+      this.devicesimService.updateActuator(this.form.value).then(() => {
+        this.router.navigate(['/devicesim']);
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   }
 }

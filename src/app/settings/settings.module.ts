@@ -16,21 +16,21 @@
  *
  */
 
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { ValidTokenGuard } from '../services/auth/guard.service';
-import { SettingsComponent } from './settings/settings.component';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../material/material.module';
-import { FormsModule } from '@angular/forms';
+import { ValidTokenGuard } from '../services/auth/guard.service';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
-    canActivate: [ValidTokenGuard]
-  }
+    canActivate: [ValidTokenGuard],
+  },
 ];
 
 @NgModule({
@@ -39,8 +39,8 @@ const routes: Routes = [
     MaterialModule,
     FormsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
-  declarations: [SettingsComponent]
+  declarations: [SettingsComponent],
 })
 export class SettingsModule { }

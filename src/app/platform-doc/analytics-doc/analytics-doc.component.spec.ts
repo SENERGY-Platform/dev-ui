@@ -26,7 +26,7 @@ describe('AnalyticsDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnalyticsDocComponent ]
+      declarations: [ AnalyticsDocComponent ],
     })
     .compileComponents();
   }));

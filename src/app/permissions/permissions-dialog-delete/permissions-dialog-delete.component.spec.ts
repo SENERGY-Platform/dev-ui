@@ -8,7 +8,7 @@ describe('PermissionsDialogDeleteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PermissionsDialogDeleteComponent ]
+      declarations: [ PermissionsDialogDeleteComponent ],
     })
     .compileComponents();
   }));

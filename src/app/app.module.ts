@@ -16,40 +16,40 @@
  *
  */
 
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { SettingsModule } from './settings/settings.module';
-import { PlatformDocModule } from './platform-doc/platform-doc.module';
-import { PermissionsModule } from './permissions/permissions.module';
-import { ClientsModule } from './clients/clients.module';
 import { ApiDocModule } from './api-doc/api-doc.module';
-import { MaterialModule } from './material/material.module';
-import { PlaygroundModule } from './playground/playground.module';
+import { ClientsModule } from './clients/clients.module';
 import { CoreModule } from './core/core.module';
+import { MaterialModule } from './material/material.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { PlatformDocModule } from './platform-doc/platform-doc.module';
+import { PlaygroundModule } from './playground/playground.module';
+import { SettingsModule } from './settings/settings.module';
 
-import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
+import { AuthService } from './services/auth/auth.service';
 import { ValidTokenGuard } from './services/auth/guard.service';
-import { SwaggerService } from './services/swagger/swagger.service';
-import { LadonService } from './services/ladon/ladon.service';
 import { DeviceSimService } from './services/devicesim/device-sim.service';
+import { LadonService } from './services/ladon/ladon.service';
+import { SwaggerService } from './services/swagger/swagger.service';
 import { UserManagementService } from './services/user-management/user-management.service';
 
-import { AppComponent } from './app.component';
-import { Dialog } from './dev-role-dialog/dialog.component';
-import { StartComponent } from './start/start.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import { AppComponent } from './app.component';
+import { DialogComponent } from './dev-role-dialog/dialog.component';
 import {PermissionsDialogDeleteComponent} from './permissions/permissions-dialog-delete/permissions-dialog-delete.component';
-import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
-import {init} from "./services/auth/auth-init";
+import {init} from './services/auth/auth-init';
+import { StartComponent } from './start/start.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -57,19 +57,21 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const appRoutes: Routes = [
   {
-    path: '',
+    canActivate: [ValidTokenGuard],
     component: StartComponent,
-    canActivate: [ValidTokenGuard]
-  }
+    path: '',
+  },
 ];
 
 @NgModule({
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
     StartComponent,
-    Dialog,
+    DialogComponent,
 
   ],
+  entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
   imports: [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
@@ -87,21 +89,19 @@ const appRoutes: Routes = [
     CoreModule,
     TranslateModule.forRoot({
       loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-      }
+        deps: [HttpClient],
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+      },
     }),
     BrowserAnimationsModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
   ],
-  entryComponents: [Dialog, PermissionsDialogDeleteComponent],
   providers: [ApiService, AuthService, ValidTokenGuard, SwaggerService, LadonService, UserManagementService, DeviceSimService, {
+    deps: [KeycloakService],
+    multi: true,
     provide: APP_INITIALIZER,
     useFactory: init,
-    multi: true,
-    deps: [KeycloakService]
   }],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }

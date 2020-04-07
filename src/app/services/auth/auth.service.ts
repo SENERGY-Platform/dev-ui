@@ -16,13 +16,13 @@
  *
  */
 
-import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpHeaders
+  HttpHeaders,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import {KeycloakService} from 'keycloak-angular';
 import { environment } from '../../../environments/environment';
-import {KeycloakService} from "keycloak-angular";
 
 declare var KEYCLOAK_URL: any;
 
@@ -30,44 +30,44 @@ declare var KEYCLOAK_URL: any;
 export class AuthService {
   constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {}
 
-  userHasRole(role) {
+  public userHasRole(role) {
     if (!environment.loginRequired) {
-      return true
+      return true;
     }
     return this.keycloakService.isUserInRole(role);
   }
 
-  getUserProfile() {
-    const id_token = sessionStorage.getItem("id_token");
-    return JSON.parse(id_token)
+  public getUserProfile() {
+    const idToken = sessionStorage.getItem('id_token');
+    return JSON.parse(idToken);
   }
 
-  logout() {
+  public logout() {
     this.keycloakService.logout();
   }
 
-  userIsAuthenticated() {
+  public userIsAuthenticated() {
     if (!environment.loginRequired) {
       return true;
     }
     return this.keycloakService.isLoggedIn();
   }
 
-  getToken(): Promise<string> {
+  public getToken(): Promise<string> {
     return this.keycloakService.getToken().then((resp) => {
       return 'bearer ' + resp;
     });
   }
 
-  get(path) {
-    return new Promise(resolve => {
-      this.getToken().then(token => {
-        var headers = new HttpHeaders({
-          "Authorization": "Bearer " + token
+  public get(path) {
+    return new Promise((resolve) => {
+      this.getToken().then((token) => {
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + token,
         });
-    
-        this.httpClient.get(KEYCLOAK_URL + "/auth" + path, {'headers': headers}).subscribe(result => resolve(result))
-      })
-    })
+
+        this.httpClient.get(KEYCLOAK_URL + '/auth' + path, {headers}).subscribe((result) => resolve(result));
+      });
+    });
   }
 }

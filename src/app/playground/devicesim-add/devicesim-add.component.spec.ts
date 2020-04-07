@@ -26,7 +26,7 @@ describe('DevicesimAddComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DevicesimAddComponent ]
+      declarations: [ DevicesimAddComponent ],
     })
     .compileComponents();
   }));

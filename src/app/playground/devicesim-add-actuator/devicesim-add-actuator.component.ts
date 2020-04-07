@@ -17,56 +17,57 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
-import { DeviceSimService } from '../../services/devicesim/device-sim.service';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { DeviceSimService } from '../../services/devicesim/device-sim.service';
 
 @Component({
   selector: 'app-devicesim-add-actuator',
   templateUrl: './devicesim-add-actuator.component.html',
-  styleUrls: ['./devicesim-add-actuator.component.css']
+  styleUrls: ['./devicesim-add-actuator.component.css'],
 })
 export class DevicesimAddActuatorComponent implements OnInit {
-  formIsValid: boolean = false
-  form = this.fb.group({
-    displayName: ["", Validators.required],
-    id: ["", Validators.required],
-    parser: ["module.exports = function(msg){return msg;}", Validators.required],
+  public formIsValid = false;
+  public form = this.fb.group({
+    displayName: ['', Validators.required],
+    id: ['', Validators.required],
+    parser: ['module.exports = function(msg){return msg;}', Validators.required],
     active: [true],
-    states: this.fb.array([])
+    states: this.fb.array([]),
   });
-  deviceLabel: string 
+  public deviceLabel: string;
 
-  constructor(private translateService: TranslateService,private fb: FormBuilder, private devicesimService: DeviceSimService, private router: Router) { 
-    this.translateService.get("DEVICE").subscribe(name => this.deviceLabel = name)
-    this.form.statusChanges.subscribe(status => {
-      this.formIsValid = status == "VALID"
-    })
+  constructor(private translateService: TranslateService, private fb: FormBuilder, private devicesimService: DeviceSimService,
+              private router: Router) {
+    this.translateService.get('DEVICE').subscribe((name) => this.deviceLabel = name);
+    this.form.statusChanges.subscribe((status) => {
+      this.formIsValid = status === 'VALID';
+    });
 
-    this.addState()
+    this.addState();
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
-  addState() { 
-    var states= <FormArray>this.form.get('states')
+  public addState() {
+    const states = this.form.get('states') as FormArray;
     states.push(this.fb.group({
       adopt: [false],
-      regex: [""],
-      response: [""]
-    })); 
+      regex: [''],
+      response: [''],
+    }));
   }
 
-  createActuator() {
-    console.log(this.form)
-    if(this.form.valid) {
-      this.devicesimService.createActuator(this.form.value).then(result => {
-        this.router.navigate(['/devicesim'])
-      }).catch(error => {
-        console.log(error)
-      })
+  public createActuator() {
+    console.log(this.form);
+    if (this.form.valid) {
+      this.devicesimService.createActuator(this.form.value).then(() => {
+        this.router.navigate(['/devicesim']);
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   }
 }
