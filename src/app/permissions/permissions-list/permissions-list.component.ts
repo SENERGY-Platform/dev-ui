@@ -26,6 +26,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {
     Router,
 } from '@angular/router';
+import { first } from 'rxjs/operators';
 import {
     AuthService,
 } from '../../services/auth/auth.service';
@@ -186,7 +187,7 @@ export class PermissionsListComponent implements OnInit {
         const dialogRef = this.dialog.open(PermissionsDialogImportComponent,
             {minWidth: '850px', minHeight: '200px'});
 
-        dialogRef.afterClosed().subscribe((result: PermissionImportModel) => {
+        dialogRef.afterClosed().subscribe(async (result: PermissionImportModel) => {
             if (result.overwrite) {
                 this.policies.forEach((policy) => {
                     if (policy.id !== 'admin-all') { // Don't ever delete this policy
@@ -194,7 +195,11 @@ export class PermissionsListComponent implements OnInit {
                     }
                 });
             }
-            result.policies.forEach((policy) => this.ladonService.postPolicy(policy));
+            console.log(result);
+            for (const policy of result.policies) {
+                await this.ladonService.deletePolicy(policy).toPromise();
+                await this.ladonService.postPolicy(policy).toPromise();
+            }
             this.loadPolicies();
         });
     }

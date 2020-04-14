@@ -24,7 +24,10 @@
             <mat-radio-button class="radio-but" value="{{false}}">Hinzufügen</mat-radio-button>
         </mat-radio-group>
         <span *ngIf="appendSelected()" class="warn-text">
-            Beim Hinzufügen werden vorhandene Einträge mit gleicher ID überschrieben!
+            Hinzufügen überschreibt Einträge gleicher ID!
+        </span>
+        <span *ngIf="addSelected()" class="warn-text">
+            Überschreiben löscht alle anderen Einträge!
         </span>
     </div>
     <div>
@@ -38,7 +41,7 @@
     <mat-table #table [dataSource]="policies" *ngIf="policies.length > 0">
 
         <ng-container matColumnDef="select">
-            <mat-header-cell math-header="select" *matHeaderCellDef>
+            <mat-header-cell mat-header="select" *matHeaderCellDef>
                 <mat-checkbox (change)="masterToggle($event.checked)"
                               [checked]="isAllSelected === true"
                               [indeterminate]="indeterminate()">

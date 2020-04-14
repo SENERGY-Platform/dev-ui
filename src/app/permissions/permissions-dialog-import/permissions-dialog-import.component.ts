@@ -128,4 +128,9 @@ export class PermissionsDialogImportComponent {
             }
         }
     }
+
+    public addSelected() {
+        const value = this.overwrite.value;
+        return value === 'true';
+    }
 }
