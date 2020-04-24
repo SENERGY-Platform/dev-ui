@@ -17,12 +17,13 @@
   -->
 
 <mat-toolbar color="primary">
-    <button mat-icon-button (click)="toggle(true)" fxHide.gt-sm>
-      <mat-icon>menu</mat-icon>
-    </button>
+  <button mat-icon-button fxHide.gt-sm (click)="toggle(true)">
+    <mat-icon>menu</mat-icon>
+  </button>
 
-  <a [routerLink]="['']"  >
-    <img src="/assets/img/logo.png">
+  <a routerLink="" (click)="resetSidenav()" class="image-wrapper" fxHide fxShow.gt-sm>
+    <img class="logo"
+         src="/assets/img/logo.png">
   </a>
 
   <span class="fill"></span>

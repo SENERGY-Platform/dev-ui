@@ -31,25 +31,10 @@
 
     <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
 
-        <!-- Subject Column -->
         <ng-container matColumnDef="subject">
             <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
         </ng-container>
-
-        <!-- Actions Column
-        <ng-container matColumnDef="actions">
-            <mat-header-cell mat-sort-header="actions" *matHeaderCellDef>Actions</mat-header-cell>
-            <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('GET')">GET</mat-checkbox>
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('POST')">POST</mat-checkbox>
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('PATCH')">PATCH</mat-checkbox>
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('DELETE')">DELETE</mat-checkbox>
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('PUT')">PUT</mat-checkbox>
-                <mat-checkbox disabled="true" [checked]="element.actions.includes('HEAD')">HEAD</mat-checkbox>
-            </mat-cell>
-        </ng-container>
-        -->
 
         <ng-container matColumnDef="GET">
             <mat-header-cell mat-sort-header="GET" *matHeaderCellDef>GET</mat-header-cell>
@@ -98,7 +83,7 @@
         <ng-container matColumnDef="delete">
             <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button (click)="askfordelete(element)"><i class="material-icons">delete</i></button>
+                <button (click)="askfordelete(element)" [disabled]="element.id === 'admin-all'"><i class="material-icons">delete</i></button>
             </mat-cell>
         </ng-container>
 
@@ -106,7 +91,10 @@
         <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button (click)="editPolicy(element)"><i class="material-icons">edit</i></button>
+                <button mat-icon-button (click)="editPolicy(element)" [disabled]="element.id === 'admin-all'"
+                        [matTooltip]="element.id === 'admin-all' ? 'Diese Policy kann nicht bearbeitet werden' : null">
+                    <mat-icon>edit</mat-icon>
+                </button>
             </mat-cell>
         </ng-container>
 

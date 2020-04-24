@@ -16,7 +16,9 @@
  *
  */
 
+import {PermissionModel} from '../../models/permission.model';
+
 export interface PermissionImportModel {
-    policies: any[];
+    policies: PermissionModel[];
     overwrite: boolean;
 }

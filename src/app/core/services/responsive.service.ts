@@ -32,23 +32,17 @@ export class ResponsiveService {
     }
 
     public getActiveMqAlias(): string {
-        let mqAlias = '';
-        mqAliases.forEach((_, index) => {
-            if (this.observableMedia.isActive(mqAliases[index])) {
-                mqAlias = mqAliases[index];
+        for (const mqAlias of mqAliases) {
+            if (this.observableMedia.isActive(mqAlias)) {
                 return mqAlias;
             }
-        });
-        return mqAlias;
+        }
     }
 
     public observeMqAlias(): Observable<string> {
         return new Observable<string>((observer) => {
-            this.observableMedia.asObservable().subscribe({
-                next: (mediaArr: MediaChange[]) => {
-                    mediaArr.forEach((media) => observer.next(media.mqAlias));
-                },
-                complete: () => observer.complete(),
+            this.observableMedia.media$.subscribe((media: MediaChange) => {
+                observer.next(media.mqAlias);
             });
         });
     }

@@ -16,15 +16,11 @@
  *
  */
 
-import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {forkJoin} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
-import {AuthService} from '../../../services/auth/auth.service';
+import {filter, map, mergeMap} from 'rxjs/operators';
+import {fadeInAnimation} from '../../animations/fade-in.animation';
 import {ResponsiveService} from '../../services/responsive.service';
 import {SidenavSectionModel} from './shared/sidenav-section.model';
 import {SidenavService} from './shared/sidenav.service';
@@ -33,121 +29,30 @@ import {SidenavService} from './shared/sidenav.service';
     selector: 'app-sidenav',
     templateUrl: './sidenav.component.html',
     styleUrls: ['./sidenav.component.css'],
+    animations: [fadeInAnimation],
 })
 
 export class SidenavComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('sidenav', { static: true }) public sidenav!: MatSidenav;
-    @Output() public mode = '';
-    @Output() public openSection: null | string = null;
-    @Output() public sections: SidenavSectionModel[] = [];
-    @Output() public zIndex = -1;
-
-    public mobileSearchPageIsHidden = true;
-    public inputFocused = false;
-    public userIsAdmin = false;
-    private httpClient: HttpClient;
+    @ViewChild('sidenav', {static: false}) public sidenav!: MatSidenav;
+    public sections: SidenavSectionModel[] = [];
+    public openSection: null | string = null;
+    public zIndex = -1;
 
     constructor(private activatedRoute: ActivatedRoute,
-                public dialog: MatDialog, translate: TranslateService,
-                private authService: AuthService,
                 private router: Router,
                 private sidenavService: SidenavService,
                 private responsiveService: ResponsiveService) {
-
-        translate.setDefaultLang('en');
-
-        const userProfile = this.authService.getUserProfile();
-
-        if (userProfile && userProfile.attributes && userProfile.attributes.locale) {
-            translate.use(userProfile.attributes.locale[0]);
-        }
-
-        this.userIsAdmin = this.authService.userHasRole('admin');
     }
 
     public ngOnInit() {
-        this.showOrHideSidenav();
-        this.getSections();
         this.getActiveSection();
-        this.detectRouterChange();
-
+        this.getSections();
+        this.showOrHideSidenav();
     }
 
     public ngAfterViewInit() {
         this.sidenavChangeListener();
-    }
-
-    public openSearchResult(url) {
-        this.inputFocused = false;
-        this.mobileSearchPageIsHidden = true;
-        this.router.navigateByUrl(url);
-    }
-
-    private showOrHideSidenav(): void {
-        this.responsiveService.observeMqAlias().subscribe((mqAlias) => {
-            if (mqAlias === 'sm' || mqAlias === 'xs') {
-                this.sidenav.close();
-                this.sidenav.mode = 'over';
-                this.sidenav.disableClose = false;
-                this.sidenav.fixedTopGap = 0;
-            } else {
-                this.sidenav.mode = 'side';
-                this.sidenav.open();
-                this.sidenav.disableClose = true;
-                this.sidenav.fixedTopGap = 64;
-            }
-        });
-    }
-
-    public loadDocs() {
-        return new Promise((resolve) => {
-            const pages = [
-                { assetUrl: 'iot', title: 'IoT Repository', redirectUrl: 'iot'},
-                { assetUrl: 'security', title: 'Security', redirectUrl: 'security'},
-                { assetUrl: 'analytics', title: 'Analytics', redirectUrl: 'analytics'},
-                { assetUrl: 'gettingstarted', title: 'Getting Started', redirectUrl: 'start'},
-                { assetUrl: 'process', title: 'Prozesse', redirectUrl: 'process'},
-            ];
-            const async = [];
-            const content = [];
-
-            pages.forEach((page) => {
-                async.push(this.httpClient.get('/assets/docs/' + page.assetUrl + '.md', {responseType: 'text'}));
-            });
-            forkJoin(async).subscribe((results) => {
-                for (let index = 0; index < results.length; index++) {
-                    content.push({
-                        content: this.removeMarkdownChars(results[index]),
-                        url: '/doc/' + pages[index].redirectUrl,
-                        title: pages[index].title,
-                    });
-                }
-                resolve(content);
-            });
-        });
-    }
-
-    public removeMarkdownChars(text) {
-        return text.replace(/#/g, '')
-            .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
-            .replace(/```/g, '');
-    }
-
-    private getSections(): void {
-        this.sections = this.sidenavService.getSections();
-
-        // delete permissions if user is not admin
-        if (!this.userIsAdmin) {
-            const index = this.sections.findIndex((x) => x.name === 'Permissions');
-            this.sections.splice(index, 1);
-        }
-    }
-
-    public closeSidenav(): void {
-        if (this.sidenav.mode === 'over') {
-            this.sidenavService.toggle(false);
-        }
     }
 
     public isSectionOpen(section: SidenavSectionModel): boolean {
@@ -165,6 +70,12 @@ export class SidenavComponent implements OnInit, AfterViewInit {
         }
     }
 
+    public closeSidenav(): void {
+        if (this.sidenav.mode === 'over') {
+            this.sidenavService.toggle(false);
+        }
+    }
+
     private sidenavChangeListener(): void {
         this.sidenavService.toggleChanged.subscribe((isToggle: boolean) => {
             if (isToggle) {
@@ -179,38 +90,39 @@ export class SidenavComponent implements OnInit, AfterViewInit {
         });
     }
 
+    private showOrHideSidenav(): void {
+        this.responsiveService.observeMqAlias().subscribe((mqAlias) => {
+            if (mqAlias === 'sm' || mqAlias === 'xs') {
+                this.sidenav.close();
+                this.sidenav.mode = 'over';
+                this.sidenav.disableClose = false;
+                this.sidenav.fixedTopGap = 0;
+                this.zIndex = -1;
+            } else {
+                this.sidenav.mode = 'side';
+                this.sidenav.open();
+                this.sidenav.disableClose = true;
+                this.sidenav.fixedTopGap = 64;
+                this.zIndex = 0;
+            }
+        });
+    }
+
+    private getSections(): void {
+        this.sections = this.sidenavService.getSections();
+    }
+
     private getActiveSection() {
         this.router.events.pipe(
             filter((event) => event instanceof NavigationEnd),
-            take(1),
             map(() => {
-                return this.router.url;
+                return this.activatedRoute.firstChild;
             }),
-        ).subscribe((activeRoute: string) => {
-            const index = activeRoute.lastIndexOf('/');
-            if (index > 0) {
-                this.openSection = activeRoute.substring(0, index);
-            } else {
-                this.openSection = activeRoute;
+            mergeMap((activatedRoute: ActivatedRoute) => activatedRoute.url),
+        ).subscribe((activeRoute: any) => {
+            if (activeRoute.length > 0) {
+                this.openSection = '/' + activeRoute[0].path;
             }
         });
     }
-
-    private detectRouterChange() {
-        this.router.events.subscribe((event) => {
-
-            if (event instanceof NavigationEnd) {
-
-                const url = event.url;
-
-                if ( url !== '/') {
-                    const section = this.sections.find((i) => i.state === url);
-                    if (typeof section !== 'undefined') {
-                        this.toggleSection(section);
-                    }
-                }
-            }
-        });
-    }
-
 }

@@ -162,3 +162,12 @@ i {
     font-size: 1.4rem;
     margin-left: 20px;
 }
+
+.image-wrapper {
+    width: 275px;
+}
+
+
+.shadow {
+    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.1);
+}

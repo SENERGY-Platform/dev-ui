@@ -20,15 +20,14 @@
 <div mat-dialog-content class="medium-text">
     <div class="radio">
         <mat-radio-group [formControl]="overwrite">
-            <mat-radio-button class="radio-but" value="{{true}}">Überschreiben</mat-radio-button>
-            <mat-radio-button class="radio-but" value="{{false}}">Hinzufügen</mat-radio-button>
+            <mat-radio-button class="radio-but" value="{{true}}"
+                              matTooltip="Löscht alle bestehenden Einträge">
+                Überschreiben
+            </mat-radio-button>
+            <mat-radio-button class="radio-but" value="{{false}}"
+                              matTooltip="Überschreibt Einträge mit gleicher Nutzer/Rolle und Ressource">Hinzufügen
+            </mat-radio-button>
         </mat-radio-group>
-        <span *ngIf="appendSelected()" class="warn-text">
-            Hinzufügen überschreibt Einträge gleicher ID!
-        </span>
-        <span *ngIf="addSelected()" class="warn-text">
-            Überschreiben löscht alle anderen Einträge!
-        </span>
     </div>
     <div>
         <h4>Datei auswählen</h4>
@@ -64,37 +63,37 @@
         <ng-container matColumnDef="GET">
             <mat-header-cell mat-header="GET" *matHeaderCellDef>GET</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('GET')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('GET')"></mat-checkbox>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="POST">
             <mat-header-cell mat-header="POST" *matHeaderCellDef>POST</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('POST')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('POST')"></mat-checkbox>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="PATCH">
             <mat-header-cell mat-header="PATCH" *matHeaderCellDef>PATCH</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('PATCH')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PATCH')"></mat-checkbox>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="DELETE">
             <mat-header-cell mat-header="DELETE" *matHeaderCellDef>DELETE</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('DELETE')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('DELETE')"></mat-checkbox>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="PUT">
             <mat-header-cell mat-header="PUT" *matHeaderCellDef>PUT</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('PUT')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('PUT')"></mat-checkbox>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="HEAD">
             <mat-header-cell mat-header="HEAD" *matHeaderCellDef>HEAD</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <mat-checkbox disabled="true" [checked]="element.actions[0].includes('HEAD')"></mat-checkbox>
+                <mat-checkbox disabled="true" [checked]="element.actions.includes('HEAD')"></mat-checkbox>
             </mat-cell>
         </ng-container>
 
@@ -105,14 +104,16 @@
         </ng-container>
 
 
-        <mat-header-row mat-header-row *matHeaderRowDef="['select', 'subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD']"></mat-header-row>
-        <mat-row mat-row *matRowDef="let row; columns: ['select', 'subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'];"></mat-row>
+        <mat-header-row mat-header-row
+                        *matHeaderRowDef="['select', 'subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD']"></mat-header-row>
+        <mat-row mat-row
+                 *matRowDef="let row; columns: ['select', 'subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'];"></mat-row>
 
     </mat-table>
 </div>
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close] color="primary"
-            [disabled]="!hasValidFileSelected() || overwrite.invalid" (click)="yes()">
+            [disabled]="!hasValidFileSelected() || overwrite.invalid || !atLeastOnePolicySelected()" (click)="yes()">
         <b>Importieren</b></button>
     <button mat-button [mat-dialog-close] color="primary" (click)="no()"><b>Abbrechen</b></button>
 </div>

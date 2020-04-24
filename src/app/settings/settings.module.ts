@@ -19,9 +19,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { SettingsComponent } from './settings/settings.component';
 
@@ -36,10 +36,10 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
     FormsModule,
-    TranslateModule.forRoot(),
-    RouterModule.forRoot(routes),
+    TranslateModule.forChild(),
+    RouterModule.forChild(routes),
+    MatSelectModule,
   ],
   declarations: [SettingsComponent],
 })

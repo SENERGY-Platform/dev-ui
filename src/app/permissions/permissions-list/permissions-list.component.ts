@@ -26,14 +26,13 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {
     Router,
 } from '@angular/router';
-import { first } from 'rxjs/operators';
+import {PermissionModel} from '../../models/permission.model';
 import {
     AuthService,
 } from '../../services/auth/auth.service';
 import {
     LadonService,
 } from '../../services/ladon/ladon.service';
-import {PermissionsAddComponent} from '../permissions-add/permissions-add.component';
 import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from '../permissions-dialog-import/permissions-dialog-import.component';
 import {PermissionImportModel} from '../permissions-dialog-import/permissions-dialog-import.model';
@@ -45,14 +44,6 @@ import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.com
     styleUrls: ['./permissions-list.component.css'],
 })
 export class PermissionsListComponent implements OnInit {
-    public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
-    public policies: any;
-    public userIsAdmin = false;
-
-    public sortedData: any[];
-    public matPolicies: any;
-    public query = '';
-    public sort: Sort = undefined;
 
     constructor(private authService: AuthService,
                 private ladonService: LadonService,
@@ -62,6 +53,19 @@ export class PermissionsListComponent implements OnInit {
     ) {
     }
 
+    public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
+    public policies: PermissionModel[] = [];
+    public userIsAdmin = false;
+
+    public sortedData: PermissionModel[];
+    public matPolicies: MatTableDataSource<PermissionModel>;
+    public query = '';
+    public sort: Sort = undefined;
+
+    private static compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) {
+        return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+
     public ngOnInit() {
         this.loadPolicies();
         this.userIsAdmin = this.authService.userHasRole('admin');
@@ -69,33 +73,23 @@ export class PermissionsListComponent implements OnInit {
 
     public loadPolicies() {
         this.ladonService.getAllPolicies().subscribe((response) => {
-            this.policies = (response as any).map((policy) => {
-                policy.subject = policy.subjects[0];
-                if (policy.resources[0] === '<.*>') {
-                    policy.resource = policy.resources[0];
-                } else {
-                    try {
-                        policy.resource = policy.resources[0].split('(')[1].split(')')[0].replace(/:/g, '/').replace('endpoints', '');
-                    } catch (e) {
-                        console.error('Could not prepare policy resource for policy', policy);
-                    }
-                }
-                policy.actions = policy.actions.join(',');
-                return policy;
-            });
+            this.policies = response;
 
-            // for sorting algorithm
-            this.sortedData = this.policies.slice();
+            this.sort == null ?
+                this.sortedData = this.policies.sort((a, b) => PermissionsListComponent.compare(a.subject, b.subject, true))
+                : this.sortData(this.sort);
 
             // data for mata table
-            this.matPolicies = new MatTableDataSource(this.sortedData);
-            this.search();
+            this.matPolicies = new MatTableDataSource<PermissionModel>(this.sortedData);
         });
     }
 
     public createPolicy() {
-        const dialogRef = this.dialog.open(PermissionsAddComponent,
-            {width: '38.2%'});
+        const dialogRef = this.dialog.open(PermissionsEditComponent,
+            {
+                data: {} as PermissionModel,
+                width: '38.2%',
+            });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result === 'yes') {
@@ -117,8 +111,10 @@ export class PermissionsListComponent implements OnInit {
                 }, width: '38.2%',
             });
 
-        dialogRef.afterClosed().subscribe(() => {
-            this.loadPolicies();
+        dialogRef.afterClosed().subscribe((res) => {
+            if (res != null) {
+                this.loadPolicies();
+            }
         });
     }
 
@@ -143,21 +139,21 @@ export class PermissionsListComponent implements OnInit {
             const isAsc = sort.direction === 'asc';
             switch (sort.active) {
                 case 'subject':
-                    return compare(a.subject, b.subject, isAsc);
+                    return PermissionsListComponent.compare(a.subject, b.subject, isAsc);
                 case 'GET':
-                    return compare(a.actions.includes('GET'), b.actions.includes('GET'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('GET'), b.actions.includes('GET'), isAsc);
                 case 'POST':
-                    return compare(a.actions.includes('POST'), b.actions.includes('POST'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('POST'), b.actions.includes('POST'), isAsc);
                 case 'PUT':
-                    return compare(a.actions.includes('PUT'), b.actions.includes('PUT'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('PUT'), b.actions.includes('PUT'), isAsc);
                 case 'PATCH':
-                    return compare(a.actions.includes('PATCH'), b.actions.includes('PATCH'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('PATCH'), b.actions.includes('PATCH'), isAsc);
                 case 'DELETE':
-                    return compare(a.actions.includes('DELETE'), b.actions.includes('DELETE'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('DELETE'), b.actions.includes('DELETE'), isAsc);
                 case 'HEAD':
-                    return compare(a.actions.includes('HEAD'), b.actions.includes('HEAD'), isAsc);
+                    return PermissionsListComponent.compare(a.actions.includes('HEAD'), b.actions.includes('HEAD'), isAsc);
                 case 'resource':
-                    return compare(a.resource, b.resource, isAsc);
+                    return PermissionsListComponent.compare(a.resource, b.resource, isAsc);
 
                 default:
                     return 0;
@@ -188,19 +184,23 @@ export class PermissionsListComponent implements OnInit {
             {minWidth: '850px', minHeight: '200px'});
 
         dialogRef.afterClosed().subscribe(async (result: PermissionImportModel) => {
-            if (result.overwrite) {
-                this.policies.forEach((policy) => {
-                    if (policy.id !== 'admin-all') { // Don't ever delete this policy
-                        this.ladonService.deletePolicy(policy);
+            if (result != null) {
+                if (result.overwrite) {
+                    this.policies.forEach((policy) => {
+                        if (policy.id !== 'admin-all') { // Don't ever delete this policy
+                            this.ladonService.deletePolicy(policy);
+                        }
+                    });
+                }
+                console.log(result);
+                for (const policy of result.policies) {
+                    if (policy.id !== 'admin-all') {
+                        await this.ladonService.deletePolicy(policy).toPromise();
+                        await this.ladonService.postPolicy(policy).toPromise();
                     }
-                });
+                }
+                this.loadPolicies();
             }
-            console.log(result);
-            for (const policy of result.policies) {
-                await this.ladonService.deletePolicy(policy).toPromise();
-                await this.ladonService.postPolicy(policy).toPromise();
-            }
-            this.loadPolicies();
         });
     }
 
@@ -210,7 +210,7 @@ export class PermissionsListComponent implements OnInit {
         this.policies.forEach((policy) => {
             try {
                 if (query.test(policy.subject)
-                    || query.test(policy.actions)
+                    || query.test(policy.actions.join())
                     || query.test(policy.resource)) {
                     filtered.push(policy);
                 }
@@ -231,8 +231,4 @@ export class PermissionsListComponent implements OnInit {
         this.sortedData = this.policies;
         this.sortData(this.sort);
     }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

@@ -25,11 +25,11 @@ import {SidenavSectionModel} from './sidenav-section.model';
     providedIn: 'root',
 })
 export class SidenavService {
-    @Output() public isToggled = false;
-    @Output() public section = '';
-
     @Output() public toggleChanged: EventEmitter<boolean> = new EventEmitter();
     @Output() public sectionChanged: EventEmitter<string> = new EventEmitter();
+
+    private isToggled = false;
+    private section = '';
 
     public toggle(sidenavOpen: boolean): void {
         this.isToggled = sidenavOpen;
@@ -50,8 +50,8 @@ export class SidenavService {
             new SidenavPageModel('Prozesse', 'link', 'ballot', '/doc/process'),
             new SidenavPageModel('Analytics', 'link', 'insert_chart', '/doc/analytics'),
             new SidenavPageModel('IoT Repository', 'link', 'storage', '/doc/iot'),
-            new SidenavPageModel('Dashboard', 'link', 'dashboard', '/doc/dashboard'),
-            new SidenavPageModel('Marketplace', 'link', 'add_shopping_cart', '/doc/marketplace'),
+            // new SidenavPageModel('Dashboard', 'link', 'dashboard', '/doc/dashboard'),
+            // new SidenavPageModel('Marketplace', 'link', 'add_shopping_cart', '/doc/marketplace'),
             new SidenavPageModel('Security', 'link', 'security', '/doc/security'),
         ]));
 

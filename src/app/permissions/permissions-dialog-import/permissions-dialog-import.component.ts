@@ -20,6 +20,7 @@ import {Component, ViewChild} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {PermissionModel} from '../../models/permission.model';
 import {PermissionImportModel} from './permissions-dialog-import.model';
 
 @Component({
@@ -35,10 +36,10 @@ export class PermissionsDialogImportComponent {
 
     @ViewChild('fileInput') public fileInput: HTMLInputElement;
     public overwrite = new FormControl(undefined, Validators.required);
-    public policies: any[] = [];
+    public policies: PermissionModel[] = [];
     public fileValid = false;
     public selections: boolean[] = [];
-    public isAllSelected = true;
+    public isAllSelected = false;
 
     public yes() {
         const imports: any[] = [];
@@ -55,23 +56,22 @@ export class PermissionsDialogImportComponent {
     }
 
     public no() {
-        const result: PermissionImportModel = {
-            policies: [],
-            overwrite: false,
-        };
-        this.dialogRef.close(result);
+        this.dialogRef.close();
     }
 
     public onFileSelected() {
         const reader = new FileReader();
         reader.onload = () => {
             try {
-                this.policies = JSON.parse(reader.result as string);
-                this.selections = [];
-                this.policies.forEach((policy) => {
-                    policy.actions = policy.actions.split(', ');
-                    this.selections.push(true);
-                });
+                this.policies = JSON.parse(reader.result as string) as PermissionModel[];
+                // Remove admin-all policy if needed, this policy can't be changed in the UI
+                const adminAllIdx = this.policies.findIndex((policy) => policy.id === 'admin-all');
+                if (adminAllIdx !== -1) {
+                    this.policies.splice(adminAllIdx, 1);
+                }
+                this.selections = new Array<boolean>(this.policies.length);
+                this.selections.fill(false);
+                this.masterToggle(true);
                 this.fileValid = true;
             } catch (e) {
                 this.snackBar.open('Could not import permissions: Invalid JSON', undefined, {
@@ -132,5 +132,9 @@ export class PermissionsDialogImportComponent {
     public addSelected() {
         const value = this.overwrite.value;
         return value === 'true';
+    }
+
+    public atLeastOnePolicySelected() {
+        return this.selections.indexOf(true) !== -1;
     }
 }

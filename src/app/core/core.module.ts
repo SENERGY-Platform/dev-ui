@@ -22,10 +22,15 @@ import {CommonModule} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {MaterialModule} from '../material/material.module';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {throwIfAlreadyLoaded} from './module-import-guard';
@@ -36,9 +41,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
     imports: [
+        BrowserAnimationsModule,
         CommonModule,
         RouterModule,
-        MaterialModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
         FormsModule,
         FlexLayoutModule,
         TranslateModule.forChild({

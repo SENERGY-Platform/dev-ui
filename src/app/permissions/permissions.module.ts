@@ -20,11 +20,23 @@ import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
-import { PermissionsAddComponent } from './permissions-add/permissions-add.component';
 import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from './permissions-dialog-import/permissions-dialog-import.component';
 import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
@@ -42,11 +54,6 @@ const routes: Routes = [
     canActivate: [ValidTokenGuard],
     children: [
       {
-        path: 'add',
-        component: PermissionsAddComponent,
-        canActivate: [ValidTokenGuard],
-      },
-      {
         path: '',
         component: PermissionsListComponent,
         canActivate: [ValidTokenGuard],
@@ -63,14 +70,26 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
-    RouterModule.forRoot(routes),
+    MatCardModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatTableModule,
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forChild(),
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatSortModule,
+    MatSnackBarModule,
   ],
   declarations: [
-    PermissionsAddComponent,
     PermissionsListComponent,
     PermissionsEditComponent,
     RoutingComponent,

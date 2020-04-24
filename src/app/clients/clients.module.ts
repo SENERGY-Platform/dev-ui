@@ -22,9 +22,14 @@ import { FormsModule } from '@angular/forms';
 import {
   ReactiveFormsModule,
 } from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { AddEditClientComponent } from './add-edit-client/add-edit-client.component';
 import { ViewClientsComponent } from './view-clients/view-clients.component';
@@ -57,11 +62,16 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(routes),
-    MaterialModule,
+    RouterModule.forChild(routes),
     ReactiveFormsModule,
-    TranslateModule.forRoot(),
+    MatIconModule,
+    MatCardModule,
+    TranslateModule.forChild(),
     FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
   ],
   declarations: [
     AddEditClientComponent,

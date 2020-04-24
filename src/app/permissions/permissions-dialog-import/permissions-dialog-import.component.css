@@ -36,6 +36,7 @@
 
 .warn-text {
     color: #F19F4D;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-column-select, .mat-column-GET, .mat-column-POST, .mat-column-PUT,

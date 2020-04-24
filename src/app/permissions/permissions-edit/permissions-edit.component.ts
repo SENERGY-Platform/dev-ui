@@ -26,6 +26,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import {PermissionModel} from '../../models/permission.model';
 import {AuthService} from '../../services/auth/auth.service';
 import {KongService} from '../../services/kong/kong.service';
 import {LadonService} from '../../services/ladon/ladon.service';
@@ -36,34 +37,23 @@ export interface Model {
     name: string;
 }
 
-export interface DialogData {
-    id: string;
-    actions: string;
-    subject: string;
-    resource: string;
-}
-
 @Component({
     selector: 'app-permissions-edit',
     templateUrl: './permissions-edit.component.html',
     styleUrls: ['./permissions-edit.component.css'],
 })
 export class PermissionsEditComponent implements OnInit {
+    public isEditMode = false;
     public myControl = new FormControl();
     public userIsAdmin: boolean;
-    public subject: string;
-    public actions: string;
-    public id: string;
-    public resource: string;
+    public title: string;
     // all roles and uris and users
     public roles: any;
     public uris: any;
     public users: any;
-    public policies: any;
     // options for autocomplete filter
     public filteredOptions: Observable<string[]>;
     public btnDisable: boolean;
-    public arrayOfActions: string[];
 
     public form = this.fb.group({
         role: this.route.snapshot.paramMap.get('subject'),
@@ -72,7 +62,7 @@ export class PermissionsEditComponent implements OnInit {
     });
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: DialogData,
+        @Inject(MAT_DIALOG_DATA) public permission: PermissionModel,
         public dialogRef: MatDialogRef<PermissionsEditComponent>,
         private kongService: KongService,
         private fb: FormBuilder,
@@ -81,17 +71,24 @@ export class PermissionsEditComponent implements OnInit {
         private ladonService: LadonService,
         private router: Router,
         private authService: AuthService,
-        private snackBar: MatSnackBar) {
-        try {
-            this.userManagementService.loadRoles().then((roles: Model) => {
-                this.roles = roles;
-                this.intbtnDisable();
-            });
-            this.userManagementService.loadUsers().then((users) => this.users = users);
-        } catch (e) {
-            console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
-            this.btnDisable = true;
-        }
+        private snackBar: MatSnackBar,
+        ) {
+            try {
+                this.userManagementService.loadRoles().then((roles: Model) => {
+                    this.roles = roles;
+                    this.intbtnDisable();
+                });
+                this.userManagementService.loadUsers().then((users) => this.users = users);
+            } catch (e) {
+                console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+                this.btnDisable = true;
+            }
+            this.isEditMode = !(Object.entries(this.permission).length === 0 && this.permission.constructor === Object);
+            if (this.isEditMode) {
+                this.title = 'Edit Permission';
+            } else {
+                this.title = 'Add Permission';
+            }
     }
 
     private methods = new FormGroup({
@@ -115,10 +112,6 @@ export class PermissionsEditComponent implements OnInit {
         } catch (e) {
             console.error('Could not load Uris from kong: ' + e);
         }
-        this.subject = this.data.subject;
-        this.actions = this.data.actions;
-        this.id = this.data.id;
-        this.resource = this.data.resource;
 
         this.checkactiveActions();
 
@@ -131,30 +124,17 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     public checkactiveActions() {
-        this.arrayOfActions = this.actions.split(',');
         this.methods.patchValue({
-            get: this.arrayOfActions.includes('GET'),
-            post: this.arrayOfActions.includes('POST'),
-            patch: this.arrayOfActions.includes('PATCH'),
-            delete: this.arrayOfActions.includes('DELETE'),
-            put: this.arrayOfActions.includes('PUT'),
-            head: this.arrayOfActions.includes('HEAD'),
+            get: this.permission.actions.includes('GET'),
+            post: this.permission.actions.includes('POST'),
+            patch: this.permission.actions.includes('PATCH'),
+            delete: this.permission.actions.includes('DELETE'),
+            put: this.permission.actions.includes('PUT'),
+            head: this.permission.actions.includes('HEAD'),
         });
-        /*
-        console.log('Status:\n'
-            + 'get: ' + this.methods.get('get').value + '\n'
-            + 'post: ' + this.methods.get('post').value + '\n'
-            + 'patch: ' + this.methods.get('patch').value + '\n'
-            + 'delete: ' + this.methods.get('delete').value + '\n'
-            + 'put: ' + this.methods.get('put').value + '\n'
-            + 'head: '+ this.methods.get('headh').value);
-         */
     }
 
     public yes() {
-        // Send list of policies to Ladon
-        // Each Triple of Subject, Action and Resource become one policy
-
         this.pushPolicy().then((res) => {
             if (res === true) {
                 this.dialogRef.close('yes');
@@ -167,47 +147,47 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     public no() {
-        this.dialogRef.close('no');
+        this.dialogRef.close();
     }
 
     public pushPolicy(): Promise<boolean> {
-        let resource = this.resource;
-        if (resource.startsWith('/')) {
-            resource = resource.substring(1);
-        }
-        resource = resource.split('/').join(':');
-        const policy = {
-            Subjects: [this.subject],
-            Actions: [],
-            Resources: ['<^(endpoints:' + resource + ').*>'],
-            Effect: 'allow',
-            id: this.id,
+        const policy: PermissionModel = {
+            subject: this.permission.subject,
+            actions: [],
+            resource: this.myControl.value,
+            id: this.permission.id,
         };
         if (this.methods.get('get').value === true) {
-            policy.Actions.push('GET');
+            policy.actions.push('GET');
         }
         if (this.methods.get('post').value === true) {
-            policy.Actions.push('POST');
+            policy.actions.push('POST');
         }
         if (this.methods.get('patch').value === true) {
-            policy.Actions.push('PATCH');
+            policy.actions.push('PATCH');
         }
         if (this.methods.get('delete').value === true) {
-            policy.Actions.push('DELETE');
+            policy.actions.push('DELETE');
         }
         if (this.methods.get('put').value === true) {
-            policy.Actions.push('PUT');
+            policy.actions.push('PUT');
         }
         if (this.methods.get('head').value === true) {
-            policy.Actions.push('HEAD');
+            policy.actions.push('HEAD');
         }
 
-        return new Promise<boolean>((resolve) => {
-            return this.ladonService.deletePolicy(policy)
-                .subscribe(() => {
-                    return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
-                });
-        });
+        if (this.isEditMode) {
+            return new Promise<boolean>((resolve) => {
+                return this.ladonService.deletePolicy(policy)
+                    .subscribe(() => {
+                        return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
+                    });
+            });
+        } else {
+            return new Promise<boolean>((resolve) => {
+                return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
+            });
+        }
     }
 
     // autocomplete filter
@@ -221,7 +201,7 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     public intbtnDisable() {
-        const persons = this.roles.find((x) => x.name === this.subject);
+        const persons = this.roles.find((x) => x.name === this.permission.subject);
         this.btnDisable = persons === undefined;
     }
 }

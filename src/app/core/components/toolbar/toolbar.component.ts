@@ -190,6 +190,10 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         this.authService.logout();
     }
 
+    public resetSidenav(): void {
+        this.sidenavService.reset();
+    }
+
     private checkIfDocIsActive() {
         this.router.events.subscribe((event) => {
             if (event instanceof RoutesRecognized ) {

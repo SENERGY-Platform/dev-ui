@@ -20,6 +20,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -29,7 +30,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ApiDocModule } from './api-doc/api-doc.module';
 import { ClientsModule } from './clients/clients.module';
 import { CoreModule } from './core/core.module';
-import { MaterialModule } from './material/material.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { PlatformDocModule } from './platform-doc/platform-doc.module';
 import { SettingsModule } from './settings/settings.module';
@@ -74,7 +74,6 @@ const keycloakService = new KeycloakService();
   imports: [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
-    MaterialModule,
     PlatformDocModule,
     SettingsModule,
     PermissionsModule,
@@ -94,6 +93,7 @@ const keycloakService = new KeycloakService();
     }),
     BrowserAnimationsModule,
     KeycloakAngularModule,
+    MatCardModule,
   ],
   providers: [
     ApiService,

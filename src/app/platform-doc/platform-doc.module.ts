@@ -91,11 +91,11 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(routes),
-    TranslateModule.forRoot(),
-     MarkdownModule.forRoot(),
-      HttpClientModule,
-      MarkdownModule.forRoot({ loader: HttpClient }),
+    RouterModule.forChild(routes),
+    TranslateModule.forChild(),
+     MarkdownModule.forChild(),
+    HttpClientModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
   ],
   declarations: [
     AnalyticsDocComponent,

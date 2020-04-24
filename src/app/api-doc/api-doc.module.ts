@@ -18,12 +18,14 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import { SingleServiceDocComponent } from './single-service-doc/single-service-doc.component';
 
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../material/material.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { ApiDocsComponent } from './api-docs/api-docs.component';
 
@@ -53,10 +55,12 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forChild(routes),
     FormsModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forChild(),
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [
    SingleServiceDocComponent,
