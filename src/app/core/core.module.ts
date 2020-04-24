@@ -25,6 +25,7 @@ import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -32,6 +33,7 @@ import {RouterModule} from '@angular/router';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {SpinnerComponent} from './components/spinner/spinner.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {throwIfAlreadyLoaded} from './module-import-guard';
 
@@ -58,14 +60,17 @@ export function HttpLoaderFactory(http: HttpClient) {
                 useFactory: HttpLoaderFactory,
             },
         }),
+        MatProgressSpinnerModule,
     ],
     declarations: [
         SidenavComponent,
         ToolbarComponent,
+        SpinnerComponent,
     ],
     exports: [
         SidenavComponent,
         ToolbarComponent,
+        SpinnerComponent,
     ],
 })
 

@@ -73,3 +73,17 @@
 .mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
     max-width: 90px;
 }
+
+.import-hint {
+    position: fixed;
+    z-index: 999;
+    height: 10em;
+    width: 20em;
+    margin: auto;
+    top: 4em;
+    left: 172px;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    font-size: 3em;
+}

@@ -18,7 +18,7 @@
 
 <section *ngIf="userIsAdmin" class="outer">
 
-    <mat-card class="search">
+    <mat-card class="search" *ngIf="!!ready">
         <i class="material-icons">search</i>
         <mat-form-field>
             <input type="text" matInput (keyup)="search()" [(ngModel)]="query" [placeholder]="'Search (for users, roles, actions or resources)'">
@@ -29,7 +29,7 @@
 
     </mat-card>
 
-    <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData">
+    <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData" [hidden]="!ready">
 
         <ng-container matColumnDef="subject">
             <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
@@ -102,19 +102,22 @@
         <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
     </mat-table>
+    <app-spinner [show]="!ready"></app-spinner>
+    <span *ngIf="importing" class="import-hint color-accent">Importing takes a few seconds...</span>
 </section>
 
-<a class="fabs add" matTooltip="Hinzufügen">
+
+<a class="fabs add" matTooltip="Hinzufügen" [hidden]="!ready">
     <button mat-fab (click)="createPolicy()">
         <mat-icon>add</mat-icon>
     </button>
 </a>
-<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren">
+<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren" [hidden]="!ready">
     <button mat-fab>
         <mat-icon>cloud_download</mat-icon>
     </button>
 </a>
-<a class="upload">
+<a class="upload" [hidden]="!ready">
     <button mat-fab (click)="import()" class="fabs upload" matTooltip="Importieren">
         <mat-icon>cloud_upload</mat-icon>
     </button>

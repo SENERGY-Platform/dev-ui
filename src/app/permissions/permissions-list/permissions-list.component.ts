@@ -61,6 +61,8 @@ export class PermissionsListComponent implements OnInit {
     public matPolicies: MatTableDataSource<PermissionModel>;
     public query = '';
     public sort: Sort = undefined;
+    public ready = false;
+    public importing = false;
 
     private static compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) {
         return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -72,6 +74,7 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public loadPolicies() {
+        this.ready = false;
         this.ladonService.getAllPolicies().subscribe((response) => {
             this.policies = response;
 
@@ -81,6 +84,7 @@ export class PermissionsListComponent implements OnInit {
 
             // data for mata table
             this.matPolicies = new MatTableDataSource<PermissionModel>(this.sortedData);
+            this.ready = true;
         });
     }
 
@@ -185,6 +189,8 @@ export class PermissionsListComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(async (result: PermissionImportModel) => {
             if (result != null) {
+                this.ready = false;
+                this.importing = true;
                 if (result.overwrite) {
                     this.policies.forEach((policy) => {
                         if (policy.id !== 'admin-all') { // Don't ever delete this policy
@@ -192,13 +198,13 @@ export class PermissionsListComponent implements OnInit {
                         }
                     });
                 }
-                console.log(result);
                 for (const policy of result.policies) {
                     if (policy.id !== 'admin-all') {
                         await this.ladonService.deletePolicy(policy).toPromise();
                         await this.ladonService.postPolicy(policy).toPromise();
                     }
                 }
+                this.importing = false;
                 this.loadPolicies();
             }
         });

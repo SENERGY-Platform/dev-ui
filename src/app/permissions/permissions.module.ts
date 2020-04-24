@@ -36,6 +36,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import {CoreModule} from '../core/core.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from './permissions-dialog-import/permissions-dialog-import.component';
@@ -88,6 +89,7 @@ const routes: Routes = [
     MatRadioModule,
     MatSortModule,
     MatSnackBarModule,
+    CoreModule,
   ],
   declarations: [
     PermissionsListComponent,
