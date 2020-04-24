@@ -16,6 +16,10 @@
  *
  */
 
+.permission-list-content {
+    height: calc(100% - 105px);
+}
+
 .search {
     display: flex;
     align-items: center;
@@ -34,6 +38,10 @@
 
 .mat-raised-button{
     color: white;
+}
+
+.table-container {
+    overflow: auto;
 }
 
 .add div {

@@ -18,6 +18,7 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -90,6 +91,7 @@ const routes: Routes = [
     MatSortModule,
     MatSnackBarModule,
     CoreModule,
+    FlexLayoutModule,
   ],
   declarations: [
     PermissionsListComponent,
