@@ -21,6 +21,7 @@ import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
+import {MatDialogModule} from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -94,6 +95,7 @@ const keycloakService = new KeycloakService();
     BrowserAnimationsModule,
     KeycloakAngularModule,
     MatCardModule,
+    MatDialogModule,
   ],
   providers: [
     ApiService,
