@@ -21,6 +21,7 @@ import { Component, NgModule } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {CoreModule} from '../core/core.module';
 import { SingleServiceDocComponent } from './single-service-doc/single-service-doc.component';
 
 import { FormsModule } from '@angular/forms';
@@ -53,15 +54,16 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    TranslateModule.forChild(),
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        TranslateModule.forChild(),
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        CoreModule,
+    ],
   declarations: [
    SingleServiceDocComponent,
    ApiDocsComponent,

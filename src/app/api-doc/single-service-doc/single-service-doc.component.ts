@@ -16,53 +16,56 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
-import { AuthService } from '../../services/auth/auth.service';
-import { SwaggerService } from '../../services/swagger/swagger.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {SwaggerService} from '../../services/swagger/swagger.service';
 
 @Component({
-  selector: 'app-single-service-doc',
-  templateUrl: './single-service-doc.component.html',
-  styleUrls: ['./single-service-doc.component.css'],
+    selector: 'app-single-service-doc',
+    templateUrl: './single-service-doc.component.html',
+    styleUrls: ['./single-service-doc.component.css'],
 })
 export class SingleServiceDocComponent implements OnInit {
-  public id: any;
-  public swagger: any;
-  public ui: any;
+    public id: any;
+    public swagger: any;
+    public ui: any;
+    public ready = false;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, private swaggerService: SwaggerService) { }
+    constructor(private authService: AuthService, private route: ActivatedRoute, private swaggerService: SwaggerService) {
+    }
 
-  public ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.swaggerService.getSwagger().then((swaggerFiles) => {
-        (swaggerFiles as any).forEach((api) => {
-          if (api.info.title === decodeURIComponent(params.id)) {
-            this.swagger = api;
-          }
+    public ngOnInit() {
+        this.route.params.subscribe((params) => {
+            this.swaggerService.getSwagger().then((swaggerFiles) => {
+                (swaggerFiles as any).forEach((api) => {
+                    if (api.info.title === decodeURIComponent(params.id)) {
+                        this.swagger = api;
+                    }
+                });
+
+                this.authService.getToken().then((token) => {
+                    this.ui = SwaggerUIBundle({
+                        spec: this.swagger,
+                        dom_id: '#swagger',
+                        presets: [
+                            SwaggerUIBundle.presets.apis,
+                            SwaggerUIStandalonePreset,
+                        ],
+                        configs: {
+                            preFetch(req) {
+                                req.headers.Authorization = 'Bearer ' + token;
+                                return req;
+                            },
+                        },
+                        layout: 'StandaloneLayout',
+                    });
+                    this.ready = true;
+                });
+
+            });
         });
-
-        this.authService.getToken().then((token) => {
-          this.ui = SwaggerUIBundle({
-            spec: this.swagger,
-            dom_id: '#swagger',
-            presets: [
-              SwaggerUIBundle.presets.apis,
-              SwaggerUIStandalonePreset,
-            ],
-            configs: {
-              preFetch(req) {
-                      req.headers.Authorization = 'Bearer ' + token;
-                      return req;
-              },
-            },
-            layout: 'StandaloneLayout',
-          });
-        });
-
-      });
-   });
-  }
+    }
 
 }

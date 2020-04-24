@@ -16,4 +16,5 @@
   ~
   -->
 
-<div id="swagger"></div>
+<div id="swagger" [hidden]="!ready"></div>
+<app-spinner [show]="!ready"></app-spinner>

@@ -19,7 +19,7 @@
 <div class="outer">
   <router-outlet></router-outlet>
 
-  <mat-card class="search">
+  <mat-card class="search" [hidden]="!ready">
       <i class="material-icons">search</i>
       <mat-form-field>
           <input type="text" matInput (keyup)="search()" [(ngModel)]="query" [placeholder]="searchPlaceholder">
@@ -27,7 +27,7 @@
   </mat-card>
 
 
-  <div class="service-container">
+  <div class="service-container" [hidden]="!ready">
     <mat-card [routerLink]="['/api/', element.info.title]" class="hover-mat-card entry-card api-card" *ngFor="let element of swaggerListShown; let i = index">
       <mat-card-header>
         <mat-card-title>{{ element.info.title }}</mat-card-title>
@@ -40,6 +40,8 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+  <app-spinner [show]="!ready"></app-spinner>
 </div>
 
 
