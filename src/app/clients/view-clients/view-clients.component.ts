@@ -31,6 +31,7 @@ import {ClientService} from '../shared/client.service';
 
 export class ViewClientsComponent implements OnInit {
   public clients: ClientModel[];
+  public ready = false
 
   constructor(private router: Router, private apiService: ApiService, private clientService: ClientService) {
   }
@@ -40,8 +41,11 @@ export class ViewClientsComponent implements OnInit {
   }
 
   public loadClients() {
+    this.ready = false;
+    this.clients = [];
     this.apiService.get('/clients/clients').subscribe((clients) => {
       this.clients = clients as ClientModel[];
+      this.ready = true;
     });
   }
 
@@ -60,6 +64,11 @@ export class ViewClientsComponent implements OnInit {
   }
 
   public viewClient(client: ClientModel) {
-    this.clientService.openViewClientDialog(JSON.parse(JSON.stringify(client))); // Work on copy
+    this.clientService.openViewClientDialog(JSON.parse(JSON.stringify(client))) // Work on copy
+        .subscribe((b) => {
+          if (b) {
+            this.loadClients();
+          }
+        });
   }
 }

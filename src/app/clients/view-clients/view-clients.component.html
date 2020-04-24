@@ -16,7 +16,7 @@
   ~
   -->
 
-<div class="clients outer">
+<div class="clients outer" [hidden]="!ready">
   <mat-card class="client" *ngFor="let client of clients">
     <div class="infos">
       <div class="client_header">
@@ -47,7 +47,9 @@
   </mat-card>
 </div>
 
-<a class="add">
+<app-spinner [show]="!ready"></app-spinner>
+
+<a class="add" [hidden]="!ready">
   <button mat-fab (click)="addClient()">
     <mat-icon>add</mat-icon>
   </button>

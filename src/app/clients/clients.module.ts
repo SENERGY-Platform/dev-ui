@@ -30,6 +30,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import {CoreModule} from '../core/core.module';
 import { ValidTokenGuard } from '../services/auth/guard.service';
 import { AddEditClientComponent } from './add-edit-client/add-edit-client.component';
 import { ViewClientsComponent } from './view-clients/view-clients.component';
@@ -72,6 +73,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    CoreModule,
   ],
   declarations: [
     AddEditClientComponent,
