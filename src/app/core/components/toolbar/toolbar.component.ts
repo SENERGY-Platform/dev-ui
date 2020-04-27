@@ -18,9 +18,9 @@
 
 import {HttpClient} from '@angular/common/http';
 import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RoutesRecognized} from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
+import {AuthService} from '../../../services/auth/auth.service';
 import {SwaggerService} from '../../../services/swagger/swagger.service';
 import {ResponsiveService} from '../../services/responsive.service';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
@@ -44,13 +44,13 @@ interface MarkdownModel {
 }
 
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.css'],
+    selector: 'app-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.css'],
 })
 export class ToolbarComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('sidenav', { static: false }) public sidenav!: MatSidenav;
+    @ViewChild('sidenav', {static: false}) public sidenav!: MatSidenav;
     @Output() public sections: SidenavSectionModel[] = [];
     @Output() public openSection: null | string = null;
     @Output() public zIndex = -1;
@@ -73,11 +73,11 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
                 private router: Router) {
     }
 
-  public ngOnInit() {
-      this.userIsAdmin = this.authService.userHasRole('admin');
-      this.checkIfDocIsActive();
-      this.getHeadersOfMarkdown();
-  }
+    public ngOnInit() {
+        this.userIsAdmin = this.authService.userHasRole('admin');
+        this.checkIfDocIsActive();
+        this.getHeadersOfMarkdown();
+    }
 
     public ngAfterViewInit() {
     }
@@ -181,6 +181,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     }
 
     public openSearchResult(url) {
+        this.searchQuery = '';
         this.inputFocused = false;
         this.mobileSearchPageIsHidden = true;
         this.router.navigateByUrl(url);
@@ -194,9 +195,14 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         this.sidenavService.reset();
     }
 
+    public resetSearchText() {
+        this.searchQuery = '';
+        this.search();
+    }
+
     private checkIfDocIsActive() {
         this.router.events.subscribe((event) => {
-            if (event instanceof RoutesRecognized ) {
+            if (event instanceof RoutesRecognized) {
                 const url = event.url;
                 this.Act = url !== '/doc';
             }
@@ -208,12 +214,12 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
             const markdowns: MarkdownModel[] = [getting as unknown as MarkdownModel, process as unknown as MarkdownModel,
                 analytics as unknown as MarkdownModel, iot as unknown as MarkdownModel, security as unknown as MarkdownModel];
             const docs = [
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
-                ];
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
+            ];
 
             const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
             const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
@@ -224,9 +230,9 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
             let header3;
 
             for (let index = 0; index < markdowns.length; index++) {
-                header1 =  markdowns[index].default.match(regex1);
-                header2 =  markdowns[index].default.match(regex2);
-                header3 =  markdowns[index].default.match(regex3);
+                header1 = markdowns[index].default.match(regex1);
+                header2 = markdowns[index].default.match(regex2);
+                header3 = markdowns[index].default.match(regex3);
 
                 header1.forEach((value) => {
                     value = value.toString().replace(/#/g, '').replace(/^ /g, '');
@@ -246,5 +252,4 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
             resolve(docs);
         });
     }
-
 }
