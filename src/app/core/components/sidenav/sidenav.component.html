@@ -16,7 +16,7 @@
   ~
   -->
 
-<mat-sidenav-container class="sidenav-container" [ngStyle]="{'z-index': zIndex}" (backdropClick)="closeSidenav()">
+<mat-sidenav-container class="sidenav-container" (backdropClick)="closeSidenav()">
     <mat-sidenav disableClose #sidenav role="navigation" class="sidenav mat-elevation-z1" [fixedInViewport]="true">
         <ul class="side-menu">
             <li *ngFor="let section of sections">
