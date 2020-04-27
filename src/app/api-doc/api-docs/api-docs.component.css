@@ -82,3 +82,7 @@ mat-card-actions {
 .api-description {
     margin-left: 15px;
 }
+
+.card-container {
+    overflow-y: auto;
+}

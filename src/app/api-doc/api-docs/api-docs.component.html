@@ -16,7 +16,7 @@
   ~
   -->
 
-<div class="outer">
+<div class="outer" fxLayout="column">
   <router-outlet></router-outlet>
 
   <mat-card class="search" [hidden]="!ready">
@@ -26,8 +26,8 @@
         </mat-form-field>
   </mat-card>
 
-
-  <div class="service-container" [hidden]="!ready">
+ <div class="card-container" fxFlex="auto" [hidden]="!ready">
+  <div class="service-container" [hidden]="!ready" fxFlex="auto">
     <mat-card [routerLink]="['/api/', element.info.title]" class="hover-mat-card entry-card api-card" *ngFor="let element of swaggerListShown; let i = index">
       <mat-card-header>
         <mat-card-title>{{ element.info.title }}</mat-card-title>
@@ -40,6 +40,7 @@
       </mat-card-content>
     </mat-card>
   </div>
+ </div>
 
   <app-spinner [show]="!ready"></app-spinner>
 </div>
