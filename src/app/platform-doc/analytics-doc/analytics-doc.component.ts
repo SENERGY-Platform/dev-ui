@@ -35,8 +35,8 @@ export class AnalyticsDocComponent implements OnInit {
   constructor(private translate: TranslateService, private authService: AuthService, private swaggerService: SwaggerService) {
     const lang = this.translate.currentLang || 'de';
     this.path = 'assets/docs/' + lang + '/analytics.md';
-    this.swaggerService.getSwagger().then((swaggerFiles) => {
-      (swaggerFiles as any).forEach((api) => {
+    this.swaggerService.getSwagger().subscribe((swaggerFiles) => {
+      swaggerFiles.forEach((api) => {
         if (api.basePath === '/db') {
           this.swagger = api;
         }

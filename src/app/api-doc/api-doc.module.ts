@@ -21,6 +21,7 @@ import { Component, NgModule } from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {CoreModule} from '../core/core.module';
 import { SingleServiceDocComponent } from './single-service-doc/single-service-doc.component';
@@ -65,6 +66,7 @@ const routes: Routes = [
         MatInputModule,
         CoreModule,
         FlexLayoutModule,
+        MatIconModule,
     ],
   declarations: [
    SingleServiceDocComponent,

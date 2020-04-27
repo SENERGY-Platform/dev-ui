@@ -36,8 +36,8 @@ export class SecurityDocComponent implements OnInit {
     const lang = this.translate.currentLang || 'de';
     this.path = 'assets/docs/' + lang + '/security.md';
 
-    this.swaggerService.getSwagger().then((swaggerFiles) => {
-      (swaggerFiles as any).forEach((api) => {
+    this.swaggerService.getSwagger().subscribe((swaggerFiles) => {
+      swaggerFiles.forEach((api) => {
         if (api.basePath === '/auth') {
           this.swagger = api;
         }

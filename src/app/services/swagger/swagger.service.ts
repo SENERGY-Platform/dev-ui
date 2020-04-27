@@ -19,7 +19,9 @@
 import {
     Injectable,
 } from '@angular/core';
+import {Observable} from 'rxjs';
 import {ApiService} from '../api/api.service';
+import {SwaggerModel} from './swagger.model';
 
 @Injectable()
 export class SwaggerService {
@@ -31,16 +33,7 @@ export class SwaggerService {
      * giIterate through the array and retrieve necessary information(name, version)
      * and add it to the list using currently unavailable descriptions.
      */
-    public getSwagger() {
-        return new Promise((resolve) => {
-            this.apiService.get('/swagger')
-                .subscribe((res) => {
-                        resolve(res);
-                    },
-                    () => {
-                        console.log('Error occured');
-                    },
-                );
-        });
+    public getSwagger(): Observable<SwaggerModel[]> {
+        return this.apiService.get('/swagger') as Observable<SwaggerModel[]>;
     }
 }

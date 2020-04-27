@@ -92,8 +92,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
         if (!this.blockSwagger) {
             this.blockSwagger = true;
-            this.loadSwagger().then((swagger) => {
-                (swagger as any).forEach((api) => {
+            this.loadSwagger().subscribe((swagger) => {
+                swagger.forEach((api) => {
                     if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
                         this.swaggerSearchresult.push({
                             title: api.info.title,

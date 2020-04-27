@@ -38,8 +38,8 @@ export class SingleServiceDocComponent implements OnInit {
 
     public ngOnInit() {
         this.route.params.subscribe((params) => {
-            this.swaggerService.getSwagger().then((swaggerFiles) => {
-                (swaggerFiles as any).forEach((api) => {
+            this.swaggerService.getSwagger().subscribe((swaggerFiles) => {
+                swaggerFiles.forEach((api) => {
                     if (api.info.title === decodeURIComponent(params.id)) {
                         this.swagger = api;
                     }

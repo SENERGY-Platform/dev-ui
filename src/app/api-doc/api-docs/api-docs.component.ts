@@ -24,6 +24,7 @@ import {
     Router,
 } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {SwaggerModel} from '../../services/swagger/swagger.model';
 import {
     SwaggerService,
 } from '../../services/swagger/swagger.service';
@@ -35,8 +36,8 @@ import {
 })
 export class ApiDocsComponent implements OnInit {
     public title = 'SEPL API Documentation';
-    public swaggerList: any;
-    public swaggerListShown: any;
+    public swaggerList: SwaggerModel[];
+    public swaggerListShown: SwaggerModel[];
     public query: any;
     public searchPlaceholder: any;
     public ready = false;
@@ -46,7 +47,7 @@ export class ApiDocsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.translateService.get('SEARCH').subscribe((name) => this.searchPlaceholder = name);
-        this.swaggerService.getSwagger().then((swaggerList) => {
+        this.swaggerService.getSwagger().subscribe((swaggerList) => {
             this.swaggerList = swaggerList;
             this.swaggerListShown = swaggerList;
             this.ready = true;

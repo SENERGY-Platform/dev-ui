@@ -20,7 +20,7 @@
   <router-outlet></router-outlet>
 
   <mat-card class="search" [hidden]="!ready">
-      <i class="material-icons">search</i>
+      <mat-icon class="material-icons">search</mat-icon>
       <mat-form-field>
           <input type="text" matInput (keyup)="search()" [(ngModel)]="query" [placeholder]="searchPlaceholder">
         </mat-form-field>
