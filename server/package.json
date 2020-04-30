@@ -1,0 +1,14 @@
+{
+  "name": "auth-developer-server",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "body-parser": "^1.19.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
