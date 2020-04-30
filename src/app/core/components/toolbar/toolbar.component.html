@@ -41,7 +41,7 @@
         <mat-icon class="pointer" matPrefix *ngIf="searchQuery !== ''" (click)="resetSearchText()">close</mat-icon>
 
         <div class="search-results" [ngClass]="{'search-results-focused': inputFocused && searchQuery !== ''}">
-            <div class="md-search-result" data-md-component="result">
+            <div class="md-search-result" data-md-component="result" *ngIf="docsSearchresult.length > 0">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/doc/start')" class="md-search-result__link" tabindex="-1">
@@ -59,7 +59,7 @@
                     </li>
                 </ol>
             </div>
-            <div class="md-search-result" data-md-component="result">
+            <div class="md-search-result" data-md-component="result" *ngIf="swaggerSearchresult.length > 0">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/api')" class="md-search-result__link" tabindex="-1">

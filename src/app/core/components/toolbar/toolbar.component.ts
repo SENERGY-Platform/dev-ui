@@ -57,8 +57,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
     public inputFocused = false;
     public searchQuery = '';
-    public docsSearchresult: any = [];
-    public swaggerSearchresult: any = [];
+    public docsSearchresult: ResultModel[] = [];
+    public swaggerSearchresult: ResultModel[] = [];
     public blockSwagger = false;
     public blockDoc = false;
     public userIsAdmin = false;
