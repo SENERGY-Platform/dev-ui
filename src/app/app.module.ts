@@ -20,6 +20,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,28 +28,26 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {SettingsModule} from './core/components/settings/settings.module';
+import {StartComponent} from './core/components/start/start.component';
+import {CoreModule} from './core/core.module';
+import {init} from './core/services/auth/auth-init';
 
-import { ApiDocModule } from './api-doc/api-doc.module';
-import { ClientsModule } from './clients/clients.module';
-import { CoreModule } from './core/core.module';
-import { PermissionsModule } from './permissions/permissions.module';
-import { PlatformDocModule } from './platform-doc/platform-doc.module';
-import { SettingsModule } from './settings/settings.module';
+import { ApiDocModule } from './modules/api-doc/api-doc.module';
+import { ClientsModule } from './modules/clients/clients.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { PlatformDocModule } from './modules/platform-doc/platform-doc.module';
 
-import { ApiService } from './services/api/api.service';
-import { AuthService } from './services/auth/auth.service';
-import { ValidTokenGuard } from './services/auth/guard.service';
-import { LadonService } from './services/ladon/ladon.service';
-import { SwaggerService } from './services/swagger/swagger.service';
-import { UserManagementService } from './services/user-management/user-management.service';
+import { ApiService } from './core/services/api/api.service';
+import { AuthService } from './core/services/auth/auth.service';
+import { ValidTokenGuard } from './core/services/auth/guard.service';
+import { SwaggerService } from './core/services/swagger/swagger.service';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import { AppComponent } from './app.component';
-import { DialogComponent } from './dev-role-dialog/dialog.component';
-import {PermissionsDialogDeleteComponent} from './permissions/permissions-dialog-delete/permissions-dialog-delete.component';
-import {init} from './services/auth/auth-init';
-import { StartComponent } from './start/start.component';
+import { DialogComponent } from './core/components/dev-role-dialog/dialog.component';
+import {PermissionsDialogDeleteComponent} from './modules/permissions/permissions-dialog-delete/permissions-dialog-delete.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -72,38 +71,37 @@ const keycloakService = new KeycloakService();
 
   ],
   entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
-  imports: [
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    PlatformDocModule,
-    SettingsModule,
-    PermissionsModule,
-    ClientsModule,
-    ApiDocModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule,
-    FlexLayoutModule,
-    CoreModule,
-    TranslateModule.forRoot({
-      loader: {
-        deps: [HttpClient],
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-      },
-    }),
-    BrowserAnimationsModule,
-    KeycloakAngularModule,
-    MatCardModule,
-    MatDialogModule,
-  ],
+    imports: [
+        RouterModule.forRoot(appRoutes),
+        BrowserModule,
+        PlatformDocModule,
+        SettingsModule,
+        PermissionsModule,
+        ClientsModule,
+        ApiDocModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        FormsModule,
+        FlexLayoutModule,
+        CoreModule,
+        TranslateModule.forRoot({
+            loader: {
+                deps: [HttpClient],
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+            },
+        }),
+        BrowserAnimationsModule,
+        KeycloakAngularModule,
+        MatCardModule,
+        MatDialogModule,
+        MatButtonModule,
+    ],
   providers: [
     ApiService,
     AuthService,
     ValidTokenGuard,
     SwaggerService,
-    LadonService,
-    UserManagementService,
     {
       provide: KeycloakService,
       useValue: keycloakService,
