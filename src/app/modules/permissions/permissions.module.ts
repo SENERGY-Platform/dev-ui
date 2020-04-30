@@ -38,7 +38,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import {CoreModule} from '../../core/core.module';
-import { ValidTokenGuard } from '../../core/services/auth/guard.service';
 import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from './permissions-dialog-import/permissions-dialog-import.component';
 import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
@@ -53,17 +52,14 @@ const routes: Routes = [
   {
     path: 'permissions',
     component: RoutingComponent,
-    canActivate: [ValidTokenGuard],
     children: [
       {
         path: '',
         component: PermissionsListComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
           path: 'edit',
           component: PermissionsEditComponent,
-          canActivate: [ValidTokenGuard],
       },
     ],
   },

@@ -40,7 +40,6 @@ import { PlatformDocModule } from './modules/platform-doc/platform-doc.module';
 
 import { ApiService } from './core/services/api/api.service';
 import { AuthService } from './core/services/auth/auth.service';
-import { ValidTokenGuard } from './core/services/auth/guard.service';
 import { SwaggerService } from './core/services/swagger/swagger.service';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -55,7 +54,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const appRoutes: Routes = [
   {
-    canActivate: [ValidTokenGuard],
     component: StartComponent,
     path: '',
   },
@@ -100,7 +98,6 @@ const keycloakService = new KeycloakService();
   providers: [
     ApiService,
     AuthService,
-    ValidTokenGuard,
     SwaggerService,
     {
       provide: KeycloakService,

@@ -29,7 +29,6 @@ import { SingleServiceDocComponent } from './single-service-doc/single-service-d
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ValidTokenGuard } from '../../core/services/auth/guard.service';
 import { ApiDocsComponent } from './api-docs/api-docs.component';
 
 @Component({
@@ -41,16 +40,13 @@ const routes: Routes = [
   {
     path: 'api',
     component: RoutingComponent,
-    canActivate: [ValidTokenGuard],
     children: [{
       path: ':id',
       component: SingleServiceDocComponent,
-      canActivate: [ValidTokenGuard],
     },
     {
       path: '',
       component: ApiDocsComponent,
-      canActivate: [ValidTokenGuard],
     },
     ],
   },

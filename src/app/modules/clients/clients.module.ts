@@ -31,7 +31,6 @@ import {MatInputModule} from '@angular/material/input';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import {CoreModule} from '../../core/core.module';
-import { ValidTokenGuard } from '../../core/services/auth/guard.service';
 import { AddEditClientComponent } from './add-edit-client/add-edit-client.component';
 import { ViewClientsComponent } from './view-clients/view-clients.component';
 
@@ -44,17 +43,14 @@ const routes: Routes = [
   {
     path: 'clients',
     component: RoutingComponent,
-    canActivate: [ValidTokenGuard],
     children: [
       {
         path: ':id',
         component: AddEditClientComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: '',
         component: ViewClientsComponent,
-        canActivate: [ValidTokenGuard],
       },
     ],
   },

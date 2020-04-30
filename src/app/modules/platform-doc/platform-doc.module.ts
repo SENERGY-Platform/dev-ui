@@ -19,7 +19,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ValidTokenGuard } from '../../core/services/auth/guard.service';
 import { AnalyticsDocComponent } from './analytics-doc/analytics-doc.component';
 import { IotRepoDocComponent } from './iot-repo-doc/iot-repo-doc.component';
 import { MarketplaceDocComponent } from './marketplace-doc/marketplace-doc.component';
@@ -43,7 +42,6 @@ const routes: Routes = [
   {
     path: 'doc',
     component: RoutingComponent,
-    canActivate: [ValidTokenGuard],
     children: [
       {
         path: '',
@@ -52,37 +50,30 @@ const routes: Routes = [
       {
         path: 'start',
         component: GettingStartedComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'security',
         component: SecurityDocComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'iot',
         component: IotRepoDocComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'dashboard',
         component: DashboardDocComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'process',
         component: ProcessDocComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'analytics',
         component: AnalyticsDocComponent,
-        canActivate: [ValidTokenGuard],
       },
       {
         path: 'marketplace',
         component: MarketplaceDocComponent,
-        canActivate: [ValidTokenGuard],
       },
     ],
   },

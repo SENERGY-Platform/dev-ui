@@ -22,14 +22,12 @@ import { FormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ValidTokenGuard } from '../../services/auth/guard.service';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
-    canActivate: [ValidTokenGuard],
   },
 ];
 
