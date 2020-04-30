@@ -80,6 +80,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        this.observeSidenav();
     }
 
     public search() {
@@ -250,6 +251,16 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
                 });
             }
             resolve(docs);
+        });
+    }
+
+    private observeSidenav() {
+        this.sidenavService.toggleChanged.subscribe((b) => {
+            if (b) {
+                this.inputFocused = false;
+            } else {
+                this.inputFocused = this.searchQuery !== '';
+            }
         });
     }
 }
