@@ -21,8 +21,8 @@ import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RoutesRecognized} from '@angular/router';
 import {AuthService} from '../../services/auth/auth.service';
-import {SwaggerService} from '../../services/swagger/swagger.service';
 import {ResponsiveService} from '../../services/responsive.service';
+import {SwaggerService} from '../../services/swagger/swagger.service';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
 import {SidenavService} from '../sidenav/shared/sidenav.service';
 
@@ -56,7 +56,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     @Output() public zIndex = -1;
 
     public inputFocused = false;
-    public searchQuery: string;
+    public searchQuery = '';
     public docsSearchresult: any = [];
     public swaggerSearchresult: any = [];
     public blockSwagger = false;
