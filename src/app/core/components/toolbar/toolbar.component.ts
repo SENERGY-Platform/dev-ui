@@ -17,11 +17,15 @@
  */
 
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RoutesRecognized} from '@angular/router';
+import {merge} from 'rxjs';
+import {debounceTime, first} from 'rxjs/operators';
 import {AuthService} from '../../services/auth/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
+import {SwaggerModel} from '../../services/swagger/swagger.model';
 import {SwaggerService} from '../../services/swagger/swagger.service';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
 import {SidenavService} from '../sidenav/shared/sidenav.service';
@@ -43,6 +47,14 @@ interface MarkdownModel {
     default: string;
 }
 
+interface DocModel {
+    headers1: string[];
+    headers2: string[];
+    headers3: string[];
+    redirectUrl: string;
+    title: string;
+}
+
 @Component({
     selector: 'app-toolbar',
     templateUrl: './toolbar.component.html',
@@ -56,14 +68,15 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     @Output() public zIndex = -1;
 
     public inputFocused = false;
-    public searchQuery = '';
-    public docsSearchresult: ResultModel[] = [];
-    public swaggerSearchresult: ResultModel[] = [];
-    public blockSwagger = false;
-    public blockDoc = false;
+    public searchQuery = new FormControl('');
+    public docsSearchResult: ResultModel[] = [];
+    public swaggerSearchResult: ResultModel[] = [];
     public userIsAdmin = false;
     public mobileSearchPageIsHidden = true;
     public Act = true;
+    private swagger: SwaggerModel[] = [];
+    private docs: DocModel[] = [];
+    private swaggerReadyEmitter: EventEmitter<null> = new EventEmitter<null>();
 
     constructor(private httpClient: HttpClient,
                 private swaggerService: SwaggerService,
@@ -81,68 +94,45 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this.observeSidenav();
+        this.observeSearch();
+        this.initDocs();
     }
 
-    public search() {
-        this.inputFocused = this.searchQuery !== '';
+    private observeSearch() {
+        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
+        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
+            this.inputFocused = this.searchQuery.value !== '';
 
-        this.swaggerSearchresult = [];
-        this.docsSearchresult = [];
+            const newSwaggerResult: ResultModel[] = [];
+            const newDocsResult: ResultModel[] = [];
 
-        const query = this.searchQuery;
+            const query = this.searchQuery.value;
 
-        if (!this.blockSwagger) {
-            this.blockSwagger = true;
-            this.loadSwagger().subscribe((swagger) => {
-                swagger.forEach((api) => {
-                    if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
-                        this.swaggerSearchresult.push({
-                            title: api.info.title,
-                            url: '/api/' + api.info.title,
-                            content: api.info.description,
-                        });
-                    }
-                });
-                this.blockSwagger = false;
+            this.swagger.forEach((api) => {
+                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
+                    newSwaggerResult.push({
+                        title: api.info.title,
+                        url: '/api/' + api.info.title,
+                        content: api.info.description,
+                    });
+                }
             });
-        }
-        if (!this.blockDoc) {
-            this.blockDoc = true;
-            this.getHeadersOfMarkdown().then((docs) => {
-                (docs as any).forEach((doc) => {
-                    let matches1: any[];
-                    let matches2: any[];
-                    let matches3: any[];
-                    [matches1, matches2, matches3] = this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3);
-                    matches1.forEach(((value) => {
+
+            this.docs.forEach((doc) => {
+                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
+                    matches.forEach(((value) => {
                         const result: ResultModel = {} as ResultModel;
                         result.title = doc.title;
                         result.content = value;
                         result.url = '/doc/' + doc.redirectUrl;
-                        this.docsSearchresult.push(result);
-                    }));
-                    matches2.forEach(((value) => {
-                        const result: ResultModel = {} as ResultModel;
-                        result.title = doc.title;
-                        result.content = value;
-                        result.url = '/doc/' + doc.redirectUrl;
-                        this.docsSearchresult.push(result);
-                    }));
-                    matches3.forEach(((value) => {
-                        const result: ResultModel = {} as ResultModel;
-                        result.title = doc.title;
-                        result.content = value;
-                        result.url = '/doc/' + doc.redirectUrl;
-                        this.docsSearchresult.push(result);
+                        newDocsResult.push(result);
                     }));
                 });
-                this.blockDoc = false;
             });
-        }
-    }
 
-    public loadSwagger() {
-        return this.swaggerService.getSwagger();
+            this.swaggerSearchResult = newSwaggerResult;
+            this.docsSearchResult = newDocsResult;
+        });
     }
 
     public queryOccursInMarkdownHeaders(query, header1, header2, header3): [any[], any[], any[]] {
@@ -182,7 +172,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     }
 
     public openSearchResult(url) {
-        this.searchQuery = '';
+        this.searchQuery.patchValue('');
         this.inputFocused = false;
         this.mobileSearchPageIsHidden = true;
         this.router.navigateByUrl(url);
@@ -197,8 +187,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     }
 
     public resetSearchText() {
-        this.searchQuery = '';
-        this.search();
+        this.searchQuery.patchValue('');
     }
 
     private checkIfDocIsActive() {
@@ -210,48 +199,46 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private getHeadersOfMarkdown() {
-        return new Promise((resolve) => {
-            const markdowns: MarkdownModel[] = [getting as unknown as MarkdownModel, process as unknown as MarkdownModel,
-                analytics as unknown as MarkdownModel, iot as unknown as MarkdownModel, security as unknown as MarkdownModel];
-            const docs = [
-                {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
-                {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
-                {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
-                {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
-                {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
-            ];
+    private getHeadersOfMarkdown(): DocModel[] {
+        const markdowns: MarkdownModel[] = [getting as unknown as MarkdownModel, process as unknown as MarkdownModel,
+            analytics as unknown as MarkdownModel, iot as unknown as MarkdownModel, security as unknown as MarkdownModel];
+        const docs: DocModel[] = [
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
+        ];
 
-            const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-            const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-            const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
 
-            let header1;
-            let header2;
-            let header3;
+        let header1;
+        let header2;
+        let header3;
 
-            for (let index = 0; index < markdowns.length; index++) {
-                header1 = markdowns[index].default.match(regex1);
-                header2 = markdowns[index].default.match(regex2);
-                header3 = markdowns[index].default.match(regex3);
+        for (let index = 0; index < markdowns.length; index++) {
+            header1 = markdowns[index].default.match(regex1);
+            header2 = markdowns[index].default.match(regex2);
+            header3 = markdowns[index].default.match(regex3);
 
-                header1.forEach((value) => {
-                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                    docs[index].headers1.push(value);
-                });
+            header1.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers1.push(value);
+            });
 
-                header2.forEach((value) => {
-                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                    docs[index].headers2.push(value);
-                });
+            header2.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers2.push(value);
+            });
 
-                header3.forEach((value) => {
-                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                    docs[index].headers3.push(value);
-                });
-            }
-            resolve(docs);
-        });
+            header3.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers3.push(value);
+            });
+        }
+        return docs;
     }
 
     private observeSidenav() {
@@ -259,8 +246,19 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
             if (b) {
                 this.inputFocused = false;
             } else {
-                this.inputFocused = this.searchQuery !== '';
+                this.inputFocused = this.searchQuery.value !== '';
             }
         });
+    }
+
+    private initSwagger() {
+        this.swaggerService.getSwagger().subscribe((swagger) => {
+            this.swagger = swagger;
+            this.swaggerReadyEmitter.emit();
+        });
+    }
+
+    private initDocs() {
+        this.docs = this.getHeadersOfMarkdown();
     }
 }

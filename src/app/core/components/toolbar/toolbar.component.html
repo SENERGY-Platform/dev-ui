@@ -35,13 +35,12 @@
 
     <mat-form-field class="md-search__form" fxFlex #searchInput>
         <mat-label>Suche</mat-label>
-        <input type="text" matInput [(ngModel)]="searchQuery"
-               (ngModelChange)="search()" [ngClass]="{'search-focused': inputFocused || searchQuery !== ''}" class="white">
-        <mat-icon matPrefix *ngIf="searchQuery === ''">search</mat-icon>
-        <mat-icon class="pointer" matPrefix *ngIf="searchQuery !== ''" (click)="resetSearchText()">close</mat-icon>
+        <input type="text" matInput [formControl]="searchQuery" [ngClass]="{'search-focused': inputFocused || searchQuery.value !== ''}" class="white">
+        <mat-icon matPrefix *ngIf="searchQuery.value === ''">search</mat-icon>
+        <mat-icon class="pointer" matPrefix *ngIf="searchQuery.value !== ''" (click)="resetSearchText()">close</mat-icon>
 
-        <div class="search-results" [ngClass]="{'search-results-focused': inputFocused && searchQuery !== ''}">
-            <div class="md-search-result" data-md-component="result" *ngIf="docsSearchresult.length > 0">
+        <div class="search-results" [ngClass]="{'search-results-focused': inputFocused && searchQuery.value !== ''}">
+            <div class="md-search-result" data-md-component="result" *ngIf="docsSearchResult.length > 0">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/doc/start')" class="md-search-result__link" tabindex="-1">
@@ -50,7 +49,7 @@
                             </article>
                         </a>
                         <a (click)="openSearchResult(result.url)" class="md-search-result__link" tabindex="-1"
-                           *ngFor="let result of docsSearchresult">
+                           *ngFor="let result of docsSearchResult">
                             <article class="md-search-result__article">
                                 <a class="md-search-result__title">{{result.title}}</a>
                                 <a class="md-search-result__teaser">{{result.content}}</a>
@@ -59,7 +58,7 @@
                     </li>
                 </ol>
             </div>
-            <div class="md-search-result" data-md-component="result" *ngIf="swaggerSearchresult.length > 0">
+            <div class="md-search-result" data-md-component="result" *ngIf="swaggerSearchResult.length > 0">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/api')" class="md-search-result__link" tabindex="-1">
@@ -68,7 +67,7 @@
                             </article>
                         </a>
                         <a (click)="openSearchResult(result.url)" class="md-search-result__link" tabindex="-1"
-                           *ngFor="let result of swaggerSearchresult">
+                           *ngFor="let result of swaggerSearchResult">
                             <article class="md-search-result__article">
                                 <p class="md-search-result__title">{{result.title}}</p>
                                 <p class="md-search-result__teaser">{{result.content}}</p>
