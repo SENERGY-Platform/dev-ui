@@ -17,42 +17,56 @@
  */
 
 import {
-  Injectable,
+    Injectable,
 } from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../core/services/api/api.service';
 import {PermissionApiModel, permissionApiToPermission, PermissionModel, permissionToPermissionApi} from '../permission.model';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class LadonService {
-  public baseUrl: string;
-  constructor(private apiService: ApiService) {
-    this.baseUrl = '/ladon';
-  }
 
-  public postPolicy(policy: PermissionModel): Observable<unknown> {
-    if (!policy.id) {
-      policy.id = policy.subject + '-' + policy.resource;
+    constructor(private apiService: ApiService) {
+        this.baseUrl = '/ladon';
     }
-    const apiModel = permissionToPermissionApi(policy);
-    return this.apiService.post(this.baseUrl + '/policies', apiModel);
-  }
+    public baseUrl: string;
 
-  public getAllPolicies(): Observable<PermissionModel[]> {
-    return  new Observable<PermissionModel[]>((obs) => {
-      this.apiService.get(this.baseUrl + '/policies').subscribe((policies) => {
-        const apiModels = policies as PermissionApiModel[];
-        const models: PermissionModel[] = [];
-        apiModels.forEach((policy) => models.push(permissionApiToPermission(policy)));
-        obs.next(models);
-        obs.complete();
-      });
-    });
-  }
+    private static handlePolicies(policies: PermissionModel[]): PermissionApiModel[] {
+        const apiPolicies: PermissionApiModel[] = [];
+        for (const policy of policies) {
+            if (!policy.id) {
+                policy.id = policy.subject + '-' + policy.resource;
+            }
+            apiPolicies.push(permissionToPermissionApi(policy));
+        }
+        return apiPolicies;
+    }
 
-  public deletePolicy(policy: PermissionModel): Observable<unknown> {
-    return this.apiService.delete(this.baseUrl + '/policies?id=' + policy.id);
-  }
+    public postPolicies(policies: PermissionModel[]): Observable<unknown> {
+        return this.apiService.post(this.baseUrl + '/policies', LadonService.handlePolicies(policies));
+    }
+
+    public putPolicies(policies: PermissionModel[]): Observable<unknown> {
+        return this.apiService.put(this.baseUrl + '/policies', LadonService.handlePolicies(policies));
+    }
+
+    public getAllPolicies(): Observable<PermissionModel[]> {
+        return new Observable<PermissionModel[]>((obs) => {
+            this.apiService.get(this.baseUrl + '/policies').subscribe((policies) => {
+                const apiModels = policies as PermissionApiModel[];
+                const models: PermissionModel[] = [];
+                apiModels.forEach((policy) => models.push(permissionApiToPermission(policy)));
+                obs.next(models);
+                obs.complete();
+            });
+        });
+    }
+
+    public deletePolicies(policies: PermissionModel[]): Observable<unknown> {
+        const ids: string[] = [];
+        policies.forEach((p) => ids.push(p.id));
+        return this.apiService.delete(this.baseUrl + '/policies?ids=' + ids.join(','));
+    }
 }

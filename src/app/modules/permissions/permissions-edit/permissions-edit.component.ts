@@ -72,26 +72,26 @@ export class PermissionsEditComponent implements OnInit {
         private router: Router,
         private authService: AuthService,
         private snackBar: MatSnackBar,
-        ) {
-            try {
-                this.userManagementService.loadRoles().then((roles: Model) => {
-                    this.roles = roles;
-                    this.intbtnDisable();
-                });
-                this.userManagementService.loadUsers().then((users) => this.users = users);
-            } catch (e) {
-                console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
-                this.btnDisable = true;
-            }
-            this.isEditMode = !(Object.entries(this.permission).length === 0 && this.permission.constructor === Object);
-            if (this.isEditMode) {
-                this.title = 'Edit Permission';
-            } else {
-                this.title = 'Add Permission';
-            }
+    ) {
+        try {
+            this.userManagementService.loadRoles().then((roles: Model) => {
+                this.roles = roles;
+                this.intbtnDisable();
+            });
+            this.userManagementService.loadUsers().then((users) => this.users = users);
+        } catch (e) {
+            console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+            this.btnDisable = true;
+        }
+        this.isEditMode = !(Object.entries(this.permission).length === 0 && this.permission.constructor === Object);
+        if (this.isEditMode) {
+            this.title = 'Edit Permission';
+        } else {
+            this.title = 'Add Permission';
+        }
     }
 
-    private methods = new FormGroup({
+    public methods = new FormGroup({
         get: new FormControl(),
         post: new FormControl(),
         patch: new FormControl(),
@@ -135,22 +135,19 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     public yes() {
-        this.pushPolicy().then((res) => {
-            if (res === true) {
-                this.dialogRef.close('yes');
-            } else {
+        this.pushPolicy().subscribe(() => this.dialogRef.close('yes'),
+            () => {
                 this.snackBar.open('Could not update policy', undefined, {
                     duration: 3 * 1000,
                 });
-            }
-        });
+            });
     }
 
     public no() {
         this.dialogRef.close();
     }
 
-    public pushPolicy(): Promise<boolean> {
+    public pushPolicy(): Observable<unknown> {
         const policy: PermissionModel = {
             subject: this.permission.subject,
             actions: [],
@@ -177,16 +174,9 @@ export class PermissionsEditComponent implements OnInit {
         }
 
         if (this.isEditMode) {
-            return new Promise<boolean>((resolve) => {
-                return this.ladonService.deletePolicy(policy)
-                    .subscribe(() => {
-                        return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
-                    });
-            });
+            return this.ladonService.putPolicies([policy]);
         } else {
-            return new Promise<boolean>((resolve) => {
-                return this.ladonService.postPolicy(policy).subscribe(() => resolve(true));
-            });
+            return this.ladonService.postPolicies([policy]);
         }
     }
 

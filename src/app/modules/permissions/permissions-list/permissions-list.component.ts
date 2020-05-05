@@ -123,7 +123,7 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public deletePolicy(policy) {
-        this.ladonService.deletePolicy(policy).subscribe(() => {
+        this.ladonService.deletePolicies([policy]).subscribe(() => {
             this.loadPolicies();
         });
     }
@@ -179,7 +179,7 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public export() {
-        const theJSON = JSON.stringify(this.sortedData);
+        const theJSON = JSON.stringify(this.sortedData.filter((p) => p.id !== 'admin-all'));
         return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
     }
 
@@ -187,25 +187,25 @@ export class PermissionsListComponent implements OnInit {
         const dialogRef = this.dialog.open(PermissionsDialogImportComponent,
             {minWidth: '850px', minHeight: '200px'});
 
-        dialogRef.afterClosed().subscribe(async (result: PermissionImportModel) => {
+        dialogRef.afterClosed().subscribe((result: PermissionImportModel) => {
             if (result != null) {
                 this.ready = false;
                 this.importing = true;
+                const filteredPolicies = result.policies.filter((p) => p.id !== 'admin-all');
                 if (result.overwrite) {
-                    this.policies.forEach((policy) => {
-                        if (policy.id !== 'admin-all') { // Don't ever delete this policy
-                            this.ladonService.deletePolicy(policy);
-                        }
+                    const currentPolicies = this.policies.filter((p) => p.id !== 'admin-all');
+                    this.ladonService.deletePolicies(currentPolicies).subscribe(() => this.ladonService.postPolicies(filteredPolicies)
+                        .subscribe(() => {
+                        this.importing = false;
+                        this.loadPolicies();
+                    }));
+                } else {
+                    this.ladonService.putPolicies(filteredPolicies).subscribe(() => {
+                        this.importing = false;
+                        this.loadPolicies();
                     });
                 }
-                for (const policy of result.policies) {
-                    if (policy.id !== 'admin-all') {
-                        await this.ladonService.deletePolicy(policy).toPromise();
-                        await this.ladonService.postPolicy(policy).toPromise();
-                    }
-                }
-                this.importing = false;
-                this.loadPolicies();
+
             }
         });
     }
