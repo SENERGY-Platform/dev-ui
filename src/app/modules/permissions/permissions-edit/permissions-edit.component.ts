@@ -112,8 +112,9 @@ export class PermissionsEditComponent implements OnInit {
         } catch (e) {
             console.error('Could not load Uris from kong: ' + e);
         }
-
-        this.checkactiveActions();
+        if (this.isEditMode) {
+            this.checkactiveActions();
+        }
 
         // autocomplete filter
         this.filteredOptions = this.myControl.valueChanges
