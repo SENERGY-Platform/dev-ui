@@ -107,12 +107,7 @@
 </section>
 
 
-<a class="fabs add" matTooltip="Hinzufügen" [hidden]="!ready">
-    <button mat-fab (click)="createPolicy()">
-        <mat-icon>add</mat-icon>
-    </button>
-</a>
-<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren" [hidden]="!ready">
+<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren" [hidden]="!ready || !sortedData || sortedData.length === 0">
     <button mat-fab>
         <mat-icon>cloud_download</mat-icon>
     </button>
@@ -120,6 +115,11 @@
 <a class="upload" [hidden]="!ready">
     <button mat-fab (click)="import()" class="fabs upload" matTooltip="Importieren">
         <mat-icon>cloud_upload</mat-icon>
+    </button>
+</a>
+<a class="fabs add" matTooltip="Hinzufügen" [hidden]="!ready">
+    <button mat-fab (click)="createPolicy()">
+        <mat-icon>add</mat-icon>
     </button>
 </a>
 

@@ -58,15 +58,15 @@
     color: white;
 }
 
-.upload {
+.add {
     bottom: 30px;
 }
 
-.add {
+.download {
     bottom: 170px;
 }
 
-.download {
+.upload {
     bottom: 100px;
 }
 .spacer-right {

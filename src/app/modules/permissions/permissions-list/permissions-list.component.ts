@@ -179,8 +179,10 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public export() {
-        const theJSON = JSON.stringify(this.sortedData.filter((p) => p.id !== 'admin-all'));
-        return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
+        if (this.sortedData && this.sortedData.length > 0) {
+            const theJSON = JSON.stringify(this.sortedData.filter((p) => p.id !== 'admin-all'));
+            return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
+        }
     }
 
     public import() {
