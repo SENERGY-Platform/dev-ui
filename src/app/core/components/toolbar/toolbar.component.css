@@ -100,6 +100,8 @@ i {
     -webkit-transition: 0.2s; /* Safari */
     transition: 0.2s;
     width: 100%;
+    overflow: auto;
+    max-height: calc(100vh - 64px);
 }
 
 .md-search__icon {
@@ -159,4 +161,25 @@ i {
 .second-level a {
     font-size: 1.4rem;
     margin-left: 20px;
+}
+
+.image-wrapper {
+    width: 275px;
+}
+
+
+.shadow {
+    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.1);
+}
+
+.white {
+    color: white;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+mat-form-field.mat-form-field {
+    font-size: 1.3rem!important;
 }

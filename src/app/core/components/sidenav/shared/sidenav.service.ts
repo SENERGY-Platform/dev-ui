@@ -18,29 +18,29 @@
 
 import {EventEmitter, Injectable, Output} from '@angular/core';
 
-import {SidenavSectionModel} from './sidenav-section.model';
 import {SidenavPageModel} from './sidenav-page.model';
+import {SidenavSectionModel} from './sidenav-section.model';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SidenavService {
-    @Output() isToggled = false;
-    @Output() section = '';
+    @Output() public toggleChanged: EventEmitter<boolean> = new EventEmitter();
+    @Output() public sectionChanged: EventEmitter<string> = new EventEmitter();
 
-    @Output() toggleChanged: EventEmitter<boolean> = new EventEmitter();
-    @Output() sectionChanged: EventEmitter<string> = new EventEmitter();
+    private isToggled = false;
+    private section = '';
 
-    toggle(sidenavOpen: boolean): void {
+    public toggle(sidenavOpen: boolean): void {
         this.isToggled = sidenavOpen;
         this.toggleChanged.emit(this.isToggled);
     }
 
-    reset(): void {
+    public reset(): void {
         this.sectionChanged.emit(this.section);
     }
 
-    getSections(): SidenavSectionModel[] {
+    public getSections(): SidenavSectionModel[] {
         const sections: SidenavSectionModel[] = [];
 
         sections.push(new SidenavSectionModel('API', 'link', 'code', '/api', []));
@@ -50,21 +50,17 @@ export class SidenavService {
             new SidenavPageModel('Prozesse', 'link', 'ballot', '/doc/process'),
             new SidenavPageModel('Analytics', 'link', 'insert_chart', '/doc/analytics'),
             new SidenavPageModel('IoT Repository', 'link', 'storage', '/doc/iot'),
-            new SidenavPageModel('Dashboard', 'link', 'dashboard', '/doc/dashboard'),
-            new SidenavPageModel('Marketplace', 'link', 'add_shopping_cart', '/doc/marketplace'),
-            new SidenavPageModel('Security', 'link', 'security', '/doc/security')
+            // new SidenavPageModel('Dashboard', 'link', 'dashboard', '/doc/dashboard'),
+            // new SidenavPageModel('Marketplace', 'link', 'add_shopping_cart', '/doc/marketplace'),
+            new SidenavPageModel('Security', 'link', 'security', '/doc/security'),
         ]));
 
         sections.push(new SidenavSectionModel('Clients', 'link', 'computer', '/clients', []));
 
         sections.push(new SidenavSectionModel('Permissions', 'link', 'security', '/permissions', []));
 
-
-
         return sections;
     }
 
     constructor() { }
 }
-
-

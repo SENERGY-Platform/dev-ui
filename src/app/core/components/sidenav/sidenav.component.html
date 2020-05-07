@@ -16,55 +16,34 @@
   ~
   -->
 
-<mat-sidenav-container (backdropClick)="closeSidenav()">
-    <mat-sidenav #sidenav
-                 disableClose
-                 role="navigation"
-                 [fixedInViewport]='true'
-                 class="sidenav"
-                 class="mat-elevation-z1"
-                >
+<mat-sidenav-container class="sidenav-container" (backdropClick)="closeSidenav()">
+    <mat-sidenav disableClose #sidenav role="navigation" class="sidenav mat-elevation-z1" [fixedInViewport]="true">
         <ul class="side-menu">
             <li *ngFor="let section of sections">
-                <button mat-button
-                        type=button
-                        routerLink="{{section.state}}"
-                        routerLinkActive="background-color-accent"
-                        *ngIf="section.type === 'link'"
+                <button mat-button  type=button routerLink="{{section.state}}" routerLinkActive="background-color-sidenav" *ngIf="section.type === 'link'"
                         (click)="toggleSection(section)"
                         class="md-button-toggle">
                     <mat-icon>{{section.icon}}</mat-icon>
                     {{section.name | uppercase}}
                 </button>
-
-                <button mat-button
-                        *ngIf="section.type === 'toggle'"
-                        [ngClass]="{'background-color-accent': isSectionOpen(section)}"
-                        routerLink="{{section.state}}"
-                        routerLinkActive="background-color-accent"
+                <button mat-button *ngIf="section.type === 'toggle'"
+                        (click)="toggleSection(section)"
+                        [ngClass]="{'background-color-sidenav': isSectionOpen(section)}"
                         class="md-button-toggle">
-                    <div fxLayout="row"
-                         fxLayoutAlign=" center">
-                        <mat-icon>
-                            {{section.icon}}
-                        </mat-icon>
-                        <div fxFlexOffset="5px">
-                            {{section.name | uppercase}}
-                        </div>
-
+                    <div fxLayout="row" fxLayoutAlign=" center">
+                        <mat-icon>{{section.icon}}</mat-icon>
+                        <div fxFlexOffset="5px">{{section.name | uppercase}}</div>
                         <mat-icon class="md-toggle-icon"
                                   [ngClass]="{'toggled': isSectionOpen(section)}">
                             keyboard_arrow_down
                         </mat-icon>
                     </div>
                 </button>
-
                 <ul [ngClass]="{'toggled': isSectionOpen(section)}"
                     class="menu-toggle-list">
                     <li *ngFor="let page of section.pages">
                         <button mat-button
-                                routerLink="{{page.state}}"
-                                routerLinkActive="background-color-accent"
+                                routerLink="{{page.state}}" routerLinkActive="background-color-sidenav"
                                 (click)="closeSidenav()" class="md-button-toggle">
                             <mat-icon>{{page.icon}}</mat-icon>
                             {{page.name}}
@@ -73,9 +52,8 @@
                 </ul>
             </li>
         </ul>
-
     </mat-sidenav>
-    <mat-sidenav-content style="padding-top: 50px; height: calc(100% - 64px);" role="main">
-        <router-outlet></router-outlet>
+    <mat-sidenav-content [@fadeInAnimation]="o.isActivated ? o.activatedRoute : ''" role="main">
+        <router-outlet #o="outlet"></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

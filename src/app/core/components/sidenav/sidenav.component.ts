@@ -16,147 +16,46 @@
  *
  */
 
-import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {TranslateService} from '@ngx-translate/core';
-import { AuthService} from '../../../services/auth/auth.service';
-import {Router, ActivatedRoute, NavigationEnd, ActivatedRouteSnapshot, RoutesRecognized, GuardsCheckEnd} from '@angular/router';
-import { MatSidenav } from '@angular/material/sidenav';
-import {filter, map, mergeMap, take} from 'rxjs/operators';
-
-import {SidenavService} from './shared/sidenav.service';
-import {SidenavSectionModel} from './shared/sidenav-section.model';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {filter, map, mergeMap} from 'rxjs/operators';
+import {fadeInAnimation} from '../../animations/fade-in.animation';
 import {ResponsiveService} from '../../services/responsive.service';
-import {forkJoin} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {not} from 'rxjs/internal-compatibility';
-
-
+import {SidenavSectionModel} from './shared/sidenav-section.model';
+import {SidenavService} from './shared/sidenav.service';
 
 @Component({
     selector: 'app-sidenav',
     templateUrl: './sidenav.component.html',
-    styleUrls: ['./sidenav.component.css']
+    styleUrls: ['./sidenav.component.css'],
+    animations: [fadeInAnimation],
 })
 
-export class SidenavComponent implements OnInit, AfterViewInit{
+export class SidenavComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
-    @Output() mode = '';
-    @Output() openSection: null | string = null;
-    @Output() sections: SidenavSectionModel[] = [];
-    @Output() zIndex = -1;
-
-    mobileSearchPageIsHidden: boolean = true;
-    inputFocused: boolean = false;
-    userIsAdmin = false;
-    private httpClient: HttpClient;
-
+    @ViewChild('sidenav', {static: false}) public sidenav!: MatSidenav;
+    public sections: SidenavSectionModel[] = [];
+    public openSection: null | string = null;
+    public zIndex = -1;
 
     constructor(private activatedRoute: ActivatedRoute,
-                public dialog: MatDialog, translate: TranslateService,
-                private authService: AuthService,
                 private router: Router,
                 private sidenavService: SidenavService,
-                private responsiveService: ResponsiveService){
-
-        translate.setDefaultLang('en');
-
-        var userProfile = this.authService.getUserProfile();
-
-        if(userProfile && userProfile["attributes"] && userProfile["attributes"]["locale"]) {
-            translate.use(userProfile["attributes"]["locale"][0]);
-        }
-
-        this.userIsAdmin = this.authService.userHasRole("admin");
+                private responsiveService: ResponsiveService) {
     }
 
-    ngOnInit() {
-        this.showOrHideSidenav();
-        this.getSections();
+    public ngOnInit() {
         this.getActiveSection();
-        this.detectRouterChange();
-
+        this.getSections();
+        this.showOrHideSidenav();
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit() {
         this.sidenavChangeListener();
     }
 
-    openSearchResult(url) {
-        this.inputFocused = false;
-        this.mobileSearchPageIsHidden = true;
-        this.router.navigateByUrl(url);
-    }
-
-    private showOrHideSidenav(): void {
-        this.responsiveService.observeMqAlias().subscribe((mqAlias) => {
-            if (mqAlias === 'sm' || mqAlias === 'xs') {
-                this.sidenav.close();
-                this.sidenav.mode = 'over';
-                this.sidenav.disableClose = false;
-                this.sidenav.fixedTopGap = 0;
-            } else {
-                this.sidenav.mode = 'side';
-                this.sidenav.open();
-                this.sidenav.disableClose = true;
-                this.sidenav.fixedTopGap = 64;
-            }
-        });
-    }
-
-    loadDocs() {
-        return new Promise(resolve => {
-            var pages = [
-                { assetUrl: "iot", title: "IoT Repository", redirectUrl: "iot"},
-                { assetUrl: "security", title: "Security", redirectUrl: "security"},
-                { assetUrl: "analytics", title: "Analytics", redirectUrl: "analytics"},
-                { assetUrl: "gettingstarted", title: "Getting Started", redirectUrl: "start"},
-                { assetUrl: "process", title: "Prozesse", redirectUrl: "process"}
-            ];
-            var async = [];
-            var content = [];
-
-            pages.forEach(page => {
-                async.push(this.httpClient.get("/assets/docs/" + page["assetUrl"] + ".md", {responseType: "text"}))
-            });
-            forkJoin(async).subscribe(results => {
-                for (let index = 0; index < results.length; index++) {
-                    content.push({
-                        "content": this.removeMarkdownChars(results[index]),
-                        "url": "/doc/" + pages[index]["redirectUrl"],
-                        "title": pages[index]["title"]
-                    });
-                }
-                resolve(content)
-            })
-        })
-    }
-
-    removeMarkdownChars(text) {
-        return text.replace(/#/g, '')
-            .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
-            .replace(/```/g, '')
-    }
-
-    private getSections(): void {
-        this.sections = this.sidenavService.getSections();
-
-        // delete permissions if user is not admin
-        if (!this.userIsAdmin){
-            const index = this.sections.findIndex(x => x.name === 'Permissions');
-            this.sections.splice(index, 1);
-        }
-    }
-
-
-    closeSidenav(): void {
-        if (this.sidenav.mode === 'over') {
-            this.sidenavService.toggle(false);
-        }
-    }
-
-    isSectionOpen(section: SidenavSectionModel): boolean {
+    public isSectionOpen(section: SidenavSectionModel): boolean {
         if (this.openSection === null) {
             return false;
         } else {
@@ -164,10 +63,16 @@ export class SidenavComponent implements OnInit, AfterViewInit{
         }
     }
 
-    toggleSection(section: SidenavSectionModel): void {
+    public toggleSection(section: SidenavSectionModel): void {
         this.openSection = (this.openSection === section.state ? null : section.state);
         if (section.type === 'link') {
             this.closeSidenav();
+        }
+    }
+
+    public closeSidenav(): void {
+        if (this.sidenav.mode === 'over') {
+            this.sidenavService.toggle(false);
         }
     }
 
@@ -185,43 +90,39 @@ export class SidenavComponent implements OnInit, AfterViewInit{
         });
     }
 
+    private showOrHideSidenav(): void {
+        this.responsiveService.observeMqAlias().subscribe((mqAlias) => {
+            if (mqAlias === 'sm' || mqAlias === 'xs') {
+                this.sidenav.close();
+                this.sidenav.mode = 'over';
+                this.sidenav.disableClose = false;
+                this.sidenav.fixedTopGap = 0;
+                this.zIndex = -1;
+            } else {
+                this.sidenav.mode = 'side';
+                this.sidenav.open();
+                this.sidenav.disableClose = true;
+                this.sidenav.fixedTopGap = 64;
+                this.zIndex = 0;
+            }
+        });
+    }
+
+    private getSections(): void {
+        this.sections = this.sidenavService.getSections();
+    }
 
     private getActiveSection() {
         this.router.events.pipe(
             filter((event) => event instanceof NavigationEnd),
-            take(1),
             map(() => {
-                return this.activatedRoute.snapshot['_routerState'].url;
-            })
-        ).subscribe((activeRoute: string) => {
-            const index = activeRoute.lastIndexOf('/');
-            if (index > 0) {
-                this.openSection = activeRoute.substring(0, index);
-            } else {
-                this.openSection = activeRoute;
+                return this.activatedRoute.firstChild;
+            }),
+            mergeMap((activatedRoute: ActivatedRoute) => activatedRoute.url),
+        ).subscribe((activeRoute: any) => {
+            if (activeRoute.length > 0) {
+                this.openSection = '/' + activeRoute[0].path;
             }
         });
     }
-
-    private detectRouterChange() {
-        this.router.events.subscribe(event => {
-
-
-            if (event instanceof NavigationEnd) {
-
-
-
-                const url = event['url'];
-
-                if ( url !== '/') {
-                    const section = this.sections.find(i => i.state === url);
-                    if (typeof section !== 'undefined') {
-                        this.toggleSection(section);
-                    }
-                }
-            }
-        });
-    }
-
-
 }

@@ -16,16 +16,19 @@
  *
  */
 
-import {AfterViewInit, Component, OnInit, Output, ViewChild} from '@angular/core';
-import {forkJoin} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {SwaggerService} from '../../../services/swagger/swagger.service';
-import { AuthService } from '../../../services/auth/auth.service';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MatSidenav} from '@angular/material/sidenav';
+import {Router, RoutesRecognized} from '@angular/router';
+import {merge} from 'rxjs';
+import {debounceTime, first} from 'rxjs/operators';
+import {AuthService} from '../../services/auth/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
-import {SidenavService} from '../sidenav/shared/sidenav.service';
-import {ActivatedRoute, NavigationEnd, Router, RoutesRecognized} from '@angular/router';
+import {SwaggerModel} from '../../services/swagger/swagger.model';
+import {SwaggerService} from '../../services/swagger/swagger.service';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
-import { MatSidenav } from '@angular/material/sidenav';
+import {SidenavService} from '../sidenav/shared/sidenav.service';
 
 // import markdownfiles
 import * as analytics from '!raw-loader!../../../../assets/docs/de/analytics.md';
@@ -34,216 +37,228 @@ import * as iot from '!raw-loader!../../../../assets/docs/de/iot.md';
 import * as process from '!raw-loader!../../../../assets/docs/de/process.md';
 import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 
+interface ResultModel {
+    title: string;
+    content: string;
+    url: string;
+}
+
+interface MarkdownModel {
+    default: string;
+}
+
+interface DocModel {
+    headers1: string[];
+    headers2: string[];
+    headers3: string[];
+    redirectUrl: string;
+    title: string;
+}
+
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.css']
+    selector: 'app-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.css'],
 })
-export class ToolbarComponent implements OnInit, AfterViewInit{
+export class ToolbarComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('sidenav', { static: false }) sidenav!: MatSidenav;
-    @Output() sections: SidenavSectionModel[] = [];
-    @Output() openSection: null | string = null;
-    @Output() zIndex = -1;
+    @ViewChild('sidenav', {static: false}) public sidenav!: MatSidenav;
+    @Output() public sections: SidenavSectionModel[] = [];
+    @Output() public openSection: null | string = null;
+    @Output() public zIndex = -1;
 
-
-    inputFocused: boolean = false;
-    searchQuery: string;
-    docsSearchresult: any = [];
-    swaggerSearchresult: any = [];
-    blockSwagger: boolean = false;
-    blockDoc: boolean = false;
-    userIsAdmin = false;
-    mobileSearchPageIsHidden: boolean = true;
-    Act: boolean = true;
+    public inputFocused = false;
+    public searchQuery = new FormControl('');
+    public docsSearchResult: ResultModel[] = [];
+    public swaggerSearchResult: ResultModel[] = [];
+    public userIsAdmin = false;
+    public mobileSearchPageIsHidden = true;
+    public Act = true;
+    private swagger: SwaggerModel[] = [];
+    private docs: DocModel[] = [];
+    private swaggerReadyEmitter: EventEmitter<null> = new EventEmitter<null>();
 
     constructor(private httpClient: HttpClient,
                 private swaggerService: SwaggerService,
                 private authService: AuthService,
                 private responsiveService: ResponsiveService,
                 private sidenavService: SidenavService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute) {
+                private router: Router) {
     }
 
-  ngOnInit() {
-      this.userIsAdmin = this.authService.userHasRole("admin");
-      this.checkIfDocIsActive();
-      this.getHeadersOfMarkdown();
-  }
-
-    ngAfterViewInit() {
+    public ngOnInit() {
+        this.userIsAdmin = this.authService.userHasRole('admin');
+        this.checkIfDocIsActive();
+        this.getHeadersOfMarkdown();
     }
 
-    search() {
-        if (this.searchQuery === '') {
-            this.inputFocused = false;
-        } else {
-            this.inputFocused = true;
-        }
+    public ngAfterViewInit() {
+        this.observeSidenav();
+        this.observeSearch();
+        this.initDocs();
+    }
 
-        this.swaggerSearchresult = [];
-        this.docsSearchresult = [];
+    private observeSearch() {
+        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
+        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
+            this.inputFocused = this.searchQuery.value !== '';
 
-        const query = this.searchQuery;
+            const newSwaggerResult: ResultModel[] = [];
+            const newDocsResult: ResultModel[] = [];
 
-        if(!this.blockSwagger) {
-            this.blockSwagger = true;
-            this.loadSwagger().then(swagger => {
-                (<any>swagger).forEach(api => {
-                    if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
-                        this.swaggerSearchresult.push({
-                            "title": api.info.title,
-                            "url": "/api/" + api.info.title,
-                            "content": api.info.description
-                        })
-                    }
-                });
-                this.blockSwagger = false;
+            const query = this.searchQuery.value;
+
+            this.swagger.forEach((api) => {
+                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
+                    newSwaggerResult.push({
+                        title: api.info.title,
+                        url: '/api/' + api.info.title,
+                        content: api.info.description,
+                    });
+                }
             });
-        }
-        if (!this.blockDoc) {
-            this.blockDoc = true;
-            this.getHeadersOfMarkdown().then(docs => {
-                (<any>docs).forEach(doc => {
-                    let matches1 = [];
-                    let matches2 = [];
-                    let matches3 = [];
-                    [matches1, matches2, matches3] = this.queryOccursInMarkdownHeaders(query, doc['headers1'], doc['headers2'], doc['headers3']);
-                    matches1.forEach(((value) => {
-                        const result = [];
-                        result['title'] = doc['title'];
-                        result['content'] = value;
-                        result['url'] = '/doc/' + doc['redirectUrl'];
-                        this.docsSearchresult.push(result);
-                    }));
-                    matches2.forEach(((value) => {
-                        const result = [];
-                        result['title'] = doc['title'];
-                        result['content'] = value;
-                        result['url'] = '/doc/' + doc['redirectUrl'];
-                        this.docsSearchresult.push(result);
-                    }));
-                    matches3.forEach(((value) => {
-                        const result = [];
-                        result['title'] = doc['title'];
-                        result['content'] = value;
-                        result['url'] = '/doc/' + doc['redirectUrl'];
-                        this.docsSearchresult.push(result);
+
+            this.docs.forEach((doc) => {
+                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
+                    matches.forEach(((value) => {
+                        const result: ResultModel = {} as ResultModel;
+                        result.title = doc.title;
+                        result.content = value;
+                        result.url = '/doc/' + doc.redirectUrl;
+                        newDocsResult.push(result);
                     }));
                 });
-                this.blockDoc = false;
             });
-        }
+
+            this.swaggerSearchResult = newSwaggerResult;
+            this.docsSearchResult = newDocsResult;
+        });
     }
 
-    loadSwagger() {
-        return this.swaggerService.getSwagger()
-    }
-
-    queryOccursInMarkdownHeaders(query, header1, header2, header3) {
+    public queryOccursInMarkdownHeaders(query, header1, header2, header3): [any[], any[], any[]] {
         const regex = new RegExp(query, 'gi');
-        let matches1 = [];
-        let matches2 = [];
-        let matches3 = [];
-        matches1 = header1.filter(value => value.match(regex));
-        matches2 = header2.filter(value => value.match(regex));
-        matches3 = header3.filter(value => value.match(regex));
+        let matches1: any[];
+        let matches2: any[];
+        let matches3: any[];
+        matches1 = header1.filter((value) => value.match(regex));
+        matches2 = header2.filter((value) => value.match(regex));
+        matches3 = header3.filter((value) => value.match(regex));
         return [matches1, matches2, matches3];
     }
 
-    queryOccursInContent(query, content) {
-        var regex = new RegExp(query, 'gi');
-        var regexMatch = regex.exec(content);
-        if(regexMatch) {
-            return true
-        }
-        return false
+    public queryOccursInContent(query, content) {
+        const regex = new RegExp(query, 'gi');
+        const regexMatch = regex.exec(content);
+        return !!regexMatch;
     }
 
-    getIndexOfSearchResultInContent(query, content) {
-        var regex = new RegExp(query, 'gi');
-        var regexMatch = regex.exec(content);
-        if(regexMatch) {
-            return regexMatch["index"]
+    public getIndexOfSearchResultInContent(query, content) {
+        const regex = new RegExp(query, 'gi');
+        const regexMatch = regex.exec(content);
+        if (regexMatch) {
+            return regexMatch.index;
         }
-        return false
+        return false;
     }
 
-    removeMarkdownChars(text) {
+    public removeMarkdownChars(text) {
         return text.replace(/#/g, '')
             .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
-            .replace(/```/g, '')
+            .replace(/```/g, '');
     }
 
-    toggle(sidenavOpen: boolean): void {
+    public toggle(sidenavOpen: boolean): void {
         this.sidenavService.toggle(sidenavOpen);
     }
 
-    openSearchResult(url) {
+    public openSearchResult(url) {
+        this.searchQuery.patchValue('');
         this.inputFocused = false;
         this.mobileSearchPageIsHidden = true;
         this.router.navigateByUrl(url);
     }
 
-    logout() {
-        this.authService.logout()
+    public logout() {
+        this.authService.logout();
+    }
+
+    public resetSidenav(): void {
+        this.sidenavService.reset();
+    }
+
+    public resetSearchText() {
+        this.searchQuery.patchValue('');
     }
 
     private checkIfDocIsActive() {
-        this.router.events.subscribe(event => {
-            if (event instanceof RoutesRecognized ) {
-                const url = event['url'];
-                if(url === '/doc'){
-                    this.Act = false;
-                } else {
-                    this.Act = true;
-                }
+        this.router.events.subscribe((event) => {
+            if (event instanceof RoutesRecognized) {
+                const url = event.url;
+                this.Act = url !== '/doc';
             }
         });
     }
 
-    private getHeadersOfMarkdown() {
-        return new Promise(resolve => {
-            const markdowns = [getting, process, analytics, iot, security];
-            const docs = [
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
-                { headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'}
-                ];
+    private getHeadersOfMarkdown(): DocModel[] {
+        const markdowns: MarkdownModel[] = [getting as unknown as MarkdownModel, process as unknown as MarkdownModel,
+            analytics as unknown as MarkdownModel, iot as unknown as MarkdownModel, security as unknown as MarkdownModel];
+        const docs: DocModel[] = [
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
+            {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
+        ];
 
-            const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-            const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-            const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
 
-            let header1;
-            let header2;
-            let header3;
+        let header1;
+        let header2;
+        let header3;
 
-            for (let index = 0; index < markdowns.length; index++) {
-                header1 =  markdowns[index]['default'].match(regex1);
-                header2 =  markdowns[index]['default'].match(regex2);
-                header3 =  markdowns[index]['default'].match(regex3);
+        for (let index = 0; index < markdowns.length; index++) {
+            header1 = markdowns[index].default.match(regex1);
+            header2 = markdowns[index].default.match(regex2);
+            header3 = markdowns[index].default.match(regex3);
 
-                header1.forEach(function (value) {
-                    value = value.toString().replace(/#/g,'').replace(/^ /g,'');
-                    docs[index]['headers1'].push(value);
-                });
+            header1.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers1.push(value);
+            });
 
-                header2.forEach(function (value) {
-                    value = value.toString().replace(/#/g,'').replace(/^ /g,'');
-                    docs[index]['headers2'].push(value);
-                });
+            header2.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers2.push(value);
+            });
 
-                header3.forEach(function (value) {
-                    value = value.toString().replace(/#/g,'').replace(/^ /g,'');
-                    docs[index]['headers3'].push(value);
-                });
+            header3.forEach((value) => {
+                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                docs[index].headers3.push(value);
+            });
+        }
+        return docs;
+    }
+
+    private observeSidenav() {
+        this.sidenavService.toggleChanged.subscribe((b) => {
+            if (b) {
+                this.inputFocused = false;
+            } else {
+                this.inputFocused = this.searchQuery.value !== '';
             }
-            resolve(docs);
         });
     }
 
+    private initSwagger() {
+        this.swaggerService.getSwagger().subscribe((swagger) => {
+            this.swagger = swagger;
+            this.swaggerReadyEmitter.emit();
+        });
+    }
+
+    private initDocs() {
+        this.docs = this.getHeadersOfMarkdown();
+    }
 }

@@ -619,7 +619,7 @@ code {
 /* Media Queries */ 
 @media (max-width: 15000px) {
   .outer {
-    margin: 50px 5%;
+    margin: 40px 3% 40px 5%;
   }
 }
 

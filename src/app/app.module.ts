@@ -16,40 +16,37 @@
  *
  */
 
-import { BrowserModule } from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatDialogModule} from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {SettingsModule} from './core/components/settings/settings.module';
+import {StartComponent} from './core/components/start/start.component';
+import {CoreModule} from './core/core.module';
+import {init} from './core/services/auth/auth-init';
 
-import { SettingsModule } from './settings/settings.module';
-import { PlatformDocModule } from './platform-doc/platform-doc.module';
-import { PermissionsModule } from './permissions/permissions.module';
-import { ClientsModule } from './clients/clients.module';
-import { ApiDocModule } from './api-doc/api-doc.module';
-import { MaterialModule } from './material/material.module';
-import { PlaygroundModule } from './playground/playground.module';
-import { CoreModule } from './core/core.module';
+import { ApiDocModule } from './modules/api-doc/api-doc.module';
+import { ClientsModule } from './modules/clients/clients.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { PlatformDocModule } from './modules/platform-doc/platform-doc.module';
 
-import { AuthService } from './services/auth/auth.service';
-import { ApiService } from './services/api/api.service';
-import { ValidTokenGuard } from './services/auth/guard.service';
-import { SwaggerService } from './services/swagger/swagger.service';
-import { LadonService } from './services/ladon/ladon.service';
-import { DeviceSimService } from './services/devicesim/device-sim.service';
-import { UserManagementService } from './services/user-management/user-management.service';
+import { ApiService } from './core/services/api/api.service';
+import { AuthService } from './core/services/auth/auth.service';
+import { SwaggerService } from './core/services/swagger/swagger.service';
 
-import { AppComponent } from './app.component';
-import { Dialog } from './dev-role-dialog/dialog.component';
-import { StartComponent } from './start/start.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {PermissionsDialogDeleteComponent} from './permissions/permissions-dialog-delete/permissions-dialog-delete.component';
-import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
-import {init} from "./services/auth/auth-init";
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import { AppComponent } from './app.component';
+import { DialogComponent } from './core/components/dev-role-dialog/dialog.component';
+import {PermissionsDialogDeleteComponent} from './modules/permissions/permissions-dialog-delete/permissions-dialog-delete.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -57,51 +54,63 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const appRoutes: Routes = [
   {
-    path: '',
     component: StartComponent,
-    canActivate: [ValidTokenGuard]
-  }
+    path: '',
+  },
 ];
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [
     AppComponent,
     StartComponent,
-    Dialog,
+    DialogComponent,
 
   ],
-  imports: [
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    MaterialModule,
-    PlatformDocModule,
-    SettingsModule,
-    PermissionsModule,
-    ClientsModule,
-    PlaygroundModule,
-    ApiDocModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule,
-    FlexLayoutModule,
-    CoreModule,
-    TranslateModule.forRoot({
-      loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-      }
-    }),
-    BrowserAnimationsModule,
-    KeycloakAngularModule
+  entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
+    imports: [
+        RouterModule.forRoot(appRoutes),
+        BrowserModule,
+        PlatformDocModule,
+        SettingsModule,
+        PermissionsModule,
+        ClientsModule,
+        ApiDocModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        FormsModule,
+        FlexLayoutModule,
+        CoreModule,
+        TranslateModule.forRoot({
+            loader: {
+                deps: [HttpClient],
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+            },
+        }),
+        BrowserAnimationsModule,
+        KeycloakAngularModule,
+        MatCardModule,
+        MatDialogModule,
+        MatButtonModule,
+    ],
+  providers: [
+    ApiService,
+    AuthService,
+    SwaggerService,
+    {
+      provide: KeycloakService,
+      useValue: keycloakService,
+    },
   ],
-  entryComponents: [Dialog, PermissionsDialogDeleteComponent],
-  providers: [ApiService, AuthService, ValidTokenGuard, SwaggerService, LadonService, UserManagementService, DeviceSimService, {
-    provide: APP_INITIALIZER,
-    useFactory: init,
-    multi: true,
-    deps: [KeycloakService]
-  }],
-  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap {
+  public ngDoBootstrap(appRef: ApplicationRef) {
+    init(keycloakService)
+        .then(() => {
+          appRef.bootstrap(AppComponent);
+        })
+        .catch((error) => console.error('[ngDoBootstrap] init Keycloak failed', error));
+  }
+}

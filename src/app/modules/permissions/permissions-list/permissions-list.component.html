@@ -1,0 +1,126 @@
+<!--
+  ~
+  ~     Copyright 2018 InfAI (CC SES)
+  ~
+  ~     Licensed under the Apache License, Version 2.0 (the “License”);
+  ~     you may not use this file except in compliance with the License.
+  ~     You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~     Unless required by applicable law or agreed to in writing, software
+  ~     distributed under the License is distributed on an “AS IS” BASIS,
+  ~     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~     See the License for the specific language governing permissions and
+  ~     limitations under the License.
+  ~
+  -->
+<section *ngIf="userIsAdmin" class="outer" fxLayout="column">
+
+    <mat-card class="search" *ngIf="ready">
+        <i class="material-icons">search</i>
+        <mat-form-field>
+            <input type="text" matInput (keyup)="search()" [(ngModel)]="query"
+                   [placeholder]="'Search (for users, roles, actions or resources)'">
+            <button *ngIf="query.length > 0" mat-icon-button matSuffix (click)="clearSearch()">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </mat-form-field>
+    </mat-card>
+    <div class="table-container" fxFlex="auto">
+        <mat-table matSort #table (matSortChange)="sortData($event)" [dataSource]="sortedData" [hidden]="!ready">
+            <ng-container matColumnDef="subject">
+                <mat-header-cell mat-sort-header="subject" *matHeaderCellDef>Subject</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="GET">
+                <mat-header-cell mat-sort-header="GET" *matHeaderCellDef>GET</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('GET')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="POST">
+                <mat-header-cell mat-sort-header="POST" *matHeaderCellDef>POST</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('POST')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="PATCH">
+                <mat-header-cell mat-sort-header="PATCH" *matHeaderCellDef>PATCH</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('PATCH')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="DELETE">
+                <mat-header-cell mat-sort-header="DELETE" *matHeaderCellDef>DELETE</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('DELETE')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="PUT">
+                <mat-header-cell mat-sort-header="PUT" *matHeaderCellDef>PUT</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('PUT')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="HEAD">
+                <mat-header-cell mat-sort-header="HEAD" *matHeaderCellDef>HEAD</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox disabled="true" [checked]="element.actions.includes('HEAD')"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Resource Column -->
+            <ng-container matColumnDef="resource">
+                <mat-header-cell mat-sort-header="resource" *matHeaderCellDef>Resource</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.resource}}</mat-cell>
+            </ng-container>
+
+            <!-- Delete Column -->
+            <ng-container matColumnDef="delete">
+                <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <button (click)="askfordelete(element)" [disabled]="element.id === 'admin-all'"><i
+                            class="material-icons">delete</i></button>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Edit Column -->
+            <ng-container matColumnDef="edit">
+                <mat-header-cell *matHeaderCellDef> Edit</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="editPolicy(element)" [disabled]="element.id === 'admin-all'"
+                            [matTooltip]="element.id === 'admin-all' ? 'Diese Policy kann nicht bearbeitet werden' : null">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+    </div>
+    <app-spinner [show]="!ready"></app-spinner>
+    <span *ngIf="importing" class="import-hint color-accent">Importing takes a few seconds...</span>
+</section>
+
+
+<a [href]="export()" download="permissions.json" class="fabs download" matTooltip="Exportieren" [hidden]="!ready || !sortedData || sortedData.length === 0">
+    <button mat-fab>
+        <mat-icon>cloud_download</mat-icon>
+    </button>
+</a>
+<a class="upload" [hidden]="!ready">
+    <button mat-fab (click)="import()" class="fabs upload" matTooltip="Importieren">
+        <mat-icon>cloud_upload</mat-icon>
+    </button>
+</a>
+<a class="fabs add" matTooltip="Hinzufügen" [hidden]="!ready">
+    <button mat-fab (click)="createPolicy()">
+        <mat-icon>add</mat-icon>
+    </button>
+</a>
+
+

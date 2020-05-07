@@ -28,39 +28,107 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $senergy-blue: (
-  50: rgb(68, 132, 206),
-  100: rgb(68, 132, 206),
-  200: rgb(68, 132, 206),
-  300: rgb(68, 132, 206),
-  400: rgb(68, 132, 206),
-  500: rgb(68, 132, 206),
-  600: rgb(68, 132, 206),
-  700: rgb(68, 132, 206),
-  800: rgb(68, 132, 206),
-  900: rgb(68, 132, 206),
-  A100: rgb(68, 132, 206),
-  A200: rgb(68, 132, 206),
-  A400: rgb(68, 132, 206),
-  A700: rgb(68, 132, 206),
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  )
+        50 : #e9f0f9,
+        100 : #c7daf0,
+        200 : #a2c2e7,
+        300 : #7ca9dd,
+        400 : #6096d5,
+        500 : #4484ce,
+        600 : #3e7cc9,
+        700 : #3571c2,
+        800 : #2d67bc,
+        900 : #1f54b0,
+        A100 : #e9f0ff,
+        A200 : #b6cfff,
+        A400 : #83adff,
+        A700 : #699cff,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #ffffff,
+                600 : #ffffff,
+                700 : #ffffff,
+                800 : #ffffff,
+                900 : #ffffff,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
 );
-$candy-app-primary: mat-palette($senergy-blue, A200);
-$candy-app-accent:  mat-palette($senergy-blue, A200, A100, A400);
+
+$md-custom-color-sidenav: (
+        50 : #fdf3ea,
+        100 : #fbe2ca,
+        200 : #f8cfa6,
+        300 : #f5bc82,
+        400 : #f3ad68,
+        500 : #f19f4d,
+        600 : #ef9746,
+        700 : #ed8d3d,
+        800 : #eb8334,
+        900 : #e77225,
+        A100 : #ffffff,
+        A200 : #fff4ee,
+        A400 : #ffd4bb,
+        A700 : #ffc4a1,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #000000,
+                600 : #000000,
+                700 : #000000,
+                800 : #000000,
+                900 : #000000,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
+);
+
+$md-custom-color-warn: (
+        50 : #f9ece6,
+        100 : #f0d0c0,
+        200 : #e7b097,
+        300 : #dd906d,
+        400 : #d5794d,
+        500 : #ce612e,
+        600 : #c95929,
+        700 : #c24f23,
+        800 : #bc451d,
+        900 : #b03312,
+        A100 : #ffe6e0,
+        A200 : #ffbcad,
+        A400 : #ff927a,
+        A700 : #ff7d61,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #ffffff,
+                600 : #ffffff,
+                700 : #ffffff,
+                800 : #ffffff,
+                900 : #ffffff,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
+);
+
+$candy-app-primary: mat-palette($senergy-blue, 500, 900, A100);
+$candy-app-accent:  mat-palette($senergy-blue, 500, 900, A100);
+$my-app-sidenav: mat-palette($md-custom-color-sidenav);
 
 // The warn palette is optional (defaults to red).
 $candy-app-warn:    mat-palette($mat-red);
@@ -78,9 +146,9 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
 /* generated: http://mcg.mbitson.com/#!?customcolor=%232e7d32&themename=mcgtheme */
 
-$my-app-primary: mat-palette($senergy-blue, A200);
-$my-app-accent:  mat-palette($senergy-blue, 800, A200);
-$my-app-warn:    mat-palette($senergy-blue);
+$my-app-primary: mat-palette($senergy-blue, 500, 900, A100);
+$my-app-accent:  mat-palette($senergy-blue, 500, 900, A100);
+$my-app-warn:    mat-palette($md-custom-color-warn);
 
 $my-app-theme: mat-light-theme($candy-app-primary, $my-app-accent, $candy-app-warn);
 
@@ -93,4 +161,13 @@ $my-app-theme: mat-light-theme($candy-app-primary, $my-app-accent, $candy-app-wa
 
 .color-accent {
   color: mat-color($my-app-accent) !important;
+}
+
+.background-color-sidenav {
+  color: white;
+  background-color: mat-color($my-app-sidenav);
+}
+
+.color-sidenav {
+  color: mat-color($my-app-sidenav) !important;
 }

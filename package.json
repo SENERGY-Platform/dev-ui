@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng build && node ./server.js",
+    "start": "ng build && node server/server.js",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -40,7 +40,9 @@
     "rxjs": "^6.5.2",
     "swagger-ui": "^3.23.11",
     "swagger-ui-dist": "^3.23.11",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "body-parser": "latest",
+    "express": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.900.0",

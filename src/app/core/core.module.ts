@@ -18,53 +18,65 @@
 
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 
-import {throwIfAlreadyLoaded} from './module-import-guard';
-import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {RouterModule} from '@angular/router';
-import {MaterialModule} from '../material/material.module';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient} from '@angular/common/http';
-import {HttpLoaderFactory} from '../app.module';
 import {CommonModule} from '@angular/common';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import {FormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterModule} from '@angular/router';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {SpinnerComponent} from './components/spinner/spinner.component';
+import {ToolbarComponent} from './components/toolbar/toolbar.component';
+import {throwIfAlreadyLoaded} from './module-import-guard';
+
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     imports: [
-
+        BrowserAnimationsModule,
         CommonModule,
         RouterModule,
-        MaterialModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
         FormsModule,
         FlexLayoutModule,
-        TranslateModule.forRoot({
+        TranslateModule.forChild({
             loader: {
+                deps: [HttpClient],
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-                }
-            }),
-
-
-
+            },
+        }),
+        MatProgressSpinnerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
     ],
     declarations: [
-
         SidenavComponent,
-
         ToolbarComponent,
-
-
+        SpinnerComponent,
     ],
     exports: [
-
         SidenavComponent,
-
         ToolbarComponent,
-
+        SpinnerComponent,
     ],
-
 })
 
 export class CoreModule {
