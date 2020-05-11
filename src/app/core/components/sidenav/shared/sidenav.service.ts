@@ -17,6 +17,7 @@
  */
 
 import {EventEmitter, Injectable, Output} from '@angular/core';
+import {KeycloakService} from 'keycloak-angular';
 
 import {SidenavPageModel} from './sidenav-page.model';
 import {SidenavSectionModel} from './sidenav-section.model';
@@ -55,12 +56,16 @@ export class SidenavService {
             new SidenavPageModel('Security', 'link', 'security', '/doc/security'),
         ]));
 
-        sections.push(new SidenavSectionModel('Clients', 'link', 'computer', '/clients', []));
+        if (this.keycloakService.isUserInRole('developer')) {
+            sections.push(new SidenavSectionModel('Clients', 'link', 'computer', '/clients', []));
+        }
 
-        sections.push(new SidenavSectionModel('Permissions', 'link', 'security', '/permissions', []));
+        if (this.keycloakService.isUserInRole('admin')) {
+            sections.push(new SidenavSectionModel('Permissions', 'link', 'security', '/permissions', []));
+        }
 
         return sections;
     }
 
-    constructor() { }
+    constructor(private keycloakService: KeycloakService) { }
 }

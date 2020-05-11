@@ -53,7 +53,7 @@
     </div>
     <div>
         <mat-form-field class="endpoint">
-            <input type="text" placeholder="Endpoint" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <input type="text" placeholder="Endpoint" aria-label="Number" matInput [formControl]="endpointControl" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let uri of filteredOptions | async" [value]="uri">
                     {{uri}}
