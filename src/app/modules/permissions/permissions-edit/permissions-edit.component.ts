@@ -44,12 +44,12 @@ export interface Model {
 })
 export class PermissionsEditComponent implements OnInit {
     public isEditMode = false;
-    public myControl = new FormControl();
+    public endpointControl = new FormControl();
     public userIsAdmin: boolean;
     public title: string;
     // all roles and uris and users
     public roles: any;
-    public uris: any;
+    public uris: string[] = [];
     public users: any;
     // options for autocomplete filter
     public filteredOptions: Observable<string[]>;
@@ -114,10 +114,11 @@ export class PermissionsEditComponent implements OnInit {
         }
         if (this.isEditMode) {
             this.checkactiveActions();
+            this.endpointControl.patchValue(this.permission.resource);
         }
 
         // autocomplete filter
-        this.filteredOptions = this.myControl.valueChanges
+        this.filteredOptions = this.endpointControl.valueChanges
             .pipe(
                 startWith(''),
                 map((value) => this._filter(value)),
@@ -152,7 +153,7 @@ export class PermissionsEditComponent implements OnInit {
         const policy: PermissionModel = {
             subject: this.permission.subject,
             actions: [],
-            resource: this.myControl.value,
+            resource: this.endpointControl.value,
             id: this.permission.id,
         };
         if (this.methods.get('get').value === true) {
