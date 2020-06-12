@@ -1,7 +1,16 @@
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormBuilder} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {TranslateService} from '@ngx-translate/core';
+import {CoreModule} from '../../../core/core.module';
+import {ApiService} from '../../../core/services/api/api.service';
+import {ApiServiceMock} from '../../../core/services/api/api.service.mock';
+import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
+import {ClientService} from '../shared/client.service';
+import {ClientServiceMock} from '../shared/client.service.mock';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ViewClientsComponent } from './view-clients.component';
+import {ViewClientsComponent} from './view-clients.component';
 
 describe('ViewClientsComponent', () => {
   let component: ViewClientsComponent;
@@ -9,7 +18,18 @@ describe('ViewClientsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewClientsComponent ],
+      declarations: [ViewClientsComponent],
+      providers: [
+        {provide: TranslateService, useClass: TranslateServiceMock},
+        FormBuilder,
+        {provide: ApiService, useClass: ApiServiceMock},
+        {provide: ClientService, useClass: ClientServiceMock},
+      ],
+      imports: [
+        MatCardModule,
+        MatIconModule,
+        CoreModule,
+      ],
     })
     .compileComponents();
   }));

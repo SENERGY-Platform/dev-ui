@@ -16,18 +16,10 @@
  *
  */
 
-import {
-    Component,
-    OnInit,
-} from '@angular/core';
-import {
-    Router,
-} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {SwaggerModel} from '../../../core/services/swagger/swagger.model';
-import {
-    SwaggerService,
-} from '../../../core/services/swagger/swagger.service';
+import {SwaggerService} from '../../../core/services/swagger/swagger.service';
 
 @Component({
     selector: 'app-docs',
@@ -42,7 +34,7 @@ export class ApiDocsComponent implements OnInit {
     public searchPlaceholder: any;
     public ready = false;
 
-    constructor(private translateService: TranslateService, private router: Router, private swaggerService: SwaggerService) {
+    constructor(private translateService: TranslateService, private swaggerService: SwaggerService) {
     }
 
     public ngOnInit(): void {

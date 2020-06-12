@@ -16,14 +16,18 @@
  * /
  */
 
-import { inject, TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
+import {AuthService} from '../../../../core/services/auth/auth.service';
+import {AuthServiceMock} from '../../../../core/services/auth/auth.service.mock';
 
-import { UserManagementService } from './user-management.service';
+import {UserManagementService} from './user-management.service';
 
 describe('UserManagementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserManagementService],
+      providers: [
+        {provide: AuthService, useClass: AuthServiceMock},
+      ],
     });
   });
 

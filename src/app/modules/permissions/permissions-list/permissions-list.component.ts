@@ -16,26 +16,17 @@
  *
  */
 
-import {
-    Component, isDevMode, OnInit,
-} from '@angular/core';
+import {Component, isDevMode, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
-import {
-    Router,
-} from '@angular/router';
-import {
-    AuthService,
-} from '../../../core/services/auth/auth.service';
+import {AuthService} from '../../../core/services/auth/auth.service';
 import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from '../permissions-dialog-import/permissions-dialog-import.component';
 import {PermissionImportModel} from '../permissions-dialog-import/permissions-dialog-import.model';
 import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.component';
-import {
-    LadonService,
-} from '../shared/ladon/ladon.service';
+import {LadonService} from '../shared/ladon/ladon.service';
 import {PermissionModel} from '../shared/permission.model';
 
 @Component({
@@ -47,7 +38,6 @@ export class PermissionsListComponent implements OnInit {
 
     constructor(private authService: AuthService,
                 private ladonService: LadonService,
-                private router: Router,
                 public dialog: MatDialog,
                 private sanitizer: DomSanitizer,
     ) {

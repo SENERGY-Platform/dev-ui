@@ -16,13 +16,11 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
-import {
-  Router,
-} from '@angular/router';
-import { ApiService } from '../../../core/services/api/api.service';
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../../../core/services/api/api.service';
 import {ClientModel} from '../shared/client.model';
 import {ClientService} from '../shared/client.service';
+
 @Component({
   selector: 'app-view-clients',
   templateUrl: './view-clients.component.html',
@@ -33,7 +31,7 @@ export class ViewClientsComponent implements OnInit {
   public clients: ClientModel[];
   public ready = false;
 
-  constructor(private router: Router, private apiService: ApiService, private clientService: ClientService) {
+  constructor(private apiService: ApiService, private clientService: ClientService) {
   }
 
   public ngOnInit() {

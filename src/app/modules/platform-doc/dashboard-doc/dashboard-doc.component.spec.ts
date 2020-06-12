@@ -16,23 +16,40 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {HttpLoaderFactory} from '../../../app.module';
+import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
 
-import { DashboardDocComponent } from './dashboard-doc.component';
+import {DashboardDocComponent} from './dashboard-doc.component';
 
 describe('DashboardDocComponent', () => {
-  let component: MarketplaceDocComponent;
-  let fixture: ComponentFixture<MarketplaceDocComponent>;
+  let component: DashboardDocComponent;
+  let fixture: ComponentFixture<DashboardDocComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarketplaceDocComponent ],
+      declarations: [DashboardDocComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            deps: [HttpClient],
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+          },
+        })],
+      providers: [
+        {provide: TranslateService, useClass: TranslateServiceMock},
+      ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MarketplaceDocComponent);
+    fixture = TestBed.createComponent(DashboardDocComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

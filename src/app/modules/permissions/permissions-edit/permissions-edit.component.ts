@@ -17,13 +17,10 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {FormControl} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
-import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {AuthService} from '../../../core/services/auth/auth.service';
@@ -69,7 +66,6 @@ export class PermissionsEditComponent implements OnInit {
         private userManagementService: UserManagementService,
         private route: ActivatedRoute,
         private ladonService: LadonService,
-        private router: Router,
         private authService: AuthService,
         private snackBar: MatSnackBar,
     ) {

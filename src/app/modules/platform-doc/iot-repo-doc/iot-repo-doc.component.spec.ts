@@ -16,9 +16,15 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {MarkdownModule, MarkdownService, MarkedOptions} from 'ngx-markdown';
+import {HttpLoaderFactory} from '../../../app.module';
+import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
 
-import { IotRepoDocComponent } from './iot-repo-doc.component';
+import {IotRepoDocComponent} from './iot-repo-doc.component';
 
 describe('IotRepoDocComponent', () => {
   let component: IotRepoDocComponent;
@@ -26,7 +32,23 @@ describe('IotRepoDocComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IotRepoDocComponent ],
+      declarations: [IotRepoDocComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            deps: [HttpClient],
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+          },
+        }),
+        MarkdownModule,
+      ],
+      providers: [
+        {provide: TranslateService, useClass: TranslateServiceMock},
+        MarkdownService,
+        MarkedOptions,
+      ],
     })
     .compileComponents();
   }));

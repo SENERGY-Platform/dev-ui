@@ -16,28 +16,50 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {MarkdownModule, MarkdownService, MarkedOptions} from 'ngx-markdown';
+import {HttpLoaderFactory} from '../../../app.module';
+import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
 
-import { GettingStartedComponent } from './getting-started.component';
+import {GettingStartedComponent} from './getting-started.component';
 
 describe('GettingStartedComponent', () => {
-  let component: GettingStartedComponent;
-  let fixture: ComponentFixture<GettingStartedComponent>;
+    let component: GettingStartedComponent;
+    let fixture: ComponentFixture<GettingStartedComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ GettingStartedComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [GettingStartedComponent],
+            imports: [
+                HttpClientTestingModule,
+                TranslateModule.forRoot({
+                    loader: {
+                        deps: [HttpClient],
+                        provide: TranslateLoader,
+                        useFactory: HttpLoaderFactory,
+                    },
+                }),
+                MarkdownModule,
+            ],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                MarkdownService,
+                MarkedOptions,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(GettingStartedComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(GettingStartedComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

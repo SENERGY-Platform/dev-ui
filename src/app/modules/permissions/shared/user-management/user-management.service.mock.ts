@@ -1,6 +1,6 @@
 /*
  *
- *       2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -13,25 +13,21 @@
  *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
- * /
+ *
  */
+import {Injectable} from '@angular/core';
 
-import {inject, TestBed} from '@angular/core/testing';
-import {ApiService} from '../../../../core/services/api/api.service';
-import {ApiServiceMock} from '../../../../core/services/api/api.service.mock';
+@Injectable()
+export class UserManagementServiceMock {
 
-import {LadonService} from './ladon.service';
+    constructor() {
+    }
 
-describe('LadonService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {provide: ApiService, useClass: ApiServiceMock},
-      ],
-    });
-  });
+    public loadUsers() {
+        return new Promise((resolve) => resolve(['user1', 'user2']));
+    }
 
-  it('should be created', inject([LadonService], (service: LadonService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+    public loadRoles() {
+        return new Promise((resolve) => resolve([{id: 'admin', name: 'admin'}, {id: 'user', name: 'user'}]));
+    }
+}

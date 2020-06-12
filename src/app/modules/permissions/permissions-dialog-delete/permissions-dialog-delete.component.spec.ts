@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {TranslateService} from '@ngx-translate/core';
+import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
 
-import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete.component';
+import {PermissionsDialogDeleteComponent} from './permissions-dialog-delete.component';
 
 describe('PermissionsDialogDeleteComponent', () => {
   let component: PermissionsDialogDeleteComponent;
@@ -8,7 +11,11 @@ describe('PermissionsDialogDeleteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PermissionsDialogDeleteComponent ],
+      declarations: [PermissionsDialogDeleteComponent],
+      providers: [
+        {provide: TranslateService, useClass: TranslateServiceMock},
+        {provide: MatDialogRef, useValue: {}},
+      ],
     })
     .compileComponents();
   }));

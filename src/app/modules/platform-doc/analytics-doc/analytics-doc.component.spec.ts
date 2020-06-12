@@ -16,28 +16,55 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {MarkdownModule, MarkdownService, MarkedOptions} from 'ngx-markdown';
+import {HttpLoaderFactory} from '../../../app.module';
+import {AuthService} from '../../../core/services/auth/auth.service';
+import {AuthServiceMock} from '../../../core/services/auth/auth.service.mock';
+import {SwaggerService} from '../../../core/services/swagger/swagger.service';
+import {SwaggerServiceMock} from '../../../core/services/swagger/swagger.service.mock';
 
-import { AnalyticsDocComponent } from './analytics-doc.component';
+import {AnalyticsDocComponent} from './analytics-doc.component';
 
 describe('AnalyticsDocComponent', () => {
-  let component: AnalyticsDocComponent;
-  let fixture: ComponentFixture<AnalyticsDocComponent>;
+    let component: AnalyticsDocComponent;
+    let fixture: ComponentFixture<AnalyticsDocComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AnalyticsDocComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [AnalyticsDocComponent],
+            imports: [
+                HttpClientTestingModule,
+                TranslateModule.forRoot({
+                    loader: {
+                        deps: [HttpClient],
+                        provide: TranslateLoader,
+                        useFactory: HttpLoaderFactory,
+                    },
+                }),
+                MarkdownModule,
+            ],
+            providers: [
+                {provide: TranslateService, useClass: TranslateService},
+                {provide: AuthService, useClass: AuthServiceMock},
+                {provide: SwaggerService, useClass: SwaggerServiceMock},
+                MarkdownService,
+                MarkedOptions,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AnalyticsDocComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AnalyticsDocComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
