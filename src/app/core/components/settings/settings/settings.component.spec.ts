@@ -26,33 +26,33 @@ import {TranslateServiceMock} from '../../../services/translate.service.mock';
 import {SettingsComponent} from './settings.component';
 
 describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+    let component: SettingsComponent;
+    let fixture: ComponentFixture<SettingsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SettingsComponent],
-      providers: [
-        {provide: TranslateService, useClass: TranslateServiceMock},
-      ],
-      imports: [
-        MatSelectModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatInputModule,
-      ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [SettingsComponent],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+            ],
+            imports: [
+                MatSelectModule,
+                BrowserAnimationsModule,
+                FormsModule,
+                ReactiveFormsModule,
+                MatInputModule,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(SettingsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

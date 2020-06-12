@@ -21,13 +21,14 @@ import {Injectable} from '@angular/core';
 declare var KONG_URIS: any;
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class KongService {
 
-  constructor() { }
+    constructor() {
+    }
 
-  public loadUris() {
-    return JSON.parse(KONG_URIS);
-  }
+    public loadUris() {
+        return JSON.parse(KONG_URIS);
+    }
 }

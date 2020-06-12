@@ -34,29 +34,30 @@ export class AppComponent implements OnInit {
 
     public title = 'app';
     public userIsAdmin = false;
-    public userIsDev = false ;
+    public userIsDev = false;
 
     constructor(
-      public dialog: MatDialog,
-      translate: TranslateService,
-      private authService: AuthService,
-      private responsiveService: ResponsiveService,
-      private apiService: ApiService) {
+        public dialog: MatDialog,
+        translate: TranslateService,
+        private authService: AuthService,
+        private responsiveService: ResponsiveService,
+        private apiService: ApiService) {
 
-      translate.setDefaultLang('en');
+        translate.setDefaultLang('en');
 
-      const userProfile = this.authService.getUserProfile();
-      if (userProfile) {
-          translate.use(userProfile.attributes.locale[0]);
-      }
+        const userProfile = this.authService.getUserProfile();
+        if (userProfile) {
+            translate.use(userProfile.attributes.locale[0]);
+        }
 
-  }
+    }
 
     public ngOnInit() {
-    this.responsiveService.observeMqAlias().subscribe(() => {});
-    this.userIsAdmin = this.authService.userHasRole('admin');
-    this.userIsDev = this.authService.userHasRole('developer');
-    this.checkDeveloperRole();
+        this.responsiveService.observeMqAlias().subscribe(() => {
+        });
+        this.userIsAdmin = this.authService.userHasRole('admin');
+        this.userIsDev = this.authService.userHasRole('developer');
+        this.checkDeveloperRole();
 
     }
 

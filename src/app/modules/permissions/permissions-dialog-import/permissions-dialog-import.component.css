@@ -17,7 +17,7 @@
  */
 
 .mat-raised-button,
-.control_buttons{
+.control_buttons {
     color: white;
 }
 
@@ -43,6 +43,7 @@
 .mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
     max-width: 60px;
 }
+
 .mat-column-subject {
     max-width: 120px;
 }

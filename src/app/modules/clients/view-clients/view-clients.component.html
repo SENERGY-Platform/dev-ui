@@ -16,41 +16,43 @@
   ~
   -->
 
-<div class="clients outer" [hidden]="!ready">
-  <mat-card class="client" *ngFor="let client of clients">
-    <div class="infos">
-      <div class="client_header">
-          <h2>{{client.name}}</h2>
-          <span *ngIf="client.enabled" class="status">
+<div [hidden]="!ready" class="clients outer">
+    <mat-card *ngFor="let client of clients" class="client">
+        <div class="infos">
+            <div class="client_header">
+                <h2>{{client.name}}</h2>
+                <span *ngIf="client.enabled" class="status">
             <span class="status_circle enabled"></span><p>{{'ACTIVE' | translate}}</p>
           </span>
-          <span *ngIf="!client.enabled" class="status">
+                <span *ngIf="!client.enabled" class="status">
             <span class="status_circle disabled"></span><p>{{'NOTACTIVE' | translate}}</p>
           </span>
-      </div>
-      <div class="">
-        <h3>Client ID:</h3> <p>{{client.id}}</p>
-        <h3>Client Secret:</h3> <p>{{client.secret}}</p>
-      </div>
-    </div>
+            </div>
+            <div class="">
+                <h3>Client ID:</h3>
+                <p>{{client.id}}</p>
+                <h3>Client Secret:</h3>
+                <p>{{client.secret}}</p>
+            </div>
+        </div>
 
-    <div class="buttons">
-      <span  class="edit" (click)="viewClient(client)">
+        <div class="buttons">
+      <span (click)="viewClient(client)" class="edit">
         <i class="material-icons">edit</i>
         <p>{{'EDIT' | translate}}</p>
       </span>
-      <span (click)="deleteClient(client.id)" class="delete">
+            <span (click)="deleteClient(client.id)" class="delete">
         <i class="material-icons">delete</i>
         <p>{{'DELETE' | translate}}</p>
       </span>
-    </div>
-  </mat-card>
+        </div>
+    </mat-card>
 </div>
 
 <app-spinner [show]="!ready"></app-spinner>
 
-<a class="add" [hidden]="!ready">
-  <button mat-fab (click)="addClient()">
-    <mat-icon>add</mat-icon>
-  </button>
+<a [hidden]="!ready" class="add">
+    <button (click)="addClient()" mat-fab>
+        <mat-icon>add</mat-icon>
+    </button>
 </a>

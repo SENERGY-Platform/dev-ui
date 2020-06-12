@@ -17,7 +17,7 @@
  */
 
 admin {
-    width:60%;
+    width: 60%;
 }
 
 .action_checkboxes {
@@ -31,7 +31,7 @@ admin {
     margin-right: 5%;
 }
 
-.mat-dialog-actions{
+.mat-dialog-actions {
     margin: auto;
 }
 

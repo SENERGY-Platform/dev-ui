@@ -18,9 +18,9 @@
 
 <h1 mat-dialog-title>Löschvorgang</h1>
 <div mat-dialog-content>
-  <p>Möchten Sie die ausgewählte Policy wirklich löschen?</p>
+    <p>Möchten Sie die ausgewählte Policy wirklich löschen?</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close] color="primary" (click)="yes()"><b>Löschen</b></button>
-  <button mat-button [mat-dialog-close] color="primary" (click)="no()"><b>Abbrechen</b></button>
+    <button (click)="yes()" [mat-dialog-close] color="primary" mat-button><b>Löschen</b></button>
+    <button (click)="no()" [mat-dialog-close] color="primary" mat-button><b>Abbrechen</b></button>
 </div>

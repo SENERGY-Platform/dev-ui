@@ -36,23 +36,22 @@ import {PermissionModel} from '../shared/permission.model';
 })
 export class PermissionsListComponent implements OnInit {
 
-    constructor(private authService: AuthService,
-                private ladonService: LadonService,
-                public dialog: MatDialog,
-                private sanitizer: DomSanitizer,
-    ) {
-    }
-
     public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
     public policies: PermissionModel[] = [];
     public userIsAdmin = false;
-
     public sortedData: PermissionModel[];
     public matPolicies: MatTableDataSource<PermissionModel>;
     public query = '';
     public sort: Sort = undefined;
     public ready = false;
     public importing = false;
+
+    constructor(private authService: AuthService,
+                private ladonService: LadonService,
+                public dialog: MatDialog,
+                private sanitizer: DomSanitizer,
+    ) {
+    }
 
     private static compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) {
         return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -188,9 +187,9 @@ export class PermissionsListComponent implements OnInit {
                     const currentPolicies = this.policies.filter((p) => p.id !== 'admin-all');
                     this.ladonService.deletePolicies(currentPolicies).subscribe(() => this.ladonService.postPolicies(filteredPolicies)
                         .subscribe(() => {
-                        this.importing = false;
-                        this.loadPolicies();
-                    }));
+                            this.importing = false;
+                            this.loadPolicies();
+                        }));
                 } else {
                     this.ladonService.putPolicies(filteredPolicies).subscribe(() => {
                         this.importing = false;

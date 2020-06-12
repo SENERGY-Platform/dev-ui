@@ -43,59 +43,60 @@ import {PermissionsEditComponent} from './permissions-edit/permissions-edit.comp
 import {PermissionsListComponent} from './permissions-list/permissions-list.component';
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
 })
 export class RoutingComponent {
 }
 
 const routes: Routes = [
-  {
-    path: 'permissions',
-    component: RoutingComponent,
-    children: [
-      {
-        path: '',
-        component: PermissionsListComponent,
-      },
-      {
-          path: 'edit',
-          component: PermissionsEditComponent,
-      },
-    ],
-  },
+    {
+        path: 'permissions',
+        component: RoutingComponent,
+        children: [
+            {
+                path: '',
+                component: PermissionsListComponent,
+            },
+            {
+                path: 'edit',
+                component: PermissionsEditComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatTableModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule.forChild(),
-    MatAutocompleteModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatSortModule,
-    MatSnackBarModule,
-    CoreModule,
-    FlexLayoutModule,
-  ],
-  declarations: [
-    PermissionsListComponent,
-    PermissionsEditComponent,
-    RoutingComponent,
-    PermissionsEditComponent,
-    PermissionsDialogDeleteComponent,
-    PermissionsDialogImportComponent,
-  ],
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatTableModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule.forChild(),
+        MatAutocompleteModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatSortModule,
+        MatSnackBarModule,
+        CoreModule,
+        FlexLayoutModule,
+    ],
+    declarations: [
+        PermissionsListComponent,
+        PermissionsEditComponent,
+        RoutingComponent,
+        PermissionsEditComponent,
+        PermissionsDialogDeleteComponent,
+        PermissionsDialogImportComponent,
+    ],
 })
-export class PermissionsModule { }
+export class PermissionsModule {
+}

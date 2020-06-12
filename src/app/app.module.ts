@@ -61,13 +61,13 @@ const appRoutes: Routes = [
 const keycloakService = new KeycloakService();
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    StartComponent,
-    DialogComponent,
+    declarations: [
+        AppComponent,
+        StartComponent,
+        DialogComponent,
 
-  ],
-  entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
+    ],
+    entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
     imports: [
         RouterModule.forRoot(appRoutes),
         BrowserModule,
@@ -94,22 +94,22 @@ const keycloakService = new KeycloakService();
         MatDialogModule,
         MatButtonModule,
     ],
-  providers: [
-    ApiService,
-    AuthService,
-    SwaggerService,
-    {
-      provide: KeycloakService,
-      useValue: keycloakService,
-    },
-  ],
+    providers: [
+        ApiService,
+        AuthService,
+        SwaggerService,
+        {
+            provide: KeycloakService,
+            useValue: keycloakService,
+        },
+    ],
 })
 export class AppModule implements DoBootstrap {
-  public ngDoBootstrap(appRef: ApplicationRef) {
-    init(keycloakService)
-        .then(() => {
-          appRef.bootstrap(AppComponent);
-        })
-        .catch((error) => console.error('[ngDoBootstrap] init Keycloak failed', error));
-  }
+    public ngDoBootstrap(appRef: ApplicationRef) {
+        init(keycloakService)
+            .then(() => {
+                appRef.bootstrap(AppComponent);
+            })
+            .catch((error) => console.error('[ngDoBootstrap] init Keycloak failed', error));
+    }
 }

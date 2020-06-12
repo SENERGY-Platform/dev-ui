@@ -52,6 +52,7 @@ const routes: Routes = [
         ],
     },
 ];
+
 @NgModule({
     imports: [
         CommonModule,
@@ -65,10 +66,11 @@ const routes: Routes = [
         FlexLayoutModule,
         MatIconModule,
     ],
-  declarations: [
-   SingleServiceDocComponent,
-   ApiDocsComponent,
-   RoutingComponent,
-  ],
+    declarations: [
+        SingleServiceDocComponent,
+        ApiDocsComponent,
+        RoutingComponent,
+    ],
 })
-export class ApiDocModule { }
+export class ApiDocModule {
+}

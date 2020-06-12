@@ -32,6 +32,9 @@ export class SidenavService {
     private isToggled = false;
     private section = '';
 
+    constructor(private keycloakService: KeycloakService) {
+    }
+
     public toggle(sidenavOpen: boolean): void {
         this.isToggled = sidenavOpen;
         this.toggleChanged.emit(this.isToggled);
@@ -66,6 +69,4 @@ export class SidenavService {
 
         return sections;
     }
-
-    constructor(private keycloakService: KeycloakService) { }
 }

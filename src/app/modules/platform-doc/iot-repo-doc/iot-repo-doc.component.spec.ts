@@ -27,39 +27,39 @@ import {TranslateServiceMock} from '../../../core/services/translate.service.moc
 import {IotRepoDocComponent} from './iot-repo-doc.component';
 
 describe('IotRepoDocComponent', () => {
-  let component: IotRepoDocComponent;
-  let fixture: ComponentFixture<IotRepoDocComponent>;
+    let component: IotRepoDocComponent;
+    let fixture: ComponentFixture<IotRepoDocComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [IotRepoDocComponent],
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            deps: [HttpClient],
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-          },
-        }),
-        MarkdownModule,
-      ],
-      providers: [
-        {provide: TranslateService, useClass: TranslateServiceMock},
-        MarkdownService,
-        MarkedOptions,
-      ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [IotRepoDocComponent],
+            imports: [
+                HttpClientTestingModule,
+                TranslateModule.forRoot({
+                    loader: {
+                        deps: [HttpClient],
+                        provide: TranslateLoader,
+                        useFactory: HttpLoaderFactory,
+                    },
+                }),
+                MarkdownModule,
+            ],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                MarkdownService,
+                MarkedOptions,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(IotRepoDocComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(IotRepoDocComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

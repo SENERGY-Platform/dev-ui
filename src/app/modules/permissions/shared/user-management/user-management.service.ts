@@ -20,18 +20,18 @@ import {Injectable} from '@angular/core';
 import {AuthService} from '../../../../core/services/auth/auth.service';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class UserManagementService {
 
-  constructor(private authService: AuthService) {
-  }
+    constructor(private authService: AuthService) {
+    }
 
-  public loadUsers() {
-    return this.authService.get('/admin/realms/master/users');
-  }
+    public loadUsers() {
+        return this.authService.get('/admin/realms/master/users');
+    }
 
-  public loadRoles() {
-    return this.authService.get('/admin/realms/master/roles');
-  }
+    public loadRoles() {
+        return this.authService.get('/admin/realms/master/roles');
+    }
 }

@@ -17,7 +17,7 @@
   -->
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content>
-    <div class="infos" *ngIf="isEditMode">
+    <div *ngIf="isEditMode" class="infos">
         <div class="client_header">
       <span *ngIf="client.enabled" class="status">
         <span class="status_circle enabled"></span>
@@ -37,50 +37,50 @@
     </div>
     <form [formGroup]="form">
         <mat-form-field class="example-full-width">
-            <input matInput required formControlName="name" placeholder="Client Name">
+            <input formControlName="name" matInput placeholder="Client Name" required>
         </mat-form-field>
 
         <table formArrayName="redirectUris">
             <tr *ngFor="let redirectUri of getRedirectUrisArray().controls; index as i">
                 <td>
                     <mat-form-field class="example-full-width">
-                        <input matInput required [formControlName]="i" placeholder="Redirect URI">
+                        <input [formControlName]="i" matInput placeholder="Redirect URI" required>
                     </mat-form-field>
                 </td>
-                <td class="customButton" *ngIf="redirectUrisLenght() > 1">
+                <td *ngIf="redirectUrisLenght() > 1" class="customButton">
                     <span>
-                        <button mat-icon-button color="accent" (click)="removeRedirectUri(i)" class="right">
+                        <button (click)="removeRedirectUri(i)" class="right" color="accent" mat-icon-button>
                             <mat-icon>delete</mat-icon>
                         </button>
                     </span>
                 </td>
             </tr>
         </table>
-        <button (click)="addRedirectUri()" color="primary" type="submit" mat-stroked-button>Add Redirect URI</button>
+        <button (click)="addRedirectUri()" color="primary" mat-stroked-button type="submit">Add Redirect URI</button>
         <div class="spacer-vertical"></div>
         <table formArrayName="webOrigins">
             <tr *ngFor="let webOrigin of getWebOriginsArray().controls; index as i">
                 <td>
                     <mat-form-field class="example-full-width">
-                        <input matInput required [formControlName]="i" placeholder="CORS Origin">
+                        <input [formControlName]="i" matInput placeholder="CORS Origin" required>
                     </mat-form-field>
                 </td>
-                <td class="customButton" *ngIf="webOriginsLenght() > 1">
-                    <button mat-icon-button color="accent" (click)="removeWebOrigin(i)" class="right">
+                <td *ngIf="webOriginsLenght() > 1" class="customButton">
+                    <button (click)="removeWebOrigin(i)" class="right" color="accent" mat-icon-button>
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>
             </tr>
         </table>
-        <button (click)="addWebOrigins()" color="primary" type="submit" mat-stroked-button>
+        <button (click)="addWebOrigins()" color="primary" mat-stroked-button type="submit">
             Add Access-Control-Allow-Origin
         </button>
     </form>
 </mat-dialog-content>
 <div class="spacer-vertical"></div>
 <mat-dialog-actions class="right">
-    <button class="mat-raised-button color-accent" (click)="close()">Cancel</button>
+    <button (click)="close()" class="mat-raised-button color-accent">Cancel</button>
     <div class="spacer"></div>
-    <button class="mat-raised-button mat-accent" [disabled]="form.invalid"
-            (click)="submit()">{{(isEditMode ? 'Update' : 'Add') | translate}}</button>
+    <button (click)="submit()" [disabled]="form.invalid"
+            class="mat-raised-button mat-accent">{{(isEditMode ? 'Update' : 'Add') | translate}}</button>
 </mat-dialog-actions>

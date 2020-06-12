@@ -26,35 +26,35 @@ import {TranslateServiceMock} from '../../../core/services/translate.service.moc
 import {DashboardDocComponent} from './dashboard-doc.component';
 
 describe('DashboardDocComponent', () => {
-  let component: DashboardDocComponent;
-  let fixture: ComponentFixture<DashboardDocComponent>;
+    let component: DashboardDocComponent;
+    let fixture: ComponentFixture<DashboardDocComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [DashboardDocComponent],
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            deps: [HttpClient],
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-          },
-        })],
-      providers: [
-        {provide: TranslateService, useClass: TranslateServiceMock},
-      ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [DashboardDocComponent],
+            imports: [
+                HttpClientTestingModule,
+                TranslateModule.forRoot({
+                    loader: {
+                        deps: [HttpClient],
+                        provide: TranslateLoader,
+                        useFactory: HttpLoaderFactory,
+                    },
+                })],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardDocComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(DashboardDocComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

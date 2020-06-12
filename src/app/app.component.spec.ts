@@ -35,34 +35,34 @@ import {SwaggerServiceMock} from './core/services/swagger/swagger.service.mock';
 import {TranslateServiceMock} from './core/services/translate.service.mock';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-      ],
-      providers: [
-        {provide: MatDialog, useClass: MatDialogHarness},
-        {provide: TranslateService, useClass: TranslateServiceMock},
-        {provide: AuthService, useClass: AuthServiceMock},
-        {provide: ApiService, useClass: ApiServiceMock},
-        {provide: SwaggerService, useClass: SwaggerServiceMock},
-        KeycloakService,
-      ],
-      imports: [
-        MatCardModule,
-        CoreModule,
-        RouterModule.forRoot([
-          {
-            component: StartComponent,
-            path: '',
-          },
-        ]),
-      ],
-    }).compileComponents();
-  }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                AppComponent,
+            ],
+            providers: [
+                {provide: MatDialog, useClass: MatDialogHarness},
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                {provide: AuthService, useClass: AuthServiceMock},
+                {provide: ApiService, useClass: ApiServiceMock},
+                {provide: SwaggerService, useClass: SwaggerServiceMock},
+                KeycloakService,
+            ],
+            imports: [
+                MatCardModule,
+                CoreModule,
+                RouterModule.forRoot([
+                    {
+                        component: StartComponent,
+                        path: '',
+                    },
+                ]),
+            ],
+        }).compileComponents();
+    }));
+    it('should create the app', async(() => {
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.debugElement.componentInstance;
+        expect(app).toBeTruthy();
+    }));
 });

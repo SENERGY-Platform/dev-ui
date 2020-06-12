@@ -23,15 +23,15 @@ import {AuthServiceMock} from '../../../../core/services/auth/auth.service.mock'
 import {UserManagementService} from './user-management.service';
 
 describe('UserManagementService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {provide: AuthService, useClass: AuthServiceMock},
-      ],
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {provide: AuthService, useClass: AuthServiceMock},
+            ],
+        });
     });
-  });
 
-  it('should be created', inject([UserManagementService], (service: UserManagementService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', inject([UserManagementService], (service: UserManagementService) => {
+        expect(service).toBeTruthy();
+    }));
 });

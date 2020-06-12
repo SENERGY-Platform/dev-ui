@@ -48,7 +48,7 @@ mat-toolbar button {
 }
 
 .md-search__form {
-    margin-left: 1.5%; 
+    margin-left: 1.5%;
 }
 
 mat-toolbar > a {
@@ -78,7 +78,7 @@ input {
 }
 
 mat-nav-list a {
-    border-bottom: .1rem solid rgba(0,0,0,.07);
+    border-bottom: .1rem solid rgba(0, 0, 0, .07);
 }
 
 i {
@@ -86,14 +86,14 @@ i {
 }
 
 .search-focused input {
-    background-color:  white;
+    background-color: white;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
 .search-focused .md-search__icon {
-    color:  black;
+    color: black;
 }
 
 .search-results {
@@ -113,7 +113,7 @@ i {
 
 .search-results-focused {
     display: block;
-    box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.4);
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .4);
     position: absolute;
     top: 3.6rem;
     z-index: 10;
@@ -128,7 +128,7 @@ i {
 .mobile_search_visible {
     display: block;
     position: absolute;
-    top:0;
+    top: 0;
     bottom: 0;
     right: 0;
     left: 0;
@@ -145,14 +145,14 @@ i {
     background: white;
     font-size: 1.8em;
     padding: 0 4.4rem 0 7.2rem;
-    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 90%;
 }
 
 .input_outer {
     display: flex;
     padding: 20px;
-    align-items: center; 
+    align-items: center;
     justify-content: space-around;
 }
 

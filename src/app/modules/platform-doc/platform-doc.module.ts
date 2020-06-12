@@ -33,70 +33,72 @@ import {ProcessDocComponent} from './process-doc/process-doc.component';
 import {SecurityDocComponent} from './security-doc/security-doc.component';
 
 @Component({
-  templateUrl: './routing.component.html',
+    templateUrl: './routing.component.html',
 })
 export class RoutingComponent {
 }
 
 const routes: Routes = [
-  {
-    path: 'doc',
-    component: RoutingComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: 'start',
-        pathMatch: 'full' },
-      {
-        path: 'start',
-        component: GettingStartedComponent,
-      },
-      {
-        path: 'security',
-        component: SecurityDocComponent,
-      },
-      {
-        path: 'iot',
-        component: IotRepoDocComponent,
-      },
-      {
-        path: 'dashboard',
-        component: DashboardDocComponent,
-      },
-      {
-        path: 'process',
-        component: ProcessDocComponent,
-      },
-      {
-        path: 'analytics',
-        component: AnalyticsDocComponent,
-      },
-      {
-        path: 'marketplace',
-        component: MarketplaceDocComponent,
-      },
-    ],
-  },
+    {
+        path: 'doc',
+        component: RoutingComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: 'start',
+                pathMatch: 'full',
+            },
+            {
+                path: 'start',
+                component: GettingStartedComponent,
+            },
+            {
+                path: 'security',
+                component: SecurityDocComponent,
+            },
+            {
+                path: 'iot',
+                component: IotRepoDocComponent,
+            },
+            {
+                path: 'dashboard',
+                component: DashboardDocComponent,
+            },
+            {
+                path: 'process',
+                component: ProcessDocComponent,
+            },
+            {
+                path: 'analytics',
+                component: AnalyticsDocComponent,
+            },
+            {
+                path: 'marketplace',
+                component: MarketplaceDocComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    TranslateModule.forChild(),
-     MarkdownModule.forChild(),
-    HttpClientModule,
-    MarkdownModule.forRoot({ loader: HttpClient }),
-  ],
-  declarations: [
-    AnalyticsDocComponent,
-    IotRepoDocComponent,
-    MarketplaceDocComponent,
-    ProcessDocComponent,
-    SecurityDocComponent,
-    GettingStartedComponent,
-    RoutingComponent,
-    DashboardDocComponent,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        TranslateModule.forChild(),
+        MarkdownModule.forChild(),
+        HttpClientModule,
+        MarkdownModule.forRoot({loader: HttpClient}),
+    ],
+    declarations: [
+        AnalyticsDocComponent,
+        IotRepoDocComponent,
+        MarketplaceDocComponent,
+        ProcessDocComponent,
+        SecurityDocComponent,
+        GettingStartedComponent,
+        RoutingComponent,
+        DashboardDocComponent,
+    ],
 })
-export class PlatformDocModule { }
+export class PlatformDocModule {
+}

@@ -23,15 +23,15 @@ import {inject, TestBed} from '@angular/core/testing';
 import {ApiService} from './api.service';
 
 describe('ApiService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {provide: HttpClient, useClass: HttpClientTestingModule},
-      ],
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {provide: HttpClient, useClass: HttpClientTestingModule},
+            ],
+        });
     });
-  });
 
-  it('should be created', inject([HttpClient], (service: ApiService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', inject([HttpClient], (service: ApiService) => {
+        expect(service).toBeTruthy();
+    }));
 });

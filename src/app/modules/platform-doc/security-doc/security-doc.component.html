@@ -17,68 +17,68 @@
   -->
 
 <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-  <div class="md-sidebar__scrollwrap">
-    <div class="md-sidebar__inner">    
-      <nav class="md-nav md-nav--secondary">
-        <p class="md-nav__title">Inhalt</p>
-        <ul class="md-nav__list" data-md-scrollfix>
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+            <nav class="md-nav md-nav--secondary">
+                <p class="md-nav__title">Inhalt</p>
+                <ul class="md-nav__list" data-md-scrollfix>
 
-        <li class="md-nav__item">
-        <a href="/doc/security#clients" title="Clients" class="md-nav__link">
-        Clients
-        </a>
+                    <li class="md-nav__item">
+                        <a class="md-nav__link" href="/doc/security#clients" title="Clients">
+                            Clients
+                        </a>
 
-        </li>
+                    </li>
 
-        <li class="md-nav__item">
-        <a href="/doc/security#tokens" title="Tokens" class="md-nav__link">
-        Tokens
-        </a>
+                    <li class="md-nav__item">
+                        <a class="md-nav__link" href="/doc/security#tokens" title="Tokens">
+                            Tokens
+                        </a>
 
-        </li>
+                    </li>
 
-        <li class="md-nav__item">
-        <a href="/doc/security#flows" title="Flows" class="md-nav__link">
-        Flows
-        </a>
+                    <li class="md-nav__item">
+                        <a class="md-nav__link" href="/doc/security#flows" title="Flows">
+                            Flows
+                        </a>
 
-        <nav class="md-nav">
-        <ul class="md-nav__list">
+                        <nav class="md-nav">
+                            <ul class="md-nav__list">
 
-        <li class="md-nav__item">
-        <a href="/doc/security#authorization-code-flow" title="Authorization Code Flow" class="md-nav__link">
-        Authorization Code Flow
-        </a>
+                                <li class="md-nav__item">
+                                    <a class="md-nav__link" href="/doc/security#authorization-code-flow"
+                                       title="Authorization Code Flow">
+                                        Authorization Code Flow
+                                    </a>
 
-        </li>
+                                </li>
 
-        <li class="md-nav__item">
-        <a href="/doc/security#ressource-owner-password-flow" title="Ressource Owner Password Flow" class="md-nav__link">
-        Ressource Owner Password Flow
-        </a>
+                                <li class="md-nav__item">
+                                    <a class="md-nav__link"
+                                       href="/doc/security#ressource-owner-password-flow"
+                                       title="Ressource Owner Password Flow">
+                                        Ressource Owner Password Flow
+                                    </a>
 
-        </li>
+                                </li>
 
-        </ul>
-        </nav>
+                            </ul>
+                        </nav>
 
-        </li>
-
-
+                    </li>
 
 
-
-        </ul>
-      </nav>
+                </ul>
+            </nav>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="md-content doc">
-  <article class="md-content__inner md-typeset">
-    <markdown class="md-typeset" [src]="path"></markdown>
-    <div id="swagger" class="swagger-simple"></div>
-  </article>
+    <article class="md-content__inner md-typeset">
+        <markdown [src]="path" class="md-typeset"></markdown>
+        <div class="swagger-simple" id="swagger"></div>
+    </article>
 </div>
 
 

@@ -16,9 +16,10 @@
  *
  */
 
-.outer{
+.outer {
     margin: 50px 10%;
 }
+
 .boxes {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -34,12 +35,12 @@
 
 .boxes i {
     font-size: 5rem;
-    margin-right:10%;
-} 
+    margin-right: 10%;
+}
 
-  
-  @media (max-width: 800px) {
+
+@media (max-width: 800px) {
     .boxes {
         grid-template-columns: 1fr;
     }
-  }
+}

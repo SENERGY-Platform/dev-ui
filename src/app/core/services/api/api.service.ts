@@ -26,34 +26,34 @@ declare var KONG_URL: string;
 
 @Injectable()
 export class ApiService {
-  public platformUrl: string;
+    public platformUrl: string;
 
-  constructor(private httpClient: HttpClient) {
-    if (environment.production) {
-      this.platformUrl = KONG_URL;
-    } else {
-      this.platformUrl = environment.kong;
+    constructor(private httpClient: HttpClient) {
+        if (environment.production) {
+            this.platformUrl = KONG_URL;
+        } else {
+            this.platformUrl = environment.kong;
+        }
     }
-  }
 
-  public get(path: string): Observable<unknown> {
-    return this.httpClient.get(this.platformUrl + path);
-  }
+    public get(path: string): Observable<unknown> {
+        return this.httpClient.get(this.platformUrl + path);
+    }
 
-  public post(path: string, payload: any): Observable<unknown> {
-    return this.httpClient.post(this.platformUrl + path, payload);
-  }
+    public post(path: string, payload: any): Observable<unknown> {
+        return this.httpClient.post(this.platformUrl + path, payload);
+    }
 
-  public put(path: string, payload: any): Observable<unknown> {
-    return this.httpClient.put(this.platformUrl + path, payload);
-  }
+    public put(path: string, payload: any): Observable<unknown> {
+        return this.httpClient.put(this.platformUrl + path, payload);
+    }
 
-  public delete(path: string): Observable<unknown> {
-    return this.httpClient.delete(this.platformUrl  + path);
+    public delete(path: string): Observable<unknown> {
+        return this.httpClient.delete(this.platformUrl + path);
 
-  }
+    }
 
-  public patch(path: string, payload: any): Observable<unknown> {
-    return this.httpClient.patch(this.platformUrl + path, payload);
-  }
+    public patch(path: string, payload: any): Observable<unknown> {
+        return this.httpClient.patch(this.platformUrl + path, payload);
+    }
 }

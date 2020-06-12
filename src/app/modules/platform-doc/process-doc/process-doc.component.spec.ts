@@ -27,39 +27,39 @@ import {TranslateServiceMock} from '../../../core/services/translate.service.moc
 import {ProcessDocComponent} from './process-doc.component';
 
 describe('ProcessDocComponent', () => {
-  let component: ProcessDocComponent;
-  let fixture: ComponentFixture<ProcessDocComponent>;
+    let component: ProcessDocComponent;
+    let fixture: ComponentFixture<ProcessDocComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ProcessDocComponent],
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            deps: [HttpClient],
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-          },
-        }),
-        MarkdownModule,
-      ],
-      providers: [
-        {provide: TranslateService, useClass: TranslateServiceMock},
-        MarkdownService,
-        MarkedOptions,
-      ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ProcessDocComponent],
+            imports: [
+                HttpClientTestingModule,
+                TranslateModule.forRoot({
+                    loader: {
+                        deps: [HttpClient],
+                        provide: TranslateLoader,
+                        useFactory: HttpLoaderFactory,
+                    },
+                }),
+                MarkdownModule,
+            ],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                MarkdownService,
+                MarkedOptions,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ProcessDocComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ProcessDocComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

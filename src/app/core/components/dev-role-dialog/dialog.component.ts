@@ -34,4 +34,4 @@ export class DialogComponent {
         window.location.href = 'https://ui.sepl.infai.org';
     }
 
-  }
+}

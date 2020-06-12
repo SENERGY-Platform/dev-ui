@@ -32,50 +32,49 @@ import {AddEditClientComponent} from './add-edit-client/add-edit-client.componen
 import {ViewClientsComponent} from './view-clients/view-clients.component';
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
 })
 export class RoutingComponent {
 }
 
 const routes: Routes = [
-  {
-    path: 'clients',
-    component: RoutingComponent,
-    children: [
-      {
-        path: ':id',
-        component: AddEditClientComponent,
-      },
-      {
-        path: '',
-        component: ViewClientsComponent,
-      },
-    ],
-  },
+    {
+        path: 'clients',
+        component: RoutingComponent,
+        children: [
+            {
+                path: ':id',
+                component: AddEditClientComponent,
+            },
+            {
+                path: '',
+                component: ViewClientsComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    MatIconModule,
-    MatCardModule,
-    TranslateModule.forChild(),
-    FormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatInputModule,
-    CoreModule,
-  ],
-  declarations: [
-    AddEditClientComponent,
-    RoutingComponent,
-    ViewClientsComponent,
-  ],
-  entryComponents: [
-
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        MatIconModule,
+        MatCardModule,
+        TranslateModule.forChild(),
+        FormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        CoreModule,
+    ],
+    declarations: [
+        AddEditClientComponent,
+        RoutingComponent,
+        ViewClientsComponent,
+    ],
+    entryComponents: [],
 })
-export class ClientsModule { }
+export class ClientsModule {
+}

@@ -57,6 +57,14 @@ export class PermissionsEditComponent implements OnInit {
         user: this.route.snapshot.paramMap.get('subject'),
         actions: this.fb.array([]),
     });
+    public methods = new FormGroup({
+        get: new FormControl(),
+        post: new FormControl(),
+        patch: new FormControl(),
+        delete: new FormControl(),
+        put: new FormControl(),
+        head: new FormControl(),
+    });
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public permission: PermissionModel,
@@ -86,15 +94,6 @@ export class PermissionsEditComponent implements OnInit {
             this.title = 'Add Permission';
         }
     }
-
-    public methods = new FormGroup({
-        get: new FormControl(),
-        post: new FormControl(),
-        patch: new FormControl(),
-        delete: new FormControl(),
-        put: new FormControl(),
-        head: new FormControl(),
-    });
 
     public ngOnInit() {
         try {
@@ -178,12 +177,6 @@ export class PermissionsEditComponent implements OnInit {
         }
     }
 
-    // autocomplete filter
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
-    }
-
     public onChange(event) {
         this.btnDisable = event !== 'subject';
     }
@@ -191,5 +184,11 @@ export class PermissionsEditComponent implements OnInit {
     public intbtnDisable() {
         const persons = this.roles.find((x) => x.name === this.permission.subject);
         this.btnDisable = persons === undefined;
+    }
+
+    // autocomplete filter
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
     }
 }

@@ -20,22 +20,22 @@ import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css'],
+    selector: 'app-settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent implements OnInit {
-  public language: string;
+    public language: string;
 
-  constructor(private translateService: TranslateService) {
-  }
+    constructor(private translateService: TranslateService) {
+    }
 
-  public ngOnInit() {
-  }
+    public ngOnInit() {
+    }
 
-  public setLanguage() {
-    console.log(this.language);
-    this.translateService.use(this.language);
-  }
+    public setLanguage() {
+        console.log(this.language);
+        this.translateService.use(this.language);
+    }
 
 }

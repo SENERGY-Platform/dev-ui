@@ -22,51 +22,51 @@ import {ClientModel} from '../shared/client.model';
 import {ClientService} from '../shared/client.service';
 
 @Component({
-  selector: 'app-view-clients',
-  templateUrl: './view-clients.component.html',
-  styleUrls: ['./view-clients.component.css'],
+    selector: 'app-view-clients',
+    templateUrl: './view-clients.component.html',
+    styleUrls: ['./view-clients.component.css'],
 })
 
 export class ViewClientsComponent implements OnInit {
-  public clients: ClientModel[];
-  public ready = false;
+    public clients: ClientModel[];
+    public ready = false;
 
-  constructor(private apiService: ApiService, private clientService: ClientService) {
-  }
+    constructor(private apiService: ApiService, private clientService: ClientService) {
+    }
 
-  public ngOnInit() {
-    this.loadClients();
-  }
-
-  public loadClients() {
-    this.ready = false;
-    this.clients = [];
-    this.apiService.get('/clients/clients').subscribe((clients) => {
-      this.clients = clients as ClientModel[];
-      this.ready = true;
-    });
-  }
-
-  public deleteClient(clientId) {
-    this.apiService.delete('/clients/client/' + clientId).subscribe(() => {
-      this.loadClients();
-    });
-  }
-
-  public addClient() {
-    this.clientService.openAddClientDialog().subscribe((b) => {
-      if (b) {
+    public ngOnInit() {
         this.loadClients();
-      }
-    });
-  }
+    }
 
-  public viewClient(client: ClientModel) {
-    this.clientService.openViewClientDialog(JSON.parse(JSON.stringify(client))) // Work on copy
-        .subscribe((b) => {
-          if (b) {
-            this.loadClients();
-          }
+    public loadClients() {
+        this.ready = false;
+        this.clients = [];
+        this.apiService.get('/clients/clients').subscribe((clients) => {
+            this.clients = clients as ClientModel[];
+            this.ready = true;
         });
-  }
+    }
+
+    public deleteClient(clientId) {
+        this.apiService.delete('/clients/client/' + clientId).subscribe(() => {
+            this.loadClients();
+        });
+    }
+
+    public addClient() {
+        this.clientService.openAddClientDialog().subscribe((b) => {
+            if (b) {
+                this.loadClients();
+            }
+        });
+    }
+
+    public viewClient(client: ClientModel) {
+        this.clientService.openViewClientDialog(JSON.parse(JSON.stringify(client))) // Work on copy
+            .subscribe((b) => {
+                if (b) {
+                    this.loadClients();
+                }
+            });
+    }
 }

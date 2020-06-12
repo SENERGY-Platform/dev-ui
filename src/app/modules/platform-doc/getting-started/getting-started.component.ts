@@ -20,15 +20,15 @@ import {Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-getting-started',
-  templateUrl: './getting-started.component.html',
-  styleUrls: ['./getting-started.component.css'],
+    selector: 'app-getting-started',
+    templateUrl: './getting-started.component.html',
+    styleUrls: ['./getting-started.component.css'],
 })
 export class GettingStartedComponent {
-  public path: string;
+    public path: string;
 
-  constructor(private translate: TranslateService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/gettingstarted.md';
-  }
+    constructor(private translate: TranslateService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/gettingstarted.md';
+    }
 }

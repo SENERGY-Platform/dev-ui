@@ -25,20 +25,21 @@ import {TranslateModule} from '@ngx-translate/core';
 import {SettingsComponent} from './settings/settings.component';
 
 const routes: Routes = [
-  {
-    path: 'settings',
-    component: SettingsComponent,
-  },
+    {
+        path: 'settings',
+        component: SettingsComponent,
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    TranslateModule.forChild(),
-    RouterModule.forChild(routes),
-    MatSelectModule,
-  ],
-  declarations: [SettingsComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        TranslateModule.forChild(),
+        RouterModule.forChild(routes),
+        MatSelectModule,
+    ],
+    declarations: [SettingsComponent],
 })
-export class SettingsModule { }
+export class SettingsModule {
+}

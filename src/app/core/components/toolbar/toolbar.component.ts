@@ -95,43 +95,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         this.initDocs();
     }
 
-    private observeSearch() {
-        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
-        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
-            this.inputFocused = this.searchQuery.value !== '';
-
-            const newSwaggerResult: ResultModel[] = [];
-            const newDocsResult: ResultModel[] = [];
-
-            const query = this.searchQuery.value;
-
-            this.swagger.forEach((api) => {
-                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
-                    newSwaggerResult.push({
-                        title: api.info.title,
-                        url: '/api/' + api.info.title,
-                        content: api.info.description,
-                    });
-                }
-            });
-
-            this.docs.forEach((doc) => {
-                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
-                    matches.forEach(((value) => {
-                        const result: ResultModel = {} as ResultModel;
-                        result.title = doc.title;
-                        result.content = value;
-                        result.url = '/doc/' + doc.redirectUrl;
-                        newDocsResult.push(result);
-                    }));
-                });
-            });
-
-            this.swaggerSearchResult = newSwaggerResult;
-            this.docsSearchResult = newDocsResult;
-        });
-    }
-
     public queryOccursInMarkdownHeaders(query, header1, header2, header3): [any[], any[], any[]] {
         const regex = new RegExp(query, 'gi');
         let matches1: any[];
@@ -185,6 +148,43 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
     public resetSearchText() {
         this.searchQuery.patchValue('');
+    }
+
+    private observeSearch() {
+        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
+        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
+            this.inputFocused = this.searchQuery.value !== '';
+
+            const newSwaggerResult: ResultModel[] = [];
+            const newDocsResult: ResultModel[] = [];
+
+            const query = this.searchQuery.value;
+
+            this.swagger.forEach((api) => {
+                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
+                    newSwaggerResult.push({
+                        title: api.info.title,
+                        url: '/api/' + api.info.title,
+                        content: api.info.description,
+                    });
+                }
+            });
+
+            this.docs.forEach((doc) => {
+                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
+                    matches.forEach(((value) => {
+                        const result: ResultModel = {} as ResultModel;
+                        result.title = doc.title;
+                        result.content = value;
+                        result.url = '/doc/' + doc.redirectUrl;
+                        newDocsResult.push(result);
+                    }));
+                });
+            });
+
+            this.swaggerSearchResult = newSwaggerResult;
+            this.docsSearchResult = newDocsResult;
+        });
     }
 
     private checkIfDocIsActive() {

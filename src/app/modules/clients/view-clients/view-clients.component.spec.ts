@@ -13,34 +13,34 @@ import {ClientServiceMock} from '../shared/client.service.mock';
 import {ViewClientsComponent} from './view-clients.component';
 
 describe('ViewClientsComponent', () => {
-  let component: ViewClientsComponent;
-  let fixture: ComponentFixture<ViewClientsComponent>;
+    let component: ViewClientsComponent;
+    let fixture: ComponentFixture<ViewClientsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ViewClientsComponent],
-      providers: [
-        {provide: TranslateService, useClass: TranslateServiceMock},
-        FormBuilder,
-        {provide: ApiService, useClass: ApiServiceMock},
-        {provide: ClientService, useClass: ClientServiceMock},
-      ],
-      imports: [
-        MatCardModule,
-        MatIconModule,
-        CoreModule,
-      ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ViewClientsComponent],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                FormBuilder,
+                {provide: ApiService, useClass: ApiServiceMock},
+                {provide: ClientService, useClass: ClientServiceMock},
+            ],
+            imports: [
+                MatCardModule,
+                MatIconModule,
+                CoreModule,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ViewClientsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ViewClientsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

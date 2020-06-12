@@ -30,16 +30,16 @@ import {PermissionImportModel} from './permissions-dialog-import.model';
 })
 export class PermissionsDialogImportComponent {
 
-    constructor(public dialogRef: MatDialogRef<PermissionsDialogImportComponent>,
-                private snackBar: MatSnackBar) {
-    }
-
     @ViewChild('fileInput') public fileInput: HTMLInputElement;
     public overwrite = new FormControl(undefined, Validators.required);
     public policies: PermissionModel[] = [];
     public fileValid = false;
     public selections: boolean[] = [];
     public isAllSelected = false;
+
+    constructor(public dialogRef: MatDialogRef<PermissionsDialogImportComponent>,
+                private snackBar: MatSnackBar) {
+    }
 
     public yes() {
         const imports: any[] = [];

@@ -26,10 +26,11 @@ import {PermissionApiModel, permissionApiToPermission, PermissionModel, permissi
 })
 export class LadonService {
 
+    public baseUrl: string;
+
     constructor(private apiService: ApiService) {
         this.baseUrl = '/ladon';
     }
-    public baseUrl: string;
 
     private static handlePolicies(policies: PermissionModel[]): PermissionApiModel[] {
         const apiPolicies: PermissionApiModel[] = [];
