@@ -16,47 +16,46 @@
  *
  */
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {ApplicationRef, DoBootstrap, NgModule} from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {AppComponent} from './app.component';
+import {DialogComponent} from './core/components/dev-role-dialog/dialog.component';
 import {SettingsModule} from './core/components/settings/settings.module';
 import {StartComponent} from './core/components/start/start.component';
 import {CoreModule} from './core/core.module';
+
+import {ApiService} from './core/services/api/api.service';
 import {init} from './core/services/auth/auth-init';
+import {AuthService} from './core/services/auth/auth.service';
+import {SwaggerService} from './core/services/swagger/swagger.service';
 
-import { ApiDocModule } from './modules/api-doc/api-doc.module';
-import { ClientsModule } from './modules/clients/clients.module';
-import { PermissionsModule } from './modules/permissions/permissions.module';
-import { PlatformDocModule } from './modules/platform-doc/platform-doc.module';
-
-import { ApiService } from './core/services/api/api.service';
-import { AuthService } from './core/services/auth/auth.service';
-import { SwaggerService } from './core/services/swagger/swagger.service';
-
-import { FlexLayoutModule } from '@angular/flex-layout';
-import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import { AppComponent } from './app.component';
-import { DialogComponent } from './core/components/dev-role-dialog/dialog.component';
+import {ApiDocModule} from './modules/api-doc/api-doc.module';
+import {ClientsModule} from './modules/clients/clients.module';
 import {PermissionsDialogDeleteComponent} from './modules/permissions/permissions-dialog-delete/permissions-dialog-delete.component';
+import {PermissionsModule} from './modules/permissions/permissions.module';
+import {PlatformDocModule} from './modules/platform-doc/platform-doc.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+    return new TranslateHttpLoader(http);
 }
 
 const appRoutes: Routes = [
-  {
-    component: StartComponent,
-    path: '',
-  },
+    {
+        component: StartComponent,
+        path: '',
+    },
 ];
 
 const keycloakService = new KeycloakService();

@@ -16,27 +16,27 @@
  *
  */
 
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AnalyticsDocComponent } from './analytics-doc/analytics-doc.component';
-import { IotRepoDocComponent } from './iot-repo-doc/iot-repo-doc.component';
-import { MarketplaceDocComponent } from './marketplace-doc/marketplace-doc.component';
-import { ProcessDocComponent } from './process-doc/process-doc.component';
-import { SecurityDocComponent } from './security-doc/security-doc.component';
+import {CommonModule} from '@angular/common';
 
-import { HttpClientModule} from '@angular/common/http';
-import { HttpClient} from '@angular/common/http';
-import { MarkdownModule } from 'ngx-markdown';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {Component, NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
+import {MarkdownModule} from 'ngx-markdown';
+import {AnalyticsDocComponent} from './analytics-doc/analytics-doc.component';
 import {DashboardDocComponent} from './dashboard-doc/dashboard-doc.component';
-import { GettingStartedComponent } from './getting-started/getting-started.component';
+import {GettingStartedComponent} from './getting-started/getting-started.component';
+import {IotRepoDocComponent} from './iot-repo-doc/iot-repo-doc.component';
+import {MarketplaceDocComponent} from './marketplace-doc/marketplace-doc.component';
+import {ProcessDocComponent} from './process-doc/process-doc.component';
+import {SecurityDocComponent} from './security-doc/security-doc.component';
 
 @Component({
   templateUrl: './routing.component.html',
 })
-export class RoutingComponent {}
+export class RoutingComponent {
+}
 
 const routes: Routes = [
   {

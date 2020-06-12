@@ -16,9 +16,9 @@
  * /
  */
 
-import { inject, TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { KongService } from './kong.service';
+import {KongService} from './kong.service';
 
 describe('KongService', () => {
   beforeEach(() => {

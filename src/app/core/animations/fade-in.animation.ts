@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    animate,
-    group,
-    query,
-    style,
-    transition,
-    trigger,
-} from '@angular/animations';
+import {animate, group, query, style, transition, trigger} from '@angular/animations';
 
 export const fadeInAnimation = trigger('fadeInAnimation', [
     transition('* => *, :enter', [

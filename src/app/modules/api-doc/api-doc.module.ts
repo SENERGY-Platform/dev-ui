@@ -16,40 +16,41 @@
  *
  */
 
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component, NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
+
+import {FormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {CoreModule} from '../../core/core.module';
-import { SingleServiceDocComponent } from './single-service-doc/single-service-doc.component';
-
-import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { ApiDocsComponent } from './api-docs/api-docs.component';
+import {ApiDocsComponent} from './api-docs/api-docs.component';
+import {SingleServiceDocComponent} from './single-service-doc/single-service-doc.component';
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
 })
-export class RoutingComponent {}
+export class RoutingComponent {
+}
 
 const routes: Routes = [
-  {
-    path: 'api',
-    component: RoutingComponent,
-    children: [{
-      path: ':id',
-      component: SingleServiceDocComponent,
-    },
     {
-      path: '',
-      component: ApiDocsComponent,
+        path: 'api',
+        component: RoutingComponent,
+        children: [{
+            path: ':id',
+            component: SingleServiceDocComponent,
+        },
+            {
+                path: '',
+                component: ApiDocsComponent,
+            },
+        ],
     },
-    ],
-  },
 ];
 @NgModule({
     imports: [

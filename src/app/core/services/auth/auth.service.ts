@@ -16,19 +16,17 @@
  *
  */
 
-import {
-  HttpClient,
-  HttpHeaders,
-} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
-import { environment } from '../../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 
 declare var KEYCLOAK_URL: any;
 
 @Injectable()
 export class AuthService {
-  constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {}
+  constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {
+  }
 
   public userHasRole(role) {
     if (!environment.loginRequired) {

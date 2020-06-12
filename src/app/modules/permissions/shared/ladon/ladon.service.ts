@@ -16,9 +16,7 @@
  *
  */
 
-import {
-    Injectable,
-} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../core/services/api/api.service';
 import {PermissionApiModel, permissionApiToPermission, PermissionModel, permissionToPermissionApi} from '../permission.model';

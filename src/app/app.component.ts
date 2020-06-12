@@ -17,17 +17,17 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { DialogComponent } from './core/components/dev-role-dialog/dialog.component';
-import { ApiService } from './core/services/api/api.service';
-import { AuthService } from './core/services/auth/auth.service';
-import { ResponsiveService } from './core/services/responsive.service';
+import {MatDialog} from '@angular/material/dialog';
+import {TranslateService} from '@ngx-translate/core';
+import {DialogComponent} from './core/components/dev-role-dialog/dialog.component';
+import {ApiService} from './core/services/api/api.service';
+import {AuthService} from './core/services/auth/auth.service';
+import {ResponsiveService} from './core/services/responsive.service';
 
 @Component({
-  selector: 'app-root',
-  styleUrls: ['./app.component.css'],
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    styleUrls: ['./app.component.css'],
+    templateUrl: './app.component.html',
 })
 
 export class AppComponent implements OnInit {

@@ -16,11 +16,11 @@
  *
  */
 
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
-import { AuthService } from '../../../core/services/auth/auth.service';
-import { SwaggerService } from '../../../core/services/swagger/swagger.service';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
+import {AuthService} from '../../../core/services/auth/auth.service';
+import {SwaggerService} from '../../../core/services/swagger/swagger.service';
 
 @Component({
   selector: 'app-analytics-doc',

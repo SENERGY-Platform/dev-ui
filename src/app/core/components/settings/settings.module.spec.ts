@@ -16,7 +16,7 @@
  * /
  */
 
-import { SettingsModule } from './settings.module';
+import {SettingsModule} from './settings.module';
 
 describe('SettingsModule', () => {
   let settingsModule: SettingsModule;

@@ -16,8 +16,8 @@
  *
  */
 
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnInit} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
@@ -27,7 +27,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class SettingsComponent implements OnInit {
   public language: string;
 
-  constructor(private translateService: TranslateService) { }
+  constructor(private translateService: TranslateService) {
+  }
 
   public ngOnInit() {
   }
