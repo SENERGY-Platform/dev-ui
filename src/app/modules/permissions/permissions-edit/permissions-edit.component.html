@@ -18,10 +18,10 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div *ngIf="userIsAdmin" mat-dialog-content>
     <div>
-        <mat-radio-button class="radio-button" [checked]="!btnDisable" (click)="onChange('subject')">
+        <mat-radio-button (click)="onChange('subject')" [checked]="!btnDisable" class="radio-button">
             Role
         </mat-radio-button>
-        <mat-radio-button class="radio-button" [checked]="btnDisable" (click)="onChange('role')">
+        <mat-radio-button (click)="onChange('role')" [checked]="btnDisable" class="radio-button">
             User
         </mat-radio-button>
     </div>
@@ -41,7 +41,7 @@
             </mat-select>
         </mat-form-field>
     </div>
-    <div class="rule"  [formGroup]="methods">
+    <div [formGroup]="methods" class="rule">
         <div class="action_checkboxes">
             <mat-checkbox formControlName="get">GET</mat-checkbox>
             <mat-checkbox formControlName="post">POST</mat-checkbox>
@@ -53,7 +53,9 @@
     </div>
     <div>
         <mat-form-field class="endpoint">
-            <input type="text" placeholder="Endpoint" aria-label="Number" matInput [formControl]="endpointControl" [matAutocomplete]="auto">
+            <input [formControl]="endpointControl" [matAutocomplete]="auto" aria-label="Number" matInput
+                   placeholder="Endpoint"
+                   type="text">
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let uri of filteredOptions | async" [value]="uri">
                     {{uri}}
@@ -63,7 +65,7 @@
     </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button color="primary" (click)="yes()"><b>Speichern</b></button>
-    <button mat-button color="primary" (click)="no()"><b>Abbrechen</b></button>
+    <button (click)="yes()" color="primary" mat-button><b>Speichern</b></button>
+    <button (click)="no()" color="primary" mat-button><b>Abbrechen</b></button>
 </div>
 

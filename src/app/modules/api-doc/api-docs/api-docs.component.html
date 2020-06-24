@@ -17,32 +17,34 @@
   -->
 
 <div class="outer" fxLayout="column">
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 
-  <mat-card class="search" [hidden]="!ready">
-      <mat-icon class="material-icons">search</mat-icon>
-      <mat-form-field>
-          <input type="text" matInput (keyup)="search()" [(ngModel)]="query" [placeholder]="searchPlaceholder">
+    <mat-card [hidden]="!ready" class="search">
+        <mat-icon class="material-icons">search</mat-icon>
+        <mat-form-field>
+            <input (keyup)="search()" [(ngModel)]="query" [placeholder]="searchPlaceholder" matInput type="text">
         </mat-form-field>
-  </mat-card>
-
- <div class="card-container" fxFlex="auto" [hidden]="!ready">
-  <div class="service-container" [hidden]="!ready" fxFlex="auto">
-    <mat-card [routerLink]="['/api/', element.info.title]" class="hover-mat-card entry-card api-card" *ngFor="let element of swaggerListShown; let i = index">
-      <mat-card-header>
-        <mat-card-title>{{ element.info.title }}</mat-card-title>
-        <mat-card-subtitle>{{ element.info.version }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="api-description">
-          {{ element.info.description }}
-        </p>
-      </mat-card-content>
     </mat-card>
-  </div>
- </div>
 
-  <app-spinner [show]="!ready"></app-spinner>
+    <div [hidden]="!ready" class="card-container" fxFlex="auto">
+        <div [hidden]="!ready" class="service-container" fxFlex="auto">
+            <mat-card *ngFor="let element of swaggerListShown; let i = index"
+                      [routerLink]="['/api/', element.info.title]"
+                      class="hover-mat-card entry-card api-card">
+                <mat-card-header>
+                    <mat-card-title>{{ element.info.title }}</mat-card-title>
+                    <mat-card-subtitle>{{ element.info.version }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p class="api-description">
+                        {{ element.info.description }}
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+    <app-spinner [show]="!ready"></app-spinner>
 </div>
 
 

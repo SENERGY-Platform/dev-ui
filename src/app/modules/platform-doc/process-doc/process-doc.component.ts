@@ -16,19 +16,19 @@
  *
  */
 
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-process-doc',
-  templateUrl: './process-doc.component.html',
-  styleUrls: ['./process-doc.component.css'],
+    selector: 'app-process-doc',
+    templateUrl: './process-doc.component.html',
+    styleUrls: ['./process-doc.component.css'],
 })
 export class ProcessDocComponent {
-  public path: string;
+    public path: string;
 
-  constructor(private translate: TranslateService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/process.md';
-  }
+    constructor(private translate: TranslateService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/process.md';
+    }
 }

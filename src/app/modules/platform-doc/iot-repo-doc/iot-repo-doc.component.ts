@@ -16,19 +16,19 @@
  *
  */
 
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-iot-repo-doc',
-  templateUrl: './iot-repo-doc.component.html',
-  styleUrls: ['./iot-repo-doc.component.css'],
+    selector: 'app-iot-repo-doc',
+    templateUrl: './iot-repo-doc.component.html',
+    styleUrls: ['./iot-repo-doc.component.css'],
 })
 export class IotRepoDocComponent {
-  public path: string;
+    public path: string;
 
-  constructor(private translate: TranslateService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/iot.md';
-  }
+    constructor(private translate: TranslateService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/iot.md';
+    }
 }

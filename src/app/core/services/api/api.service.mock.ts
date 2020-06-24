@@ -16,34 +16,32 @@
  *
  */
 
-.mat-raised-button,
-.control_buttons {
-    color: white;
-}
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 
-.radio {
-    margin-top: 10px;
-    margin-bottom: 30px;
-}
+@Injectable()
+export class ApiServiceMock {
 
-.radio-but {
-    margin-right: 10px;
-}
+    constructor() {
+    }
 
-.medium-text {
-    font-size: medium;
-}
+    public get(path: string): Observable<unknown> {
+        return of(null);
+    }
 
-.warn-text {
-    color: #F19F4D;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+    public post(path: string, payload: any): Observable<unknown> {
+        return of(null);
+    }
 
-.mat-column-select, .mat-column-GET, .mat-column-POST, .mat-column-PUT,
-.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
-    max-width: 60px;
-}
+    public put(path: string, payload: any): Observable<unknown> {
+        return of(null);
+    }
 
-.mat-column-subject {
-    max-width: 120px;
+    public delete(path: string): Observable<unknown> {
+        return of(null);
+    }
+
+    public patch(path: string, payload: any): Observable<unknown> {
+        return of(null);
+    }
 }

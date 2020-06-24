@@ -16,29 +16,30 @@
  *
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { SettingsComponent } from './settings/settings.component';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
+import {SettingsComponent} from './settings/settings.component';
 
 const routes: Routes = [
-  {
-    path: 'settings',
-    component: SettingsComponent,
-  },
+    {
+        path: 'settings',
+        component: SettingsComponent,
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    TranslateModule.forChild(),
-    RouterModule.forChild(routes),
-    MatSelectModule,
-  ],
-  declarations: [SettingsComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        TranslateModule.forChild(),
+        RouterModule.forChild(routes),
+        MatSelectModule,
+    ],
+    declarations: [SettingsComponent],
 })
-export class SettingsModule { }
+export class SettingsModule {
+}

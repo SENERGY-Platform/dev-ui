@@ -16,9 +16,7 @@
  *
  */
 
-import {
-    Injectable,
-} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../core/services/api/api.service';
 import {PermissionApiModel, permissionApiToPermission, PermissionModel, permissionToPermissionApi} from '../permission.model';
@@ -28,10 +26,11 @@ import {PermissionApiModel, permissionApiToPermission, PermissionModel, permissi
 })
 export class LadonService {
 
+    public baseUrl: string;
+
     constructor(private apiService: ApiService) {
         this.baseUrl = '/ladon';
     }
-    public baseUrl: string;
 
     private static handlePolicies(policies: PermissionModel[]): PermissionApiModel[] {
         const apiPolicies: PermissionApiModel[] = [];

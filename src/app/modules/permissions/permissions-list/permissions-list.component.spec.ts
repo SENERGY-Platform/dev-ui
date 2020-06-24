@@ -16,28 +16,54 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialog} from '@angular/material/dialog';
+import {MatDialogHarness} from '@angular/material/dialog/testing';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import {CoreModule} from '../../../core/core.module';
+import {AuthService} from '../../../core/services/auth/auth.service';
+import {AuthServiceMock} from '../../../core/services/auth/auth.service.mock';
+import {LadonService} from '../shared/ladon/ladon.service';
+import {LadonServiceMock} from '../shared/ladon/ladon.service.mock';
+import {PermissionsListComponent} from './permissions-list.component';
 
-import { ListComponent } from './list.component';
+describe('PermissionsListComponent', () => {
+    let component: PermissionsListComponent;
+    let fixture: ComponentFixture<PermissionsListComponent>;
 
-describe('ListComponent', () => {
-  let component: ListComponent;
-  let fixture: ComponentFixture<ListComponent>;
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [PermissionsListComponent],
+            providers: [
+                {provide: AuthService, useClass: AuthServiceMock},
+                {provide: LadonService, useClass: LadonServiceMock},
+                {provide: MatDialog, useClass: MatDialogHarness},
+            ],
+            imports: [
+                MatCardModule,
+                MatCheckboxModule,
+                MatIconModule,
+                MatTableModule,
+                CoreModule,
+                FormsModule,
+                ReactiveFormsModule,
+                MatInputModule,
+            ],
+        }).compileComponents();
+    }));
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ListComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(() => {
+        fixture = TestBed.createComponent(PermissionsListComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

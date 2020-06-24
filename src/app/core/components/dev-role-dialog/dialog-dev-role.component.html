@@ -18,9 +18,9 @@
 
 <h1 mat-dialog-title>Developer Portal</h1>
 <div mat-dialog-content>
-  <p>If you want to use the developer portal, you have to be a developer.</p>
+    <p>If you want to use the developer portal, you have to be a developer.</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No thanks, take me to the UI</button>
-  <button mat-button [mat-dialog-close] cdkFocusInitial>Be a developer</button>
+    <button (click)="onNoClick()" mat-button>No thanks, take me to the UI</button>
+    <button [mat-dialog-close] cdkFocusInitial mat-button>Be a developer</button>
 </div>

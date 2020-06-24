@@ -17,46 +17,47 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { DialogComponent } from './core/components/dev-role-dialog/dialog.component';
-import { ApiService } from './core/services/api/api.service';
-import { AuthService } from './core/services/auth/auth.service';
-import { ResponsiveService } from './core/services/responsive.service';
+import {MatDialog} from '@angular/material/dialog';
+import {TranslateService} from '@ngx-translate/core';
+import {DialogComponent} from './core/components/dev-role-dialog/dialog.component';
+import {ApiService} from './core/services/api/api.service';
+import {AuthService} from './core/services/auth/auth.service';
+import {ResponsiveService} from './core/services/responsive.service';
 
 @Component({
-  selector: 'app-root',
-  styleUrls: ['./app.component.css'],
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    styleUrls: ['./app.component.css'],
+    templateUrl: './app.component.html',
 })
 
 export class AppComponent implements OnInit {
 
     public title = 'app';
     public userIsAdmin = false;
-    public userIsDev = false ;
+    public userIsDev = false;
 
     constructor(
-      public dialog: MatDialog,
-      translate: TranslateService,
-      private authService: AuthService,
-      private responsiveService: ResponsiveService,
-      private apiService: ApiService) {
+        public dialog: MatDialog,
+        translate: TranslateService,
+        private authService: AuthService,
+        private responsiveService: ResponsiveService,
+        private apiService: ApiService) {
 
-      translate.setDefaultLang('en');
+        translate.setDefaultLang('en');
 
-      const userProfile = this.authService.getUserProfile();
-      if (userProfile) {
-          translate.use(userProfile.attributes.locale[0]);
-      }
+        const userProfile = this.authService.getUserProfile();
+        if (userProfile) {
+            translate.use(userProfile.attributes.locale[0]);
+        }
 
-  }
+    }
 
     public ngOnInit() {
-    this.responsiveService.observeMqAlias().subscribe(() => {});
-    this.userIsAdmin = this.authService.userHasRole('admin');
-    this.userIsDev = this.authService.userHasRole('developer');
-    this.checkDeveloperRole();
+        this.responsiveService.observeMqAlias().subscribe(() => {
+        });
+        this.userIsAdmin = this.authService.userHasRole('admin');
+        this.userIsDev = this.authService.userHasRole('developer');
+        this.checkDeveloperRole();
 
     }
 

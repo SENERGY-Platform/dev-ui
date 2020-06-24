@@ -16,28 +16,55 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {Pipe, PipeTransform} from '@angular/core';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatCardModule} from '@angular/material/card';
+import {RouterTestingModule} from '@angular/router/testing';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {AuthService} from '../../services/auth/auth.service';
+import {AuthServiceMock} from '../../services/auth/auth.service.mock';
+import {TranslateServiceMock} from '../../services/translate.service.mock';
 
-import { StartComponent } from './start.component';
+import {StartComponent} from './start.component';
+
+@Pipe({
+    name: 'translate',
+})
+export class TranslatePipeMock implements PipeTransform {
+    public name = 'translate';
+
+    public transform(query: string, ...args: any[]): any {
+        return query;
+    }
+}
 
 describe('StartComponent', () => {
-  let component: StartComponent;
-  let fixture: ComponentFixture<StartComponent>;
+    let component: StartComponent;
+    let fixture: ComponentFixture<StartComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ StartComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [StartComponent, TranslatePipeMock],
+            providers: [
+                {provide: AuthService, useClass: AuthServiceMock},
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                {provide: TranslatePipe, useClass: TranslatePipeMock},
+            ],
+            imports: [
+                MatCardModule,
+                RouterTestingModule,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StartComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(StartComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

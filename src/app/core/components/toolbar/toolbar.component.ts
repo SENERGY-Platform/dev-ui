@@ -16,7 +16,12 @@
  *
  */
 
-import {HttpClient} from '@angular/common/http';
+// import markdownfiles
+import * as analytics from '!raw-loader!../../../../assets/docs/de/analytics.md';
+import * as getting from '!raw-loader!../../../../assets/docs/de/gettingstarted.md';
+import * as iot from '!raw-loader!../../../../assets/docs/de/iot.md';
+import * as process from '!raw-loader!../../../../assets/docs/de/process.md';
+import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatSidenav} from '@angular/material/sidenav';
@@ -29,13 +34,6 @@ import {SwaggerModel} from '../../services/swagger/swagger.model';
 import {SwaggerService} from '../../services/swagger/swagger.service';
 import {SidenavSectionModel} from '../sidenav/shared/sidenav-section.model';
 import {SidenavService} from '../sidenav/shared/sidenav.service';
-
-// import markdownfiles
-import * as analytics from '!raw-loader!../../../../assets/docs/de/analytics.md';
-import * as getting from '!raw-loader!../../../../assets/docs/de/gettingstarted.md';
-import * as iot from '!raw-loader!../../../../assets/docs/de/iot.md';
-import * as process from '!raw-loader!../../../../assets/docs/de/process.md';
-import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 
 interface ResultModel {
     title: string;
@@ -78,8 +76,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     private docs: DocModel[] = [];
     private swaggerReadyEmitter: EventEmitter<null> = new EventEmitter<null>();
 
-    constructor(private httpClient: HttpClient,
-                private swaggerService: SwaggerService,
+    constructor(private swaggerService: SwaggerService,
                 private authService: AuthService,
                 private responsiveService: ResponsiveService,
                 private sidenavService: SidenavService,
@@ -96,43 +93,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         this.observeSidenav();
         this.observeSearch();
         this.initDocs();
-    }
-
-    private observeSearch() {
-        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
-        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
-            this.inputFocused = this.searchQuery.value !== '';
-
-            const newSwaggerResult: ResultModel[] = [];
-            const newDocsResult: ResultModel[] = [];
-
-            const query = this.searchQuery.value;
-
-            this.swagger.forEach((api) => {
-                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
-                    newSwaggerResult.push({
-                        title: api.info.title,
-                        url: '/api/' + api.info.title,
-                        content: api.info.description,
-                    });
-                }
-            });
-
-            this.docs.forEach((doc) => {
-                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
-                    matches.forEach(((value) => {
-                        const result: ResultModel = {} as ResultModel;
-                        result.title = doc.title;
-                        result.content = value;
-                        result.url = '/doc/' + doc.redirectUrl;
-                        newDocsResult.push(result);
-                    }));
-                });
-            });
-
-            this.swaggerSearchResult = newSwaggerResult;
-            this.docsSearchResult = newDocsResult;
-        });
     }
 
     public queryOccursInMarkdownHeaders(query, header1, header2, header3): [any[], any[], any[]] {
@@ -188,6 +148,43 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
     public resetSearchText() {
         this.searchQuery.patchValue('');
+    }
+
+    private observeSearch() {
+        this.searchQuery.valueChanges.pipe(first()).subscribe(() => this.initSwagger()); // Delay loading of swagger until search used
+        merge(this.searchQuery.valueChanges, this.swaggerReadyEmitter).pipe(debounceTime(300)).subscribe(() => {
+            this.inputFocused = this.searchQuery.value !== '';
+
+            const newSwaggerResult: ResultModel[] = [];
+            const newDocsResult: ResultModel[] = [];
+
+            const query = this.searchQuery.value;
+
+            this.swagger.forEach((api) => {
+                if (this.queryOccursInContent(query, api.info.title) || this.queryOccursInContent(query, api.info.description)) {
+                    newSwaggerResult.push({
+                        title: api.info.title,
+                        url: '/api/' + api.info.title,
+                        content: api.info.description,
+                    });
+                }
+            });
+
+            this.docs.forEach((doc) => {
+                this.queryOccursInMarkdownHeaders(query, doc.headers1, doc.headers2, doc.headers3).forEach((matches) => {
+                    matches.forEach(((value) => {
+                        const result: ResultModel = {} as ResultModel;
+                        result.title = doc.title;
+                        result.content = value;
+                        result.url = '/doc/' + doc.redirectUrl;
+                        newDocsResult.push(result);
+                    }));
+                });
+            });
+
+            this.swaggerSearchResult = newSwaggerResult;
+            this.docsSearchResult = newDocsResult;
+        });
     }
 
     private checkIfDocIsActive() {

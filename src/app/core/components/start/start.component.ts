@@ -16,26 +16,24 @@
  *
  */
 
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth/auth.service';
 
 @Component({
-  selector: 'app-start',
-  templateUrl: './start.component.html',
-  styleUrls: ['./start.component.css'],
+    selector: 'app-start',
+    templateUrl: './start.component.html',
+    styleUrls: ['./start.component.css'],
 })
-  export class StartComponent implements OnInit {
-  public userIsAdmin = false;
-  public userIsDev = false;
+export class StartComponent implements OnInit {
+    public userIsAdmin = false;
+    public userIsDev = false;
 
-  constructor(private authService: AuthService) {
-    this.userIsDev = this.authService.userHasRole('developer');
-    this.userIsAdmin = this.authService.userHasRole('admin');
-  }
+    constructor(private authService: AuthService) {
+        this.userIsDev = this.authService.userHasRole('developer');
+        this.userIsAdmin = this.authService.userHasRole('admin');
+    }
 
-  public ngOnInit() {}
+    public ngOnInit() {
+    }
 
 }

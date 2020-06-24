@@ -1,6 +1,6 @@
 /*
  *
- *     Copyright 2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -15,20 +15,19 @@
  *     limitations under the License.
  *
  */
+import {Injectable} from '@angular/core';
 
-import {Component} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+@Injectable()
+export class UserManagementServiceMock {
 
-@Component({
-    selector: 'app-getting-started',
-    templateUrl: './getting-started.component.html',
-    styleUrls: ['./getting-started.component.css'],
-})
-export class GettingStartedComponent {
-    public path: string;
+    constructor() {
+    }
 
-    constructor(private translate: TranslateService) {
-        const lang = this.translate.currentLang || 'de';
-        this.path = 'assets/docs/' + lang + '/gettingstarted.md';
+    public loadUsers() {
+        return new Promise((resolve) => resolve(['user1', 'user2']));
+    }
+
+    public loadRoles() {
+        return new Promise((resolve) => resolve([{id: 'admin', name: 'admin'}, {id: 'user', name: 'user'}]));
     }
 }

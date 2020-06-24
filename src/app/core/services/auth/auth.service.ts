@@ -16,58 +16,56 @@
  *
  */
 
-import {
-  HttpClient,
-  HttpHeaders,
-} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
-import { environment } from '../../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 
 declare var KEYCLOAK_URL: any;
 
 @Injectable()
 export class AuthService {
-  constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {}
-
-  public userHasRole(role) {
-    if (!environment.loginRequired) {
-      return true;
+    constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) {
     }
-    return this.keycloakService.isUserInRole(role);
-  }
 
-  public getUserProfile() {
-    const idToken = sessionStorage.getItem('id_token');
-    return JSON.parse(idToken);
-  }
-
-  public logout() {
-    this.keycloakService.logout();
-  }
-
-  public userIsAuthenticated() {
-    if (!environment.loginRequired) {
-      return true;
+    public userHasRole(role) {
+        if (!environment.loginRequired) {
+            return true;
+        }
+        return this.keycloakService.isUserInRole(role);
     }
-    return this.keycloakService.isLoggedIn();
-  }
 
-  public getToken(): Promise<string> {
-    return this.keycloakService.getToken().then((resp) => {
-      return 'bearer ' + resp;
-    });
-  }
+    public getUserProfile() {
+        const idToken = sessionStorage.getItem('id_token');
+        return JSON.parse(idToken);
+    }
 
-  public get(path) {
-    return new Promise((resolve) => {
-      this.getToken().then((token) => {
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + token,
+    public logout() {
+        this.keycloakService.logout();
+    }
+
+    public userIsAuthenticated() {
+        if (!environment.loginRequired) {
+            return true;
+        }
+        return this.keycloakService.isLoggedIn();
+    }
+
+    public getToken(): Promise<string> {
+        return this.keycloakService.getToken().then((resp) => {
+            return 'bearer ' + resp;
         });
+    }
 
-        this.httpClient.get(KEYCLOAK_URL + '/auth' + path, {headers}).subscribe((result) => resolve(result));
-      });
-    });
-  }
+    public get(path) {
+        return new Promise((resolve) => {
+            this.getToken().then((token) => {
+                const headers = new HttpHeaders({
+                    Authorization: 'Bearer ' + token,
+                });
+
+                this.httpClient.get(KEYCLOAK_URL + '/auth' + path, {headers}).subscribe((result) => resolve(result));
+            });
+        });
+    }
 }

@@ -16,26 +16,17 @@
  *
  */
 
-import {
-    Component, isDevMode, OnInit,
-} from '@angular/core';
+import {Component, isDevMode, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
-import {
-    Router,
-} from '@angular/router';
-import {
-    AuthService,
-} from '../../../core/services/auth/auth.service';
+import {AuthService} from '../../../core/services/auth/auth.service';
 import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from '../permissions-dialog-import/permissions-dialog-import.component';
 import {PermissionImportModel} from '../permissions-dialog-import/permissions-dialog-import.model';
 import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.component';
-import {
-    LadonService,
-} from '../shared/ladon/ladon.service';
+import {LadonService} from '../shared/ladon/ladon.service';
 import {PermissionModel} from '../shared/permission.model';
 
 @Component({
@@ -45,24 +36,22 @@ import {PermissionModel} from '../shared/permission.model';
 })
 export class PermissionsListComponent implements OnInit {
 
-    constructor(private authService: AuthService,
-                private ladonService: LadonService,
-                private router: Router,
-                public dialog: MatDialog,
-                private sanitizer: DomSanitizer,
-    ) {
-    }
-
     public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
     public policies: PermissionModel[] = [];
     public userIsAdmin = false;
-
     public sortedData: PermissionModel[];
     public matPolicies: MatTableDataSource<PermissionModel>;
     public query = '';
     public sort: Sort = undefined;
     public ready = false;
     public importing = false;
+
+    constructor(private authService: AuthService,
+                private ladonService: LadonService,
+                public dialog: MatDialog,
+                private sanitizer: DomSanitizer,
+    ) {
+    }
 
     private static compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) {
         return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -198,9 +187,9 @@ export class PermissionsListComponent implements OnInit {
                     const currentPolicies = this.policies.filter((p) => p.id !== 'admin-all');
                     this.ladonService.deletePolicies(currentPolicies).subscribe(() => this.ladonService.postPolicies(filteredPolicies)
                         .subscribe(() => {
-                        this.importing = false;
-                        this.loadPolicies();
-                    }));
+                            this.importing = false;
+                            this.loadPolicies();
+                        }));
                 } else {
                     this.ladonService.putPolicies(filteredPolicies).subscribe(() => {
                         this.importing = false;

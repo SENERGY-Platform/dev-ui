@@ -16,11 +16,10 @@
  *
  */
 
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component, NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
@@ -35,67 +34,69 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {CoreModule} from '../../core/core.module';
-import { PermissionsDialogDeleteComponent } from './permissions-dialog-delete/permissions-dialog-delete.component';
+import {PermissionsDialogDeleteComponent} from './permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from './permissions-dialog-import/permissions-dialog-import.component';
-import { PermissionsEditComponent } from './permissions-edit/permissions-edit.component';
-import { PermissionsListComponent } from './permissions-list/permissions-list.component';
+import {PermissionsEditComponent} from './permissions-edit/permissions-edit.component';
+import {PermissionsListComponent} from './permissions-list/permissions-list.component';
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
 })
-export class RoutingComponent {}
+export class RoutingComponent {
+}
 
 const routes: Routes = [
-  {
-    path: 'permissions',
-    component: RoutingComponent,
-    children: [
-      {
-        path: '',
-        component: PermissionsListComponent,
-      },
-      {
-          path: 'edit',
-          component: PermissionsEditComponent,
-      },
-    ],
-  },
+    {
+        path: 'permissions',
+        component: RoutingComponent,
+        children: [
+            {
+                path: '',
+                component: PermissionsListComponent,
+            },
+            {
+                path: 'edit',
+                component: PermissionsEditComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatTableModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule.forChild(),
-    MatAutocompleteModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatSortModule,
-    MatSnackBarModule,
-    CoreModule,
-    FlexLayoutModule,
-  ],
-  declarations: [
-    PermissionsListComponent,
-    PermissionsEditComponent,
-    RoutingComponent,
-    PermissionsEditComponent,
-    PermissionsDialogDeleteComponent,
-    PermissionsDialogImportComponent,
-  ],
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatTableModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule.forChild(),
+        MatAutocompleteModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatSortModule,
+        MatSnackBarModule,
+        CoreModule,
+        FlexLayoutModule,
+    ],
+    declarations: [
+        PermissionsListComponent,
+        PermissionsEditComponent,
+        RoutingComponent,
+        PermissionsEditComponent,
+        PermissionsDialogDeleteComponent,
+        PermissionsDialogImportComponent,
+    ],
 })
-export class PermissionsModule { }
+export class PermissionsModule {
+}

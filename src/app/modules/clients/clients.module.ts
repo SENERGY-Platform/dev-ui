@@ -16,68 +16,65 @@
  *
  */
 
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {
-  ReactiveFormsModule,
-} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Component, NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {CoreModule} from '../../core/core.module';
-import { AddEditClientComponent } from './add-edit-client/add-edit-client.component';
-import { ViewClientsComponent } from './view-clients/view-clients.component';
+import {AddEditClientComponent} from './add-edit-client/add-edit-client.component';
+import {ViewClientsComponent} from './view-clients/view-clients.component';
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
 })
-export class RoutingComponent {}
+export class RoutingComponent {
+}
 
 const routes: Routes = [
-  {
-    path: 'clients',
-    component: RoutingComponent,
-    children: [
-      {
-        path: ':id',
-        component: AddEditClientComponent,
-      },
-      {
-        path: '',
-        component: ViewClientsComponent,
-      },
-    ],
-  },
+    {
+        path: 'clients',
+        component: RoutingComponent,
+        children: [
+            {
+                path: ':id',
+                component: AddEditClientComponent,
+            },
+            {
+                path: '',
+                component: ViewClientsComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    MatIconModule,
-    MatCardModule,
-    TranslateModule.forChild(),
-    FormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatInputModule,
-    CoreModule,
-  ],
-  declarations: [
-    AddEditClientComponent,
-    RoutingComponent,
-    ViewClientsComponent,
-  ],
-  entryComponents: [
-
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        MatIconModule,
+        MatCardModule,
+        TranslateModule.forChild(),
+        FormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        CoreModule,
+    ],
+    declarations: [
+        AddEditClientComponent,
+        RoutingComponent,
+        ViewClientsComponent,
+    ],
+    entryComponents: [],
 })
-export class ClientsModule { }
+export class ClientsModule {
+}

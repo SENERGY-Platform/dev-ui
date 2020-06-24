@@ -16,28 +16,43 @@
  * /
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SettingsComponent } from './settings.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TranslateService} from '@ngx-translate/core';
+import {TranslateServiceMock} from '../../../services/translate.service.mock';
+import {SettingsComponent} from './settings.component';
 
 describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+    let component: SettingsComponent;
+    let fixture: ComponentFixture<SettingsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ],
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [SettingsComponent],
+            providers: [
+                {provide: TranslateService, useClass: TranslateServiceMock},
+            ],
+            imports: [
+                MatSelectModule,
+                BrowserAnimationsModule,
+                FormsModule,
+                ReactiveFormsModule,
+                MatInputModule,
+            ],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(SettingsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

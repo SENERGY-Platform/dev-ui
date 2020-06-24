@@ -16,30 +16,53 @@
  * /
  */
 
-import { async, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {async, TestBed} from '@angular/core/testing';
+import {MatCardModule} from '@angular/material/card';
+import {MatDialog} from '@angular/material/dialog';
+import {MatDialogHarness} from '@angular/material/dialog/testing';
+import {RouterModule} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {KeycloakService} from 'keycloak-angular';
+import {AppComponent} from './app.component';
+import {StartComponent} from './core/components/start/start.component';
+import {CoreModule} from './core/core.module';
+import {ApiService} from './core/services/api/api.service';
+import {ApiServiceMock} from './core/services/api/api.service.mock';
+import {AuthService} from './core/services/auth/auth.service';
+import {AuthServiceMock} from './core/services/auth/auth.service.mock';
+import {SwaggerService} from './core/services/swagger/swagger.service';
+import {SwaggerServiceMock} from './core/services/swagger/swagger.service.mock';
+import {TranslateServiceMock} from './core/services/translate.service.mock';
+
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-      ],
-    }).compileComponents();
-  }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                AppComponent,
+            ],
+            providers: [
+                {provide: MatDialog, useClass: MatDialogHarness},
+                {provide: TranslateService, useClass: TranslateServiceMock},
+                {provide: AuthService, useClass: AuthServiceMock},
+                {provide: ApiService, useClass: ApiServiceMock},
+                {provide: SwaggerService, useClass: SwaggerServiceMock},
+                KeycloakService,
+            ],
+            imports: [
+                MatCardModule,
+                CoreModule,
+                RouterModule.forRoot([
+                    {
+                        component: StartComponent,
+                        path: '',
+                    },
+                ]),
+            ],
+        }).compileComponents();
+    }));
+    it('should create the app', async(() => {
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.debugElement.componentInstance;
+        expect(app).toBeTruthy();
+    }));
 });

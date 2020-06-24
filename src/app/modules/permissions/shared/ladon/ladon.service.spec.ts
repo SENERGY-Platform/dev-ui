@@ -16,18 +16,22 @@
  * /
  */
 
-import { inject, TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
+import {ApiService} from '../../../../core/services/api/api.service';
+import {ApiServiceMock} from '../../../../core/services/api/api.service.mock';
 
-import { LadonService } from './ladon.service';
+import {LadonService} from './ladon.service';
 
 describe('LadonService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [LadonService],
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {provide: ApiService, useClass: ApiServiceMock},
+            ],
+        });
     });
-  });
 
-  it('should be created', inject([LadonService], (service: LadonService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', inject([LadonService], (service: LadonService) => {
+        expect(service).toBeTruthy();
+    }));
 });

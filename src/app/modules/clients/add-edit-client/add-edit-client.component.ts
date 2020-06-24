@@ -17,11 +17,7 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {
-    FormArray,
-    FormBuilder,
-    FormControl, FormGroup, Validators,
-} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable} from 'rxjs';
@@ -34,7 +30,7 @@ import {ClientModel} from '../shared/client.model';
     styleUrls: ['./add-edit-client.component.css'],
 })
 export class AddEditClientComponent implements OnInit {
-    private client: ClientModel = {} as ClientModel;
+    public client: ClientModel = {} as ClientModel;
     public isEditMode = false;
     public form: FormGroup = this.fb.group({
         name: ['', Validators.required],

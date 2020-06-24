@@ -16,24 +16,62 @@
  *
  */
 
-import {
-    Injectable,
-} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 import {ApiService} from '../api/api.service';
 import {SwaggerModel} from './swagger.model';
 
 @Injectable()
 export class SwaggerService {
+    private cachedSwagger: SwaggerModel[];
+    private invalidAfter: Date;
+
     constructor(private apiService: ApiService) {
     }
 
-    /**
-     * Get all Swagger files from the service.
-     * giIterate through the array and retrieve necessary information(name, version)
-     * and add it to the list using currently unavailable descriptions.
-     */
     public getSwagger(): Observable<SwaggerModel[]> {
-        return this.apiService.get('/swagger') as Observable<SwaggerModel[]>;
+        if (this.needsReload()) {
+            return this.loadSwagger();
+        } else {
+            return of(this.cachedSwagger);
+        }
+    }
+
+    public getSingleSwagger(title: string): Observable<SwaggerModel> {
+        if (this.needsReload()) {
+            return new Observable<SwaggerModel>((obs) => {
+                this.loadSwagger().subscribe((_) => {
+                    obs.next(this.filterSingleSwagger(title));
+                    obs.complete();
+                });
+            });
+        }
+        return of(this.filterSingleSwagger(title));
+    }
+
+    private loadSwagger(): Observable<SwaggerModel[]> {
+        return new Observable<SwaggerModel[]>((obs) => {
+            (this.apiService.get('/swagger') as Observable<SwaggerModel[]>).subscribe((res) => {
+                this.cachedSwagger = res;
+                const d = new Date();
+                d.setHours(d.getHours() + 1);
+                this.invalidAfter = d;
+                obs.next(this.cachedSwagger);
+                obs.complete();
+            });
+        });
+    }
+
+    private needsReload(): boolean {
+        return this.cachedSwagger === undefined || new Date() > this.invalidAfter;
+    }
+
+    private filterSingleSwagger(title: string): SwaggerModel {
+        for (const api of this.cachedSwagger) {
+            if (api.info.title === title) {
+                return api;
+            }
+        }
+        return {} as SwaggerModel;
     }
 }

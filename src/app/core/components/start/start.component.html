@@ -18,44 +18,44 @@
 
 <section class="boxes outer">
     <mat-card *ngIf="userIsAdmin" [routerLink]="['permissions']" class="hover-mat-card">
-      <i class="material-icons">security</i>
-      <div>
-        <h1>Permissions</h1>
-        <p>Manage which users or groups my perform which HTTP operations on which API endpoints.</p>
-      </div>
+        <i class="material-icons">security</i>
+        <div>
+            <h1>Permissions</h1>
+            <p>Manage which users or groups my perform which HTTP operations on which API endpoints.</p>
+        </div>
     </mat-card>
 
-  <mat-card [routerLink]="['doc']" class="hover-mat-card">
-    <i class="material-icons">library_books</i>
-    <div>
-      <h1>{{ 'START.PLAT_DOC' | translate}}</h1>
-      <p>Get an introduction to the platform and read about structures and features.</p>
+    <mat-card [routerLink]="['doc']" class="hover-mat-card">
+        <i class="material-icons">library_books</i>
+        <div>
+            <h1>{{ 'START.PLAT_DOC' | translate}}</h1>
+            <p>Get an introduction to the platform and read about structures and features.</p>
 
-    </div>
-  </mat-card>
-
-  <mat-card [routerLink]="['api']" class="hover-mat-card">
-    <i class="material-icons">code</i>
-    <div>
-      <h1>{{ 'START.API_DOC' | translate}}</h1>
-      <p>See the documentation of backend services and try them interactively directly from the browser.</p>
-    </div>
-  </mat-card>
-  <!--
-  <mat-card [routerLink]="['devicesim']" class="hover-mat-card">
-      <i class="material-icons">code</i>
-      <div>
-        <h1>Playground</h1>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-          magna aliquyam erat, sed diam voluptua.</p>
-      </div>
+        </div>
     </mat-card>
-  -->
-  <mat-card *ngIf="userIsDev" [routerLink]="['clients']" class="hover-mat-card">
-    <i class="material-icons">computer</i>
-    <div>
-      <h1>Clients</h1>
-      <p>Create and manage clients to authenticate users and act on their behalf.</p>
-    </div>
-  </mat-card>
+
+    <mat-card [routerLink]="['api']" class="hover-mat-card">
+        <i class="material-icons">code</i>
+        <div>
+            <h1>{{ 'START.API_DOC' | translate}}</h1>
+            <p>See the documentation of backend services and try them interactively directly from the browser.</p>
+        </div>
+    </mat-card>
+    <!--
+    <mat-card [routerLink]="['devicesim']" class="hover-mat-card">
+        <i class="material-icons">code</i>
+        <div>
+          <h1>Playground</h1>
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+            magna aliquyam erat, sed diam voluptua.</p>
+        </div>
+      </mat-card>
+    -->
+    <mat-card *ngIf="userIsDev" [routerLink]="['clients']" class="hover-mat-card">
+        <i class="material-icons">computer</i>
+        <div>
+            <h1>Clients</h1>
+            <p>Create and manage clients to authenticate users and act on their behalf.</p>
+        </div>
+    </mat-card>
 </section>

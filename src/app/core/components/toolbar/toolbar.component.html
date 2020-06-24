@@ -17,30 +17,33 @@
   -->
 
 <mat-toolbar color="primary" fxLayout="row">
-  <button mat-icon-button fxHide.gt-sm (click)="toggle(true)">
-    <mat-icon>menu</mat-icon>
-  </button>
+    <button (click)="toggle(true)" fxHide.gt-sm mat-icon-button>
+        <mat-icon>menu</mat-icon>
+    </button>
 
-  <a routerLink="" (click)="resetSidenav()" class="image-wrapper" fxHide fxShow.gt-sm>
-    <img class="logo"
-         src="/assets/img/logo.png">
-  </a>
+    <a (click)="resetSidenav()" class="image-wrapper" fxHide fxShow.gt-sm routerLink="">
+        <img class="logo"
+             src="/assets/img/logo.png">
+    </a>
 
-  <span class="fill"></span>
+    <span class="fill"></span>
 
-  <a [routerLink]="['api']"  fxHide fxShow.gt-sm>API</a>
-  <a [routerLink]="Act ? ['doc']: []"  fxHide fxShow.gt-sm>Documentation</a>
-  <a [routerLink]="['clients']"   fxHide fxShow.gt-sm>Clients</a>
-  <a *ngIf="userIsAdmin" [routerLink]="['permissions']"   fxHide fxShow.gt-sm>Permissions</a>
+    <a [routerLink]="['api']" fxHide fxShow.gt-sm>API</a>
+    <a [routerLink]="Act ? ['doc']: []" fxHide fxShow.gt-sm>Documentation</a>
+    <a [routerLink]="['clients']" fxHide fxShow.gt-sm>Clients</a>
+    <a *ngIf="userIsAdmin" [routerLink]="['permissions']" fxHide fxShow.gt-sm>Permissions</a>
 
-    <mat-form-field class="md-search__form" fxFlex #searchInput>
+    <mat-form-field #searchInput class="md-search__form" fxFlex>
         <mat-label>Suche</mat-label>
-        <input type="text" matInput [formControl]="searchQuery" [ngClass]="{'search-focused': inputFocused || searchQuery.value !== ''}" class="white">
-        <mat-icon matPrefix *ngIf="searchQuery.value === ''">search</mat-icon>
-        <mat-icon class="pointer" matPrefix *ngIf="searchQuery.value !== ''" (click)="resetSearchText()">close</mat-icon>
+        <input [formControl]="searchQuery" [ngClass]="{'search-focused': inputFocused || searchQuery.value !== ''}"
+               class="white"
+               matInput type="text">
+        <mat-icon *ngIf="searchQuery.value === ''" matPrefix>search</mat-icon>
+        <mat-icon (click)="resetSearchText()" *ngIf="searchQuery.value !== ''" class="pointer" matPrefix>close
+        </mat-icon>
 
-        <div class="search-results" [ngClass]="{'search-results-focused': inputFocused && searchQuery.value !== ''}">
-            <div class="md-search-result" data-md-component="result" *ngIf="docsSearchResult.length > 0">
+        <div [ngClass]="{'search-results-focused': inputFocused && searchQuery.value !== ''}" class="search-results">
+            <div *ngIf="docsSearchResult.length > 0" class="md-search-result" data-md-component="result">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/doc/start')" class="md-search-result__link" tabindex="-1">
@@ -48,8 +51,9 @@
                                 <p class="md-search-result__title">{{'START.PLAT_DOC' | translate }}</p>
                             </article>
                         </a>
-                        <a (click)="openSearchResult(result.url)" class="md-search-result__link" tabindex="-1"
-                           *ngFor="let result of docsSearchResult">
+                        <a (click)="openSearchResult(result.url)" *ngFor="let result of docsSearchResult"
+                           class="md-search-result__link"
+                           tabindex="-1">
                             <article class="md-search-result__article">
                                 <a class="md-search-result__title">{{result.title}}</a>
                                 <a class="md-search-result__teaser">{{result.content}}</a>
@@ -58,7 +62,7 @@
                     </li>
                 </ol>
             </div>
-            <div class="md-search-result" data-md-component="result" *ngIf="swaggerSearchResult.length > 0">
+            <div *ngIf="swaggerSearchResult.length > 0" class="md-search-result" data-md-component="result">
                 <ol class="md-search-result__list">
                     <li class="md-search-result__item">
                         <a (click)="openSearchResult('/api')" class="md-search-result__link" tabindex="-1">
@@ -66,8 +70,9 @@
                                 <p class="md-search-result__title">{{'START.API_DOC' | translate}}</p>
                             </article>
                         </a>
-                        <a (click)="openSearchResult(result.url)" class="md-search-result__link" tabindex="-1"
-                           *ngFor="let result of swaggerSearchResult">
+                        <a (click)="openSearchResult(result.url)" *ngFor="let result of swaggerSearchResult"
+                           class="md-search-result__link"
+                           tabindex="-1">
                             <article class="md-search-result__article">
                                 <p class="md-search-result__title">{{result.title}}</p>
                                 <p class="md-search-result__teaser">{{result.content}}</p>
@@ -79,18 +84,18 @@
         </div>
     </mat-form-field>
 
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>account_circle</mat-icon>
-  </button>
+    <button [matMenuTriggerFor]="menu" mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+    </button>
 
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item [routerLink]="['/settings']">
-      <mat-icon>settings</mat-icon>
-      <span>{{'SETTINGS' | translate}}</span>
-    </button>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>power_settings_new</mat-icon>
-      <span>{{'LOGOUT' | translate}}</span>
-    </button>
-  </mat-menu>
+    <mat-menu #menu="matMenu">
+        <button [routerLink]="['/settings']" mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>{{'SETTINGS' | translate}}</span>
+        </button>
+        <button (click)="logout()" mat-menu-item>
+            <mat-icon>power_settings_new</mat-icon>
+            <span>{{'LOGOUT' | translate}}</span>
+        </button>
+    </mat-menu>
 </mat-toolbar>

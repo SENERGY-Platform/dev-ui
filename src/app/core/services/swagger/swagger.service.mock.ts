@@ -16,34 +16,25 @@
  *
  */
 
-.mat-raised-button,
-.control_buttons {
-    color: white;
-}
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {SwaggerModel} from './swagger.model';
 
-.radio {
-    margin-top: 10px;
-    margin-bottom: 30px;
-}
+@Injectable()
+export class SwaggerServiceMock {
+    constructor() {
+    }
 
-.radio-but {
-    margin-right: 10px;
-}
+    /**
+     * Get all Swagger files from the service.
+     * giIterate through the array and retrieve necessary information(name, version)
+     * and add it to the list using currently unavailable descriptions.
+     */
+    public getSwagger(): Observable<SwaggerModel[]> {
+        return of([] as SwaggerModel[]);
+    }
 
-.medium-text {
-    font-size: medium;
-}
-
-.warn-text {
-    color: #F19F4D;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.mat-column-select, .mat-column-GET, .mat-column-POST, .mat-column-PUT,
-.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
-    max-width: 60px;
-}
-
-.mat-column-subject {
-    max-width: 120px;
+    public getSingleSwagger(title: string): Observable<SwaggerModel> {
+        return of({} as SwaggerModel);
+    }
 }

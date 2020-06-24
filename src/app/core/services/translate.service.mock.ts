@@ -1,6 +1,6 @@
 /*
  *
- *     Copyright 2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -16,19 +16,14 @@
  *
  */
 
-import {Component} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+import {of} from 'rxjs';
 
-@Component({
-    selector: 'app-getting-started',
-    templateUrl: './getting-started.component.html',
-    styleUrls: ['./getting-started.component.css'],
-})
-export class GettingStartedComponent {
-    public path: string;
+export class TranslateServiceMock {
+    public get(key: any): any {
+        return of(key);
+    }
 
-    constructor(private translate: TranslateService) {
-        const lang = this.translate.currentLang || 'de';
-        this.path = 'assets/docs/' + lang + '/gettingstarted.md';
+    public setDefaultLang(lang: string) {
+        return null;
     }
 }

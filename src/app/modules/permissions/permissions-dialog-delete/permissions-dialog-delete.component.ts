@@ -20,13 +20,14 @@ import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-permissions-dialog-delete',
-  templateUrl: './permissions-dialog-delete.component.html',
-  styleUrls: ['./permissions-dialog-delete.component.css'],
+    selector: 'app-permissions-dialog-delete',
+    templateUrl: './permissions-dialog-delete.component.html',
+    styleUrls: ['./permissions-dialog-delete.component.css'],
 })
 export class PermissionsDialogDeleteComponent {
 
-  constructor(public dialogRef: MatDialogRef<PermissionsDialogDeleteComponent>) { }
+    constructor(public dialogRef: MatDialogRef<PermissionsDialogDeleteComponent>) {
+    }
 
     public yes() {
         this.dialogRef.close('yes');

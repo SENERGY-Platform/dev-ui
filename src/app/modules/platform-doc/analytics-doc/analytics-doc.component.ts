@@ -16,50 +16,50 @@
  *
  */
 
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
-import { AuthService } from '../../../core/services/auth/auth.service';
-import { SwaggerService } from '../../../core/services/swagger/swagger.service';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {SwaggerUIBundle, SwaggerUIStandalonePreset} from 'swagger-ui-dist';
+import {AuthService} from '../../../core/services/auth/auth.service';
+import {SwaggerService} from '../../../core/services/swagger/swagger.service';
 
 @Component({
-  selector: 'app-analytics-doc',
-  templateUrl: './analytics-doc.component.html',
-  styleUrls: ['./analytics-doc.component.css'],
+    selector: 'app-analytics-doc',
+    templateUrl: './analytics-doc.component.html',
+    styleUrls: ['./analytics-doc.component.css'],
 })
 export class AnalyticsDocComponent {
-  public swagger: any;
-  public ui: any;
-  public path: string;
+    public swagger: any;
+    public ui: any;
+    public path: string;
 
-  constructor(private translate: TranslateService, private authService: AuthService, private swaggerService: SwaggerService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/analytics.md';
-    this.swaggerService.getSwagger().subscribe((swaggerFiles) => {
-      swaggerFiles.forEach((api) => {
-        if (api.basePath === '/db') {
-          this.swagger = api;
-        }
-      });
+    constructor(private translate: TranslateService, private authService: AuthService, private swaggerService: SwaggerService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/analytics.md';
+        this.swaggerService.getSwagger().subscribe((swaggerFiles) => {
+            swaggerFiles.forEach((api) => {
+                if (api.basePath === '/db') {
+                    this.swagger = api;
+                }
+            });
 
-      this.authService.getToken().then((token) => {
-        this.ui = SwaggerUIBundle({
-          spec: this.swagger,
-          dom_id: '#swagger',
-          presets: [
-            SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset,
-          ],
-          configs: {
-            preFetch(req) {
-                    req.headers.Authorization = 'Bearer ' + token;
-                    return req;
-            },
-          },
-          layout: 'StandaloneLayout',
+            this.authService.getToken().then((token) => {
+                this.ui = SwaggerUIBundle({
+                    spec: this.swagger,
+                    dom_id: '#swagger',
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIStandalonePreset,
+                    ],
+                    configs: {
+                        preFetch(req) {
+                            req.headers.Authorization = 'Bearer ' + token;
+                            return req;
+                        },
+                    },
+                    layout: 'StandaloneLayout',
+                });
+            });
+
         });
-      });
-
-    });
-  }
+    }
 }

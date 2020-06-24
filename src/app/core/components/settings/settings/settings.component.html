@@ -18,7 +18,7 @@
 
 <div class="outer">
     <mat-form-field>
-        <mat-select placeholder="Language" [(ngModel)]="language" (ngModelChange)="setLanguage()">
+        <mat-select (ngModelChange)="setLanguage()" [(ngModel)]="language" placeholder="Language">
             <mat-option value="de">Deutsch</mat-option>
             <mat-option value="en">English</mat-option>
         </mat-select>

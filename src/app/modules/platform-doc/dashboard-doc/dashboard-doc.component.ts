@@ -16,19 +16,19 @@
  *
  */
 
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-dashboard-doc',
-  templateUrl: './dashboard-doc.component.html',
-  styleUrls: ['./dashboard-doc.component.css'],
+    selector: 'app-dashboard-doc',
+    templateUrl: './dashboard-doc.component.html',
+    styleUrls: ['./dashboard-doc.component.css'],
 })
 export class DashboardDocComponent {
-  public path: string;
+    public path: string;
 
-  constructor(private translate: TranslateService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/dashboard.md';
-  }
+    constructor(private translate: TranslateService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/dashboard.md';
+    }
 }

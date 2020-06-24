@@ -127,11 +127,11 @@ $md-custom-color-warn: (
 );
 
 $candy-app-primary: mat-palette($senergy-blue, 500, 900, A100);
-$candy-app-accent:  mat-palette($senergy-blue, 500, 900, A100);
+$candy-app-accent: mat-palette($senergy-blue, 500, 900, A100);
 $my-app-sidenav: mat-palette($md-custom-color-sidenav);
 
 // The warn palette is optional (defaults to red).
-$candy-app-warn:    mat-palette($mat-red);
+$candy-app-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
@@ -147,8 +147,8 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 /* generated: http://mcg.mbitson.com/#!?customcolor=%232e7d32&themename=mcgtheme */
 
 $my-app-primary: mat-palette($senergy-blue, 500, 900, A100);
-$my-app-accent:  mat-palette($senergy-blue, 500, 900, A100);
-$my-app-warn:    mat-palette($md-custom-color-warn);
+$my-app-accent: mat-palette($senergy-blue, 500, 900, A100);
+$my-app-warn: mat-palette($md-custom-color-warn);
 
 $my-app-theme: mat-light-theme($candy-app-primary, $my-app-accent, $candy-app-warn);
 

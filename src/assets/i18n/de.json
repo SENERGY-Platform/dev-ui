@@ -1,33 +1,31 @@
 {
-    "START": {
-        "API_DOC": "API",
-        "PLAT_DOC": "Documentation"
-    },
-    "DOCUMENTATION": {
-
-    },
-    "PLAYGROUND": {
-        "DEVICE_NAME": "Name",
-        "DEVICE_CLASS": "Klasse",
-        "CREATE_SENSOR": "Erstelle Sensor",
-        "CREATE_ACTUATOR": "Erstelle Actuator",
-        "DEVICE_STATUS": "Status"
-    },
-    "CLIENTS": {
-
-    },
-    "ACTION": "Aktion",
-    "ADD": "Hinzufügen",
-    "UPDATE": "Ändern",
-    "PREV": "Zurück",
-    "NEXT": "Weiter",
-    "CREATE": "Erstellen",
-    "SEARCH": "Suche",
-    "EDIT": "Bearbeiten",
-    "DELETE": "Löschen",
-    "ACTIVE": "Aktiv",
-    "NOTACTIVE": "Nicht aktiv",
-    "DEVICE": "Gerät",
-    "SETTINGS": "Einstellungen",
-    "LOGOUT": "Abmelden"
+  "START": {
+    "API_DOC": "API",
+    "PLAT_DOC": "Documentation"
+  },
+  "DOCUMENTATION": {
+  },
+  "PLAYGROUND": {
+    "DEVICE_NAME": "Name",
+    "DEVICE_CLASS": "Klasse",
+    "CREATE_SENSOR": "Erstelle Sensor",
+    "CREATE_ACTUATOR": "Erstelle Actuator",
+    "DEVICE_STATUS": "Status"
+  },
+  "CLIENTS": {
+  },
+  "ACTION": "Aktion",
+  "ADD": "Hinzufügen",
+  "UPDATE": "Ändern",
+  "PREV": "Zurück",
+  "NEXT": "Weiter",
+  "CREATE": "Erstellen",
+  "SEARCH": "Suche",
+  "EDIT": "Bearbeiten",
+  "DELETE": "Löschen",
+  "ACTIVE": "Aktiv",
+  "NOTACTIVE": "Nicht aktiv",
+  "DEVICE": "Gerät",
+  "SETTINGS": "Einstellungen",
+  "LOGOUT": "Abmelden"
 }

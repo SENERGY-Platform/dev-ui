@@ -1,6 +1,6 @@
 /*
  *
- *     Copyright 2018 InfAI (CC SES)
+ *     Copyright 2020 InfAI (CC SES)
  *
  *     Licensed under the Apache License, Version 2.0 (the “License”);
  *     you may not use this file except in compliance with the License.
@@ -17,21 +17,36 @@
  */
 
 import {Injectable} from '@angular/core';
-import {AuthService} from '../../../../core/services/auth/auth.service';
 
-@Injectable({
-    providedIn: 'root',
-})
-export class UserManagementService {
-
-    constructor(private authService: AuthService) {
+@Injectable()
+export class AuthServiceMock {
+    constructor() {
     }
 
-    public loadUsers() {
-        return this.authService.get('/admin/realms/master/users');
+    public userHasRole(role) {
+        return true;
     }
 
-    public loadRoles() {
-        return this.authService.get('/admin/realms/master/roles');
+    public getUserProfile() {
+        const idToken = sessionStorage.getItem('id_token');
+        return JSON.parse(idToken);
+    }
+
+    public logout() {
+        return null;
+    }
+
+    public userIsAuthenticated() {
+        return true;
+    }
+
+    public getToken(): Promise<string> {
+        return new Promise<string>((resolve) => resolve('bearer ' + 'mockToken'));
+    }
+
+    public get(path) {
+        return new Promise((resolve) => {
+            resolve(null);
+        });
     }
 }

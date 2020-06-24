@@ -17,13 +17,10 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {FormControl} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
-import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {AuthService} from '../../../core/services/auth/auth.service';
@@ -60,6 +57,14 @@ export class PermissionsEditComponent implements OnInit {
         user: this.route.snapshot.paramMap.get('subject'),
         actions: this.fb.array([]),
     });
+    public methods = new FormGroup({
+        get: new FormControl(),
+        post: new FormControl(),
+        patch: new FormControl(),
+        delete: new FormControl(),
+        put: new FormControl(),
+        head: new FormControl(),
+    });
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public permission: PermissionModel,
@@ -69,7 +74,6 @@ export class PermissionsEditComponent implements OnInit {
         private userManagementService: UserManagementService,
         private route: ActivatedRoute,
         private ladonService: LadonService,
-        private router: Router,
         private authService: AuthService,
         private snackBar: MatSnackBar,
     ) {
@@ -90,15 +94,6 @@ export class PermissionsEditComponent implements OnInit {
             this.title = 'Add Permission';
         }
     }
-
-    public methods = new FormGroup({
-        get: new FormControl(),
-        post: new FormControl(),
-        patch: new FormControl(),
-        delete: new FormControl(),
-        put: new FormControl(),
-        head: new FormControl(),
-    });
 
     public ngOnInit() {
         try {
@@ -182,12 +177,6 @@ export class PermissionsEditComponent implements OnInit {
         }
     }
 
-    // autocomplete filter
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
-    }
-
     public onChange(event) {
         this.btnDisable = event !== 'subject';
     }
@@ -195,5 +184,11 @@ export class PermissionsEditComponent implements OnInit {
     public intbtnDisable() {
         const persons = this.roles.find((x) => x.name === this.permission.subject);
         this.btnDisable = persons === undefined;
+    }
+
+    // autocomplete filter
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
     }
 }

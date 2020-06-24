@@ -16,19 +16,19 @@
  *
  */
 
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-marketplace-doc',
-  templateUrl: './marketplace-doc.component.html',
-  styleUrls: ['./marketplace-doc.component.css'],
+    selector: 'app-marketplace-doc',
+    templateUrl: './marketplace-doc.component.html',
+    styleUrls: ['./marketplace-doc.component.css'],
 })
 export class MarketplaceDocComponent {
-  public path: string;
+    public path: string;
 
-  constructor(private translate: TranslateService) {
-    const lang = this.translate.currentLang || 'de';
-    this.path = 'assets/docs/' + lang + '/marketplace.md';
-  }
+    constructor(private translate: TranslateService) {
+        const lang = this.translate.currentLang || 'de';
+        this.path = 'assets/docs/' + lang + '/marketplace.md';
+    }
 }
