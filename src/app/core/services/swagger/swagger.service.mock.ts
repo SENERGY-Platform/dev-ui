@@ -33,4 +33,8 @@ export class SwaggerServiceMock {
     public getSwagger(): Observable<SwaggerModel[]> {
         return of([] as SwaggerModel[]);
     }
+
+    public getSingleSwagger(title: string): Observable<SwaggerModel> {
+        return of({} as SwaggerModel);
+    }
 }
