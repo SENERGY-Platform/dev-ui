@@ -643,7 +643,7 @@ code {
 .md-typeset details > .admonition-title:before,
 .md-typeset details > summary:before,
 .md-typeset summary:after {
-    font-family: Material Icons;
+    font-family: Material Icons, monospace;
     font-style: normal;
     font-variant: normal;
     font-weight: 400;
