@@ -16,10 +16,6 @@
  *
  */
 
-admin {
-    width: 60%;
-}
-
 .action_checkboxes {
     display: flex;
     justify-content: space-between;
