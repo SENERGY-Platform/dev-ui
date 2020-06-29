@@ -51,6 +51,7 @@ mat-card-actions {
     align-items: center;
     font-size: 1.3rem;
     margin-bottom: 20px;
+    background: white;
 }
 
 .search i {
@@ -61,10 +62,6 @@ mat-card-actions {
 
 .api-card:hover {
     /*background: #c7daf0;*/
-}
-
-.search {
-    background: white;
 }
 
 @media (max-width: 1000px) {
