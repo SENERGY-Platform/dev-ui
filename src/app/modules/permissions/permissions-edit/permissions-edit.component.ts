@@ -77,16 +77,18 @@ export class PermissionsEditComponent implements OnInit {
         private authService: AuthService,
         private snackBar: MatSnackBar,
     ) {
-        try {
-            this.userManagementService.loadRoles().then((roles: Model) => {
-                this.roles = roles;
-                this.intbtnDisable();
-            });
-            this.userManagementService.loadUsers().then((users) => this.users = users);
-        } catch (e) {
-            console.error('Could not load users or roles from Keycloak.\nWill assume entry is for roles.\nMessage was : ' + e);
+
+        this.userManagementService.loadRoles().then((roles: Model) => {
+            this.roles = roles;
+            this.intbtnDisable();
+        }).catch((r) => {
+            console.error('Could not load roles from Keycloak. Reason was : ', r);
             this.btnDisable = true;
-        }
+        });
+        this.userManagementService.loadUsers().then((users) => this.users = users).catch((r) => {
+            console.error('Could not load users from Keycloak. Reason was : ', r);
+            this.btnDisable = true;
+        });
         this.isEditMode = !(Object.entries(this.permission).length === 0 && this.permission.constructor === Object);
         if (this.isEditMode) {
             this.title = 'Edit Permission';

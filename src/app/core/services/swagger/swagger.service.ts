@@ -51,7 +51,7 @@ export class SwaggerService {
 
     private loadSwagger(): Observable<SwaggerModel[]> {
         return new Observable<SwaggerModel[]>((obs) => {
-            (this.apiService.get('/swagger') as Observable<SwaggerModel[]>).subscribe((res) => {
+            this.apiService.get('/swagger').subscribe((res: SwaggerModel[]) => {
                 this.cachedSwagger = res;
                 const d = new Date();
                 d.setHours(d.getHours() + 1);
