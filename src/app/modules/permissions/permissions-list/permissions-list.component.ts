@@ -67,9 +67,12 @@ export class PermissionsListComponent implements OnInit {
         this.ladonService.getAllPolicies().subscribe((response) => {
             this.policies = response;
 
-            this.sort == null ?
-                this.sortedData = this.policies.sort((a, b) => PermissionsListComponent.compare(a.subject, b.subject, true))
-                : this.sortData(this.sort);
+            if (this.sort == null) {
+                this.sortedData = this.policies;
+                this.sortData({active: 'subject', direction: 'asc'});
+            } else {
+                this.sortData(this.sort);
+            }
 
             // data for mata table
             this.matPolicies = new MatTableDataSource<PermissionModel>(this.sortedData);
@@ -128,7 +131,7 @@ export class PermissionsListComponent implements OnInit {
             this.sortedData = data;
             return;
         }
-        this.sortedData = data.sort((a, b) => {
+        data.sort((a, b) => {
             const isAsc = sort.direction === 'asc';
             switch (sort.active) {
                 case 'subject':
@@ -152,6 +155,7 @@ export class PermissionsListComponent implements OnInit {
                     return 0;
             }
         });
+        this.sortedData = data;
     }
 
     public askfordelete(policy) {
