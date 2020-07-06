@@ -74,7 +74,6 @@ const routes: Routes = [
         RoutingComponent,
         ViewClientsComponent,
     ],
-    entryComponents: [],
 })
 export class ClientsModule {
 }

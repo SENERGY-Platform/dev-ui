@@ -43,7 +43,6 @@ import {SwaggerService} from './core/services/swagger/swagger.service';
 
 import {ApiDocModule} from './modules/api-doc/api-doc.module';
 import {ClientsModule} from './modules/clients/clients.module';
-import {PermissionsDialogDeleteComponent} from './modules/permissions/permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsModule} from './modules/permissions/permissions.module';
 import {PlatformDocModule} from './modules/platform-doc/platform-doc.module';
 
@@ -67,7 +66,6 @@ const keycloakService = new KeycloakService();
         DialogComponent,
 
     ],
-    entryComponents: [DialogComponent, PermissionsDialogDeleteComponent],
     imports: [
         RouterModule.forRoot(appRoutes),
         BrowserModule,
