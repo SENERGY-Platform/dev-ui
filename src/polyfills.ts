@@ -66,7 +66,7 @@ import 'core-js/es7/reflect';
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-import 'hammerjs/hammer';
+// import 'hammerjs/hammer';
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */

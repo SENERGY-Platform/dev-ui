@@ -28,6 +28,11 @@
             ],
             "scripts": [
               "node_modules/prismjs/prism.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "swagger-ui-dist",
+              "keycloak-js",
+              "js-sha256"
             ]
           },
           "configurations": {

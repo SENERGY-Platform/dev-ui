@@ -8,6 +8,7 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts",
+    "**/*.mock.ts",
     "environments/environment.prod.ts"
   ]
 }
