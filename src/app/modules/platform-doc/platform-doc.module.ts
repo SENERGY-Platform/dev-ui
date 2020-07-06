@@ -18,7 +18,7 @@
 
 import {CommonModule} from '@angular/common';
 
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {Component, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
@@ -87,7 +87,6 @@ const routes: Routes = [
         TranslateModule.forChild(),
         MarkdownModule.forChild(),
         HttpClientModule,
-        MarkdownModule.forRoot({loader: HttpClient}),
     ],
     declarations: [
         AnalyticsDocComponent,

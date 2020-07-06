@@ -30,6 +30,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {MarkdownModule} from 'ngx-markdown';
 import {AppComponent} from './app.component';
 import {DialogComponent} from './core/components/dev-role-dialog/dialog.component';
 import {SettingsModule} from './core/components/settings/settings.module';
@@ -91,6 +92,7 @@ const keycloakService = new KeycloakService();
         MatCardModule,
         MatDialogModule,
         MatButtonModule,
+        MarkdownModule.forRoot({loader: HttpClient}),
     ],
     providers: [
         ApiService,
