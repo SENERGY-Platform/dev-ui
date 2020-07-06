@@ -42,7 +42,7 @@ describe('ProcessDocComponent', () => {
                         useFactory: HttpLoaderFactory,
                     },
                 }),
-                MarkdownModule,
+                MarkdownModule.forRoot(),
             ],
             providers: [
                 {provide: TranslateService, useClass: TranslateServiceMock},

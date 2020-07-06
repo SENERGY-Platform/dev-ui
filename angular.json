@@ -28,6 +28,11 @@
             ],
             "scripts": [
               "node_modules/prismjs/prism.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "swagger-ui-dist",
+              "keycloak-js",
+              "js-sha256"
             ]
           },
           "configurations": {
@@ -132,7 +137,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "style": "css"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
