@@ -4,7 +4,7 @@ WORKDIR /workspace
 # Collect compiletime dependencies
 ADD package.json .
 ADD package-lock.json .
-RUN npm ci
+RUN npm ci --unsafe-perm
 # Compile source code
 COPY . .
 RUN npm run-script build 
