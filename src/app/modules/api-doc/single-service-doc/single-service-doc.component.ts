@@ -50,7 +50,7 @@ export class SingleServiceDocComponent implements OnInit {
                         ],
                         configs: {
                             preFetch(req) {
-                                req.headers.Authorization = 'Bearer ' + token;
+                                req.headers.Authorization = token;
                                 return req;
                             },
                         },
