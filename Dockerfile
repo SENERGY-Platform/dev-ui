@@ -1,5 +1,5 @@
 # Compile app
-FROM node:12.16-alpine as builder
+FROM node:14-alpine as builder
 WORKDIR /workspace
 # Collect compiletime dependencies
 ADD package.json .
@@ -11,7 +11,7 @@ RUN npm run-script build
 
 
 # Create an image only containing compiled app and runtime dependencies to save space
-FROM node:12.16-alpine
+FROM node:14-alpine
 WORKDIR /workspace
 COPY server .
 # Collect runtime dependencies
