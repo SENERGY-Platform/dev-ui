@@ -28,7 +28,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "body-parser": "latest",
     "core-js": "^2.6.9",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "keycloak-angular": "^8.0.1",
     "keycloak-js": "11.0.0",
     "ngx-markdown": "^11.1.3",
