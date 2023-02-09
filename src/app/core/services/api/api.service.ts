@@ -49,7 +49,7 @@ export class ApiService {
     }
 
     public delete(path: string, body?: any): Observable<unknown> {
-        return this.httpClient.delete(this.platformUrl + path, body);
+        return this.httpClient.request('DELETE', this.platformUrl + path, {body});
     }
 
     public patch(path: string, payload: any): Observable<unknown> {
