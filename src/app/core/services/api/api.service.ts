@@ -48,9 +48,8 @@ export class ApiService {
         return this.httpClient.put(this.platformUrl + path, payload);
     }
 
-    public delete(path: string): Observable<unknown> {
-        return this.httpClient.delete(this.platformUrl + path);
-
+    public delete(path: string, body?: any): Observable<unknown> {
+        return this.httpClient.delete(this.platformUrl + path, body);
     }
 
     public patch(path: string, payload: any): Observable<unknown> {

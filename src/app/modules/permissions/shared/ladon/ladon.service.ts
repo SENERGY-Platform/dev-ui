@@ -66,7 +66,7 @@ export class LadonService {
     public deletePolicies(policies: PermissionModel[]): Observable<unknown> {
         const ids: string[] = [];
         policies.forEach((p) => ids.push(p.id));
-        return this.apiService.delete(this.baseUrl + '/policies?ids=' + ids.join(','));
+        return this.apiService.delete(this.baseUrl + '/policies', ids);
     }
 
     public test(test: { clientID: string, userId: string, roles: string[], username: string, target_method: string, target_uri: string }):
