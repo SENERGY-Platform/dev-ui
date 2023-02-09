@@ -64,7 +64,14 @@ export class AuthService {
                     Authorization: 'Bearer ' + token,
                 });
 
-                this.httpClient.get(KEYCLOAK_URL + '/auth' + path, {headers}).subscribe((result) => resolve(result));
+                let url = '';
+                if (!environment.production) {
+                    url = environment.keycloak;
+                } else {
+                    url = KEYCLOAK_URL + '/auth';
+                }
+
+                this.httpClient.get(url + path, {headers}).subscribe((result) => resolve(result));
             });
         });
     }

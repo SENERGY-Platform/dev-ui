@@ -32,6 +32,7 @@ export interface PermissionModel {
     subject: string;
     resource: string;
     actions: string[];
+    mode?: string;
 }
 
 export function permissionApiToPermission(model: PermissionApiModel): PermissionModel {

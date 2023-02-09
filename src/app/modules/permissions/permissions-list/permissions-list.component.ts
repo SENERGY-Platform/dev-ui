@@ -16,18 +16,24 @@
  *
  */
 
+import {SelectionModel} from '@angular/cdk/collections';
 import {Component, isDevMode, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
+import {interval, Observable} from 'rxjs';
+import {debounce, map, startWith} from 'rxjs/operators';
 import {AuthService} from '../../../core/services/auth/auth.service';
 import {PermissionsDialogDeleteComponent} from '../permissions-dialog-delete/permissions-dialog-delete.component';
 import {PermissionsDialogImportComponent} from '../permissions-dialog-import/permissions-dialog-import.component';
 import {PermissionImportModel} from '../permissions-dialog-import/permissions-dialog-import.model';
 import {PermissionsEditComponent} from '../permissions-edit/permissions-edit.component';
+import {KongService} from '../shared/kong/kong.service';
 import {LadonService} from '../shared/ladon/ladon.service';
 import {PermissionModel} from '../shared/permission.model';
+import {UserManagementService} from '../shared/user-management/user-management.service';
 
 @Component({
     selector: 'app-permissions-list',
@@ -36,21 +42,57 @@ import {PermissionModel} from '../shared/permission.model';
 })
 export class PermissionsListComponent implements OnInit {
 
-    public displayedColumns = ['subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
+    public displayedColumns = ['select', 'mode', 'subject', 'resource', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'edit', 'delete'];
     public policies: PermissionModel[] = [];
     public userIsAdmin = false;
     public sortedData: PermissionModel[];
-    public matPolicies: MatTableDataSource<PermissionModel>;
+    selection = new SelectionModel<PermissionModel>(true, []);
+    public matPolicies: MatTableDataSource<PermissionModel> = new MatTableDataSource<PermissionModel>([]);
     public query = '';
     public sort: Sort = undefined;
     public ready = false;
     public importing = false;
+    public roles: any[];
+    public users: any[];
+    public clients: any[];
+    public endpointControl = new FormControl();
+    public filteredOptions: Observable<string[]>;
+    public uris: string[] = [];
+    public test: { clientID: string, userId: string, roles: string[], username: string, target_method: string, target_uri: string } = {
+        clientID: '',
+        userId: '',
+        roles: [],
+        username: '',
+        target_method: '',
+        target_uri: ''
+    };
+    public testResult: { GET: boolean, POST: boolean, PUT: boolean, PATCH: boolean, DELETE: boolean, HEAD: boolean } = {
+        GET: false,
+        POST: false,
+        PUT: false,
+        PATCH: false,
+        DELETE: false,
+        HEAD: false
+    };
 
     constructor(private authService: AuthService,
                 private ladonService: LadonService,
                 public dialog: MatDialog,
                 private sanitizer: DomSanitizer,
+                private userManagementService: UserManagementService,
+                private kongService: KongService,
     ) {
+        this.userManagementService.loadRoles().then((roles) => {
+            this.roles = roles as any[];
+        }).catch((r) => {
+            console.error('Could not load roles from Keycloak. Reason was : ', r);
+        });
+        this.userManagementService.loadUsers().then((users) => this.users = users as any[]).catch((r) => {
+            console.error('Could not load users from Keycloak. Reason was : ', r);
+        });
+        this.userManagementService.loadClients().then((clients) => this.clients = clients as any[]).catch((r) => {
+            console.error('Could not load clients from Keycloak. Reason was : ', r);
+        });
     }
 
     private static compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) {
@@ -60,30 +102,61 @@ export class PermissionsListComponent implements OnInit {
     public ngOnInit() {
         this.loadPolicies();
         this.userIsAdmin = this.authService.userHasRole('admin');
+        // autocomplete filter
+        this.filteredOptions = this.endpointControl.valueChanges
+            .pipe(
+                startWith(''),
+                map((value) => this._filter(value)),
+            );
+        this.filteredOptions.pipe(debounce(() => interval(300))).subscribe(() => this.testAccess());
+        try {
+            this.uris = this.kongService.loadUris();
+        } catch (e) {
+            console.error('Could not load Uris from kong: ' + e);
+        }
     }
 
     public loadPolicies() {
         this.ready = false;
+        this.policies = [];
+        this.sortedData = [];
+        this.selection.clear();
         this.ladonService.getAllPolicies().subscribe((response) => {
             this.policies = response;
+            this.sortedData = this.policies;
 
             if (this.sort == null) {
-                this.sortedData = this.policies;
                 this.sortData({active: 'subject', direction: 'asc'});
             } else {
                 this.sortData(this.sort);
             }
-
-            // data for mata table
-            this.matPolicies = new MatTableDataSource<PermissionModel>(this.sortedData);
-            this.ready = true;
+            this.addModes();
         });
+    }
+
+    private addModes() {
+        if (this.roles == null || this.clients == null || this.users == null) {
+            setTimeout(() => this.addModes(), 100);
+            return;
+        }
+        this.sortedData.forEach(policy => {
+            if (this.roles.some((e) => e.name === policy.subject)) {
+                policy.mode = 'role';
+            } else if (this.users.some((e) => e.username === policy.subject)) {
+                policy.mode = 'user';
+            } else if (this.clients.some((e) => e.clientId === policy.subject)) {
+                policy.mode = 'client';
+            }
+        });
+        // data for mata table
+        this.matPolicies.data = this.sortedData;
+        this.ready = true;
     }
 
     public createPolicy() {
         const dialogRef = this.dialog.open(PermissionsEditComponent,
             {
-                data: {} as PermissionModel,
+                data: {permission: {} as PermissionModel, roles: this.roles, users: this.users, clients: this.clients},
                 width: '38.2%',
             });
 
@@ -99,12 +172,9 @@ export class PermissionsListComponent implements OnInit {
     public editPolicy(policy) {
         const dialogRef = this.dialog.open(PermissionsEditComponent,
             {
-                data: {
-                    id: policy.id,
-                    actions: policy.actions,
-                    subject: policy.subject,
-                    resource: policy.resource,
-                }, width: '38.2%',
+                data:
+                    {permission: policy, roles: this.roles, users: this.users, clients: this.clients},
+                width: '38.2%',
             });
 
         dialogRef.afterClosed().subscribe((res) => {
@@ -231,5 +301,68 @@ export class PermissionsListComponent implements OnInit {
         this.query = '';
         this.sortedData = this.policies;
         this.sortData(this.sort);
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length + 1; // admin-all won't be selected
+        const currentViewed = this.matPolicies.connect().value.length;
+        return numSelected === currentViewed;
+    }
+
+    masterToggle() {
+        if (this.isAllSelected()) {
+            this.selectionClear();
+        } else {
+            this.matPolicies.connect().value.forEach((row) => {
+                if (row.id !== 'admin-all') {
+                    this.selection.select(row);
+                }
+            });
+        }
+    }
+
+    selectionClear(): void {
+        this.selection.clear();
+    }
+
+    deleteMultipleItems() {
+        const dialogRef = this.dialog.open(PermissionsDialogDeleteComponent, {
+            width: '450px',
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result === 'yes') {
+                this.ladonService.deletePolicies(this.selection.selected).subscribe(() => {
+                    this.loadPolicies();
+                });
+            }
+        });
+    }
+
+    setTestUser(user) {
+        this.test.username = user.username;
+        this.test.userId = user.id;
+        this.testAccess();
+    }
+
+    setTestRole(role) {
+        this.test.roles = [role];
+        this.testAccess();
+    }
+
+    setTestClient(id) {
+        this.test.clientID = id;
+        this.testAccess();
+    }
+
+    // autocomplete filter
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
+    }
+
+    public testAccess() {
+        this.test.target_uri = this.endpointControl.value || '';
+        this.ladonService.test(this.test).subscribe((res) => this.testResult = res);
     }
 }

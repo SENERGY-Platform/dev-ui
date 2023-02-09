@@ -34,4 +34,8 @@ export class UserManagementService {
     public loadRoles() {
         return this.authService.get('/admin/realms/master/roles');
     }
+
+    public loadClients() {
+        return this.authService.get('/admin/realms/master/clients');
+    }
 }

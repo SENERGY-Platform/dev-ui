@@ -18,25 +18,35 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div *ngIf="userIsAdmin" mat-dialog-content>
     <div>
-        <mat-radio-button (click)="onChange('subject')" [checked]="!btnDisable" class="radio-button">
+        <mat-radio-button (click)="onChange('role')" [checked]="permission.mode === 'role'" class="radio-button">
             Role
         </mat-radio-button>
-        <mat-radio-button (click)="onChange('role')" [checked]="btnDisable" class="radio-button">
+        <mat-radio-button (click)="onChange('user')" [checked]="permission.mode === 'user'" class="radio-button">
             User
+        </mat-radio-button>
+        <mat-radio-button (click)="onChange('client')" [checked]="permission.mode === 'client'" class="radio-button">
+            Client
         </mat-radio-button>
     </div>
     <div class="role-user">
-        <mat-form-field *ngIf="btnDisable">
+        <mat-form-field *ngIf="permission.mode === 'user'">
             <mat-select [(ngModel)]="permission.subject" placeholder="User">
                 <mat-option *ngFor="let user of users" [value]="user.username">
                     {{user.username}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="!btnDisable">
+        <mat-form-field *ngIf="permission.mode === 'role'">
             <mat-select [(ngModel)]="permission.subject" placeholder="Role">
                 <mat-option *ngFor="let role of roles" [value]="role.name">
                     {{role.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="permission.mode === 'client'">
+            <mat-select [(ngModel)]="permission.subject" placeholder="Client">
+                <mat-option *ngFor="let client of clients" [value]="client.clientId">
+                    {{client.clientId}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -65,7 +75,7 @@
     </div>
 </div>
 <div mat-dialog-actions>
-    <button (click)="yes()" color="primary" mat-button><strong>Speichern</strong></button>
+    <button (click)="yes()" color="primary" mat-button cdkFocusInitial><strong>Speichern</strong></button>
     <button (click)="no()" color="primary" mat-button><strong>Abbrechen</strong></button>
 </div>
 

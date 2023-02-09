@@ -23,6 +23,15 @@
     margin-bottom: 20px;
 }
 
+.test {
+    margin-bottom: 20px;
+}
+
+.test .mat-form-field {
+    padding-right: 20px;
+}
+
+
 .search i {
     font-size: 1.5rem;
     margin-right: 20px;
@@ -76,7 +85,7 @@
 }
 
 .mat-column-edit, .mat-column-delete, .mat-column-GET, .mat-column-POST, .mat-column-PUT,
-.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD {
+.mat-column-PATCH, .mat-column-DELETE, .mat-column-HEAD, .mat-column-mode {
     max-width: 90px;
 }
 
@@ -92,4 +101,8 @@
     right: 0;
     text-align: center;
     font-size: 3em;
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    border-bottom-style: hidden;
 }

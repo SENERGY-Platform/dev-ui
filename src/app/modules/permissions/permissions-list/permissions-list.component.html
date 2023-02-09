@@ -16,6 +16,59 @@
   ~
   -->
 <section *ngIf="userIsAdmin" class="outer" fxLayout="column">
+    <mat-card *ngIf="ready" class="test">
+        <mat-card-title>Rule Tester</mat-card-title>
+        <mat-card-content>
+            <div fxLayout="row">
+                <mat-form-field>
+                    <mat-select (valueChange)="setTestUser($event)" placeholder="User">
+                        <mat-option *ngFor="let user of users" [value]="user">
+                            {{user.username}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select (valueChange)="setTestRole($event)" placeholder="Role">
+                        <mat-option *ngFor="let role of roles" [value]="role.name">
+                            {{role.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field>
+                    <mat-select (valueChange)="setTestClient($event)" placeholder="Client">
+                        <mat-option *ngFor="let client of clients" [value]="client.clientId">
+                            {{client.clientId}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="endpoint">
+                    <input [formControl]="endpointControl" [matAutocomplete]="auto" aria-label="Number" matInput
+                           placeholder="Endpoint"
+                           type="text">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let uri of filteredOptions | async" [value]="uri">
+                            {{uri}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-checkbox [checked]="testResult.GET" disabled fxFlex>GET</mat-checkbox>
+                <mat-checkbox [checked]="testResult.POST" disabled fxFlex>POST</mat-checkbox>
+                <mat-checkbox [checked]="testResult.PUT" disabled fxFlex>PUT</mat-checkbox>
+                <mat-checkbox [checked]="testResult.PATCH" disabled fxFlex>PATCH</mat-checkbox>
+                <mat-checkbox [checked]="testResult.DELETE" disabled fxFlex>DELETE</mat-checkbox>
+                <mat-checkbox [checked]="testResult.HEAD" disabled fxFlex>HEAD</mat-checkbox>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
 
     <mat-card *ngIf="ready" class="search">
         <i class="material-icons">search</i>
@@ -30,6 +83,31 @@
     </mat-card>
     <div class="table-container" fxFlex="auto">
         <mat-table #table (matSortChange)="sortData($event)" [dataSource]="sortedData" [hidden]="!ready" matSort>
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(element) : null"
+                                  [disabled]="element.id === 'admin-all'"
+                                  [checked]="selection.isSelected(element)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="mode">
+                <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.mode === 'user'">account_circle</mat-icon>
+                    <mat-icon *ngIf="element.mode === 'role'">group</mat-icon>
+                    <mat-icon *ngIf="element.mode === 'client'">computer</mat-icon>
+                </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="subject">
                 <mat-header-cell *matHeaderCellDef mat-sort-header="subject">Subject</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.subject}}</mat-cell>
@@ -99,6 +177,22 @@
                 </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="header-delete-all">
+                <th mat-header-cell *matHeaderCellDef colspan="10">
+                    <div fxLayout="row">
+                        <div fxLayoutAlign="center center">You have
+                            selected {{selection.selected.length}} items
+                        </div>
+                        <button matTooltip="Delete" mat-icon-button color="accent"
+                                (click)="deleteMultipleItems()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['header-delete-all']"
+                [hidden]="selection.selected.length === 0"></tr>
             <mat-header-row *matHeaderRowDef="displayedColumns" mat-header-row></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;" mat-row></mat-row>
 

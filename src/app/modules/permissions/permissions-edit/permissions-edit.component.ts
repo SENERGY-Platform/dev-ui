@@ -27,12 +27,6 @@ import {AuthService} from '../../../core/services/auth/auth.service';
 import {KongService} from '../shared/kong/kong.service';
 import {LadonService} from '../shared/ladon/ladon.service';
 import {PermissionModel} from '../shared/permission.model';
-import {UserManagementService} from '../shared/user-management/user-management.service';
-
-export interface Model {
-    id: string;
-    name: string;
-}
 
 @Component({
     selector: 'app-permissions-edit',
@@ -45,12 +39,13 @@ export class PermissionsEditComponent implements OnInit {
     public userIsAdmin: boolean;
     public title: string;
     // all roles and uris and users
-    public roles: any;
+    public roles: any[];
     public uris: string[] = [];
-    public users: any;
+    public users: any[];
+    public clients: any[];
     // options for autocomplete filter
     public filteredOptions: Observable<string[]>;
-    public btnDisable: boolean;
+    public permission: PermissionModel;
 
     public form = this.fb.group({
         role: this.route.snapshot.paramMap.get('subject'),
@@ -67,28 +62,20 @@ export class PermissionsEditComponent implements OnInit {
     });
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public permission: PermissionModel,
+        @Inject(MAT_DIALOG_DATA) data: { permission: PermissionModel, roles: any[], users: any[], clients: any[] },
         public dialogRef: MatDialogRef<PermissionsEditComponent>,
         private kongService: KongService,
         private fb: FormBuilder,
-        private userManagementService: UserManagementService,
         private route: ActivatedRoute,
         private ladonService: LadonService,
         private authService: AuthService,
         private snackBar: MatSnackBar,
     ) {
+        this.permission = data.permission;
+        this.roles = data.roles;
+        this.users = data.users;
+        this.clients = data.clients;
 
-        this.userManagementService.loadRoles().then((roles: Model) => {
-            this.roles = roles;
-            this.intbtnDisable();
-        }).catch((r) => {
-            console.error('Could not load roles from Keycloak. Reason was : ', r);
-            this.btnDisable = true;
-        });
-        this.userManagementService.loadUsers().then((users) => this.users = users).catch((r) => {
-            console.error('Could not load users from Keycloak. Reason was : ', r);
-            this.btnDisable = true;
-        });
         this.isEditMode = !(Object.entries(this.permission).length === 0 && this.permission.constructor === Object);
         if (this.isEditMode) {
             this.title = 'Edit Permission';
@@ -180,13 +167,9 @@ export class PermissionsEditComponent implements OnInit {
     }
 
     public onChange(event) {
-        this.btnDisable = event !== 'subject';
+        this.permission.mode = event;
     }
 
-    public intbtnDisable() {
-        const persons = this.roles.find((x) => x.name === this.permission.subject);
-        this.btnDisable = persons === undefined;
-    }
 
     // autocomplete filter
     private _filter(value: string): string[] {

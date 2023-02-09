@@ -40,8 +40,8 @@ export class ApiService {
         return this.httpClient.get(this.platformUrl + path);
     }
 
-    public post(path: string, payload: any): Observable<unknown> {
-        return this.httpClient.post(this.platformUrl + path, payload);
+    public post<T>(path: string, payload: any): Observable<T> {
+        return this.httpClient.post<T>(this.platformUrl + path, payload);
     }
 
     public put(path: string, payload: any): Observable<unknown> {
