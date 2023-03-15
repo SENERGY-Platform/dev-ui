@@ -2,7 +2,9 @@
   "name": "auth-developer",
   "version": "0.0.0",
   "license": "MIT",
-  "resolutions": {"webpack": "^5.0.0"},
+  "resolutions": {
+    "webpack": "^5.0.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng build && mv dist server/dist && node server/server.js",
