@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
@@ -16,7 +16,7 @@ describe('PermissionsDialogImportComponent', () => {
 
     const snackBarMock = jasmine.createSpyObj(['open']);
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [PermissionsDialogImportComponent],
             providers: [

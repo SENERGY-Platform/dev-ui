@@ -16,7 +16,7 @@
  * /
  */
 
-import {async, TestBed} from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
 import {MatDialogHarness} from '@angular/material/dialog/testing';
@@ -35,7 +35,7 @@ import {SwaggerServiceMock} from './core/services/swagger/swagger.service.mock';
 import {TranslateServiceMock} from './core/services/translate.service.mock';
 
 describe('AppComponent', () => {
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
@@ -52,15 +52,15 @@ describe('AppComponent', () => {
                 MatCardModule,
                 CoreModule,
                 RouterModule.forRoot([
-                    {
-                        component: StartComponent,
-                        path: '',
-                    },
-                ]),
+    {
+        component: StartComponent,
+        path: '',
+    },
+], { relativeLinkResolution: 'legacy' }),
             ],
         }).compileComponents();
     }));
-    it('should create the app', async(() => {
+    it('should create the app', waitForAsync(() => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
         expect(app).toBeTruthy();

@@ -16,7 +16,7 @@
  * /
  */
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -36,7 +36,7 @@ describe('PermissionsListComponent', () => {
     let component: PermissionsListComponent;
     let fixture: ComponentFixture<PermissionsListComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [PermissionsListComponent],
             providers: [

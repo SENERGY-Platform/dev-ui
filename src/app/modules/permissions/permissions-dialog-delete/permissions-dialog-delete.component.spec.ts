@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
 import {TranslateServiceMock} from '../../../core/services/translate.service.mock';
@@ -9,7 +9,7 @@ describe('PermissionsDialogDeleteComponent', () => {
     let component: PermissionsDialogDeleteComponent;
     let fixture: ComponentFixture<PermissionsDialogDeleteComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [PermissionsDialogDeleteComponent],
             providers: [

@@ -68,7 +68,7 @@ const keycloakService = new KeycloakService();
 
     ],
     imports: [
-        RouterModule.forRoot(appRoutes),
+        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
         BrowserModule,
         PlatformDocModule,
         SettingsModule,
