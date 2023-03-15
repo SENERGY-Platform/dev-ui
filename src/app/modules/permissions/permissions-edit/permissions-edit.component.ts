@@ -17,7 +17,7 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
@@ -35,7 +35,7 @@ import {PermissionModel} from '../shared/permission.model';
 })
 export class PermissionsEditComponent implements OnInit {
     public isEditMode = false;
-    public endpointControl = new FormControl();
+    public endpointControl = new UntypedFormControl();
     public userIsAdmin: boolean;
     public title: string;
     // all roles and uris and users
@@ -52,20 +52,20 @@ export class PermissionsEditComponent implements OnInit {
         user: this.route.snapshot.paramMap.get('subject'),
         actions: this.fb.array([]),
     });
-    public methods = new FormGroup({
-        get: new FormControl(),
-        post: new FormControl(),
-        patch: new FormControl(),
-        delete: new FormControl(),
-        put: new FormControl(),
-        head: new FormControl(),
+    public methods = new UntypedFormGroup({
+        get: new UntypedFormControl(),
+        post: new UntypedFormControl(),
+        patch: new UntypedFormControl(),
+        delete: new UntypedFormControl(),
+        put: new UntypedFormControl(),
+        head: new UntypedFormControl(),
     });
 
     constructor(
         @Inject(MAT_DIALOG_DATA) data: { permission: PermissionModel, roles: any[], users: any[], clients: any[] },
         public dialogRef: MatDialogRef<PermissionsEditComponent>,
         private kongService: KongService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private route: ActivatedRoute,
         private ladonService: LadonService,
         private authService: AuthService,

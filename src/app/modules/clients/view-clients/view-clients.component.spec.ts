@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {FormBuilder} from '@angular/forms';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {UntypedFormBuilder} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {TranslateService} from '@ngx-translate/core';
@@ -21,7 +21,7 @@ describe('ViewClientsComponent', () => {
             declarations: [ViewClientsComponent],
             providers: [
                 {provide: TranslateService, useClass: TranslateServiceMock},
-                FormBuilder,
+                UntypedFormBuilder,
                 {provide: ApiService, useClass: ApiServiceMock},
                 {provide: ClientService, useClass: ClientServiceMock},
             ],

@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {UntypedFormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
@@ -32,7 +32,7 @@ describe('AddEditClientComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AddEditClientComponent, TranslatePipeMock],
             providers: [
-                FormBuilder,
+                UntypedFormBuilder,
                 {provide: ApiService, useClass: ApiServiceMock},
                 {provide: MatDialogRef, useValue: {}},
                 {provide: MAT_DIALOG_DATA, useValue: {}},

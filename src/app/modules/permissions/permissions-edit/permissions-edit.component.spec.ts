@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {UntypedFormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -32,7 +32,7 @@ describe('PermissionsEditComponent', () => {
             providers: [
                 {provide: MatDialogRef, useValue: {}},
                 {provide: MAT_DIALOG_DATA, useValue: {} as PermissionModel},
-                FormBuilder,
+                UntypedFormBuilder,
                 {provide: AuthService, useClass: AuthServiceMock},
                 {provide: UserManagementService, useClass: UserManagementServiceMock},
                 {

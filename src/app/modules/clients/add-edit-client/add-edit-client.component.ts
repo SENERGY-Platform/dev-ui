@@ -17,7 +17,7 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable} from 'rxjs';
@@ -32,14 +32,14 @@ import {ClientModel} from '../shared/client.model';
 export class AddEditClientComponent implements OnInit {
     public client: ClientModel = {} as ClientModel;
     public isEditMode = false;
-    public form: FormGroup = this.fb.group({
+    public form: UntypedFormGroup = this.fb.group({
         name: ['', Validators.required],
         redirectUris: this.fb.array([]),
         webOrigins: this.fb.array([]),
     });
     public title: string;
 
-    constructor(private fb: FormBuilder, private apiService: ApiService,
+    constructor(private fb: UntypedFormBuilder, private apiService: ApiService,
                 private dialogRef: MatDialogRef<AddEditClientComponent>, @Inject(MAT_DIALOG_DATA) data, private snackBar: MatSnackBar) {
         this.client = data as ClientModel;
         this.isEditMode = !(Object.entries(this.client).length === 0 && this.client.constructor === Object);
@@ -55,20 +55,20 @@ export class AddEditClientComponent implements OnInit {
     }
 
     public addWebOrigins() {
-        (this.form.get('webOrigins') as FormArray).push(new FormControl(undefined, Validators.required));
+        (this.form.get('webOrigins') as UntypedFormArray).push(new UntypedFormControl(undefined, Validators.required));
     }
 
     public addRedirectUri() {
-        (this.form.get('redirectUris') as FormArray).push(new FormControl(undefined, Validators.required));
+        (this.form.get('redirectUris') as UntypedFormArray).push(new UntypedFormControl(undefined, Validators.required));
     }
 
     public loadClientInformations() {
-        (this.form.get('name') as FormControl).setValue(this.client.name);
+        (this.form.get('name') as UntypedFormControl).setValue(this.client.name);
         for (const redirectUri of this.client.redirectUris) {
-            (this.form.get('redirectUris') as FormArray).push(new FormControl(redirectUri, Validators.required));
+            (this.form.get('redirectUris') as UntypedFormArray).push(new UntypedFormControl(redirectUri, Validators.required));
         }
         for (const webOrigin of this.client.webOrigins) {
-            (this.form.get('webOrigins') as FormArray).push(new FormControl(webOrigin, Validators.required));
+            (this.form.get('webOrigins') as UntypedFormArray).push(new UntypedFormControl(webOrigin, Validators.required));
         }
     }
 
@@ -103,12 +103,12 @@ export class AddEditClientComponent implements OnInit {
         return this.getWebOriginsArray().length;
     }
 
-    public getRedirectUrisArray(): FormArray {
-        return (this.form.get('redirectUris') as FormArray);
+    public getRedirectUrisArray(): UntypedFormArray {
+        return (this.form.get('redirectUris') as UntypedFormArray);
     }
 
-    public getWebOriginsArray(): FormArray {
-        return (this.form.get('webOrigins') as FormArray);
+    public getWebOriginsArray(): UntypedFormArray {
+        return (this.form.get('webOrigins') as UntypedFormArray);
     }
 
     public removeWebOrigin(i: number) {

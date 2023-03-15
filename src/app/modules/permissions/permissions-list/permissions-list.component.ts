@@ -18,7 +18,7 @@
 
 import {SelectionModel} from '@angular/cdk/collections';
 import {Component, isDevMode, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -55,7 +55,7 @@ export class PermissionsListComponent implements OnInit {
     public roles: any[];
     public users: any[];
     public clients: any[];
-    public endpointControl = new FormControl();
+    public endpointControl = new UntypedFormControl();
     public filteredOptions: Observable<string[]>;
     public uris: string[] = [];
     public test: { clientID: string, userId: string, roles: string[], username: string, target_method: string, target_uri: string } = {

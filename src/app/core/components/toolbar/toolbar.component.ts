@@ -23,7 +23,7 @@ import * as iot from '!raw-loader!../../../../assets/docs/de/iot.md';
 import * as process from '!raw-loader!../../../../assets/docs/de/process.md';
 import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RoutesRecognized} from '@angular/router';
 import {merge} from 'rxjs';
@@ -66,7 +66,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     @Output() public zIndex = -1;
 
     public inputFocused = false;
-    public searchQuery = new FormControl('');
+    public searchQuery = new UntypedFormControl('');
     public docsSearchResult: ResultModel[] = [];
     public swaggerSearchResult: ResultModel[] = [];
     public userIsAdmin = false;
