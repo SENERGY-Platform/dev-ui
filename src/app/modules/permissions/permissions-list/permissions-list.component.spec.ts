@@ -16,15 +16,15 @@
  * /
  */
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDialog} from '@angular/material/dialog';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
 import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatTableModule} from '@angular/material/table';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacyDialogHarness as MatDialogHarness} from '@angular/material/legacy-dialog/testing';
+import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
+import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
 import {CoreModule} from '../../../core/core.module';
 import {AuthService} from '../../../core/services/auth/auth.service';
 import {AuthServiceMock} from '../../../core/services/auth/auth.service.mock';

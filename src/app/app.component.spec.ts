@@ -16,10 +16,10 @@
  * /
  */
 
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import {MatCardModule} from '@angular/material/card';
-import {MatDialog} from '@angular/material/dialog';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
+import {TestBed, waitForAsync} from '@angular/core/testing';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacyDialogHarness as MatDialogHarness} from '@angular/material/legacy-dialog/testing';
 import {RouterModule} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {KeycloakService} from 'keycloak-angular';
@@ -52,11 +52,11 @@ describe('AppComponent', () => {
                 MatCardModule,
                 CoreModule,
                 RouterModule.forRoot([
-    {
-        component: StartComponent,
-        path: '',
-    },
-], { relativeLinkResolution: 'legacy' }),
+                    {
+                        component: StartComponent,
+                        path: '',
+                    },
+                ], {}),
             ],
         }).compileComponents();
     }));

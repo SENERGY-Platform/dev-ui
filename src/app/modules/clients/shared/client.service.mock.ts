@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {Observable, of} from 'rxjs';
 import {ClientModel} from './client.model';
 

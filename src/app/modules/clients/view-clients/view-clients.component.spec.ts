@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {UntypedFormBuilder} from '@angular/forms';
-import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {TranslateService} from '@ngx-translate/core';
 import {CoreModule} from '../../../core/core.module';
 import {ApiService} from '../../../core/services/api/api.service';

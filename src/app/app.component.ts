@@ -17,7 +17,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {TranslateService} from '@ngx-translate/core';
 import {DialogComponent} from './core/components/dev-role-dialog/dialog.component';
 import {ApiService} from './core/services/api/api.service';

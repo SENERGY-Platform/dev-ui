@@ -17,8 +17,8 @@
  */
 
 import {Pipe, PipeTransform} from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {MatCardModule} from '@angular/material/card';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {AuthService} from '../../services/auth/auth.service';
