@@ -139,7 +139,7 @@ export class PermissionsListComponent implements OnInit {
             setTimeout(() => this.addModes(), 100);
             return;
         }
-        this.sortedData.forEach(policy => {
+        this.sortedData?.forEach(policy => {
             if (this.roles.some((e) => e.name === policy.subject)) {
                 policy.mode = 'role';
             } else if (this.users.some((e) => e.username === policy.subject)) {
@@ -195,7 +195,7 @@ export class PermissionsListComponent implements OnInit {
         if (sort == null) {
             return;
         }
-        const data = this.sortedData.slice();
+        const data = this.sortedData?.slice();
 
         if (!sort.active || sort.direction === '') {
             this.sortedData = data;
@@ -242,8 +242,8 @@ export class PermissionsListComponent implements OnInit {
     }
 
     public export() {
-        if (this.sortedData && this.sortedData.length > 0) {
-            const theJSON = JSON.stringify(this.sortedData.filter((p) => p.id !== 'admin-all'));
+        if (this.sortedData && this.sortedData?.length > 0) {
+            const theJSON = JSON.stringify(this.sortedData?.filter((p) => p.id !== 'admin-all'));
             return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
         }
     }
@@ -256,9 +256,9 @@ export class PermissionsListComponent implements OnInit {
             if (result != null) {
                 this.ready = false;
                 this.importing = true;
-                const filteredPolicies = result.policies.filter((p) => p.id !== 'admin-all');
+                const filteredPolicies = result.policies?.filter((p) => p.id !== 'admin-all');
                 if (result.overwrite) {
-                    const currentPolicies = this.policies.filter((p) => p.id !== 'admin-all');
+                    const currentPolicies = this.policies?.filter((p) => p.id !== 'admin-all');
                     this.ladonService.deletePolicies(currentPolicies).subscribe(() => this.ladonService.postPolicies(filteredPolicies)
                         .subscribe(() => {
                             this.importing = false;
@@ -358,7 +358,7 @@ export class PermissionsListComponent implements OnInit {
     // autocomplete filter
     private _filter(value: string): string[] {
         const filterValue = value.toLowerCase();
-        return this.uris.filter((option) => option.toLowerCase().includes(filterValue));
+        return this.uris?.filter((option) => option.toLowerCase().includes(filterValue));
     }
 
     public testAccess() {
