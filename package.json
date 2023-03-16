@@ -7,7 +7,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng build && mv dist server/dist && node server/server.js",
+    "start": "ng build && rm -rf server/dist && mv dist server/dist && node server/server.js",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",

@@ -16,18 +16,15 @@
  *
  */
 
+import {HttpClient} from '@angular/common/http';
 // import markdownfiles
-import * as analytics from '!raw-loader!../../../../assets/docs/de/analytics.md';
-import * as getting from '!raw-loader!../../../../assets/docs/de/gettingstarted.md';
-import * as iot from '!raw-loader!../../../../assets/docs/de/iot.md';
-import * as process from '!raw-loader!../../../../assets/docs/de/process.md';
-import * as security from '!raw-loader!../../../../assets/docs/de/security.md';
 import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {UntypedFormControl} from '@angular/forms';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RoutesRecognized} from '@angular/router';
-import {merge} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
+import {forkJoin, merge, Observable} from 'rxjs';
+import {debounceTime, first, map} from 'rxjs/operators';
 import {AuthService} from '../../services/auth/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
 import {SwaggerModel} from '../../services/swagger/swagger.model';
@@ -80,6 +77,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
                 private authService: AuthService,
                 private responsiveService: ResponsiveService,
                 private sidenavService: SidenavService,
+                private http: HttpClient,
+                private translate: TranslateService,
                 private router: Router) {
     }
 
@@ -196,46 +195,65 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private getHeadersOfMarkdown(): DocModel[] {
-        const markdowns: MarkdownModel[] = [getting as unknown as MarkdownModel, process as unknown as MarkdownModel,
-            analytics as unknown as MarkdownModel, iot as unknown as MarkdownModel, security as unknown as MarkdownModel];
-        const docs: DocModel[] = [
-            {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
-            {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
-            {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
-            {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
-            {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
-        ];
+    private getHeadersOfMarkdown(): Observable<DocModel[]> {
+        const lang = this.translate.currentLang || 'de';
+        const obs: Observable<any>[] = [];
 
-        const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-        const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
-        const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+        const analytics: MarkdownModel = {} as MarkdownModel;
+        obs.push(this.http.get('assets/docs/' + lang + '/analytics.md', {responseType: 'text'}).pipe(map(res => analytics.default = res)));
 
-        let header1;
-        let header2;
-        let header3;
+        const getting: MarkdownModel = {} as MarkdownModel;
+        obs.push(this.http.get('assets/docs/' + lang + '/gettingstarted.md', {responseType: 'text'}).pipe(map(res => getting.default = res)));
 
-        for (let index = 0; index < markdowns.length; index++) {
-            header1 = markdowns[index].default.match(regex1);
-            header2 = markdowns[index].default.match(regex2);
-            header3 = markdowns[index].default.match(regex3);
+        const process: MarkdownModel = {} as MarkdownModel;
+        obs.push(this.http.get('assets/docs/' + lang + '/process.md', {responseType: 'text'}).pipe(map(res => process.default = res)));
 
-            header1.forEach((value) => {
-                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                docs[index].headers1.push(value);
-            });
+        const iot: MarkdownModel = {} as MarkdownModel;
+        obs.push(this.http.get('assets/docs/' + lang + '/iot.md', {responseType: 'text'}).pipe(map(res => iot.default = res)));
 
-            header2.forEach((value) => {
-                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                docs[index].headers2.push(value);
-            });
+        const security: MarkdownModel = {} as MarkdownModel;
+        obs.push(this.http.get('assets/docs/' + lang + '/security.md', {responseType: 'text'}).pipe(map(res => security.default = res)));
 
-            header3.forEach((value) => {
-                value = value.toString().replace(/#/g, '').replace(/^ /g, '');
-                docs[index].headers3.push(value);
-            });
-        }
-        return docs;
+        return forkJoin(obs).pipe(map(_ => {
+            const markdowns: MarkdownModel[] = [getting, process, analytics, iot, security];
+            const docs: DocModel[] = [
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'start', title: 'Getting Started'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'process', title: 'Prozesse'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'analytics', title: 'Analytics'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'iot', title: 'IoT Repository'},
+                {headers1: [], headers2: [], headers3: [], redirectUrl: 'security', title: 'Security'},
+            ];
+
+            const regex1 = new RegExp('^# [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+            const regex2 = new RegExp('^## [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+            const regex3 = new RegExp('^### [a-zA-ZäöüÄÖÜß0-9 ]*', 'gm');
+
+            let header1;
+            let header2;
+            let header3;
+
+            for (let index = 0; index < markdowns.length; index++) {
+                header1 = markdowns[index].default.match(regex1);
+                header2 = markdowns[index].default.match(regex2);
+                header3 = markdowns[index].default.match(regex3);
+
+                header1.forEach((value) => {
+                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                    docs[index].headers1.push(value);
+                });
+
+                header2.forEach((value) => {
+                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                    docs[index].headers2.push(value);
+                });
+
+                header3.forEach((value) => {
+                    value = value.toString().replace(/#/g, '').replace(/^ /g, '');
+                    docs[index].headers3.push(value);
+                });
+            }
+            return docs;
+        }));
     }
 
     private observeSidenav() {
@@ -256,6 +274,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     }
 
     private initDocs() {
-        this.docs = this.getHeadersOfMarkdown();
+        this.getHeadersOfMarkdown().subscribe(docs => this.docs = docs);
     }
 }
