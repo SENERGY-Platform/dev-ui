@@ -36,7 +36,7 @@
  * BROWSER POLYFILLS
  */
 
-// tslint:disable-next-line:jsdoc-format
+// eslint-disable-next-line jsdoc/check-alignment,jsdoc/check-indentation,jsdoc/newline-after-description
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 // import 'core-js/es6/symbol';
 // import 'core-js/es6/object';
@@ -56,7 +56,7 @@
 /** IE10 and IE11 requires the following for the Reflect API. */
 // import 'core-js/es6/reflect';
 
-// tslint:disable-next-line:jsdoc-format
+// eslint-disable-next-line jsdoc/check-alignment,jsdoc/check-indentation,jsdoc/newline-after-description
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 import 'core-js/es7/reflect';
@@ -69,4 +69,4 @@ import 'core-js/es7/reflect';
  */
 import 'zone.js/dist/zone'; // Included with Angular CLI.
 
-// tslint:disable-next-line:jsdoc-format max-line-length
+// eslint-disable-next-line jsdoc/check-alignment, jsdoc/check-indentation, jsdoc/newline-after-description, max-len

@@ -62,7 +62,7 @@ export class PermissionsEditComponent implements OnInit {
     });
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) data: { permission: PermissionModel, roles: any[], users: any[], clients: any[] },
+        @Inject(MAT_DIALOG_DATA) data: { permission: PermissionModel; roles: any[]; users: any[]; clients: any[] },
         public dialogRef: MatDialogRef<PermissionsEditComponent>,
         private kongService: KongService,
         private fb: UntypedFormBuilder,

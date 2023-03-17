@@ -21,7 +21,7 @@ import {Injectable} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
 import {environment} from '../../../../environments/environment';
 
-declare var KEYCLOAK_URL: any;
+declare let KEYCLOAK_URL: any;
 
 @Injectable()
 export class AuthService {
@@ -52,9 +52,7 @@ export class AuthService {
     }
 
     public getToken(): Promise<string> {
-        return this.keycloakService.getToken().then((resp) => {
-            return 'bearer ' + resp;
-        });
+        return this.keycloakService.getToken().then((resp) => 'bearer ' + resp);
     }
 
     public get(path) {
@@ -64,7 +62,7 @@ export class AuthService {
                     Authorization: 'Bearer ' + token,
                 });
 
-                let url = '';
+                let url: string;
                 if (!environment.production) {
                     url = environment.keycloak;
                 } else {

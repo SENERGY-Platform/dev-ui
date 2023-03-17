@@ -69,10 +69,10 @@ export class LadonService {
         return this.apiService.delete(this.baseUrl + '/policies', ids);
     }
 
-    public test(test: { clientID: string, userId: string, roles: string[], username: string, target_method: string, target_uri: string }):
-        Observable<{ GET: boolean, POST: boolean, PUT: boolean, PATCH: boolean, DELETE: boolean, HEAD: boolean }> {
+    public test(test: { clientID: string; userId: string; roles: string[]; username: string; target_method: string; target_uri: string }):
+        Observable<{ GET: boolean; POST: boolean; PUT: boolean; PATCH: boolean; DELETE: boolean; HEAD: boolean }> {
 
-        return this.apiService.post
-            < {GET: boolean, POST: boolean, PUT: boolean, PATCH: boolean, DELETE: boolean, HEAD: boolean} > (this.baseUrl + '/test', test);
+        return this.apiService.post<{ GET: boolean; POST: boolean; PUT: boolean; PATCH: boolean; DELETE: boolean; HEAD: boolean }>
+        (this.baseUrl + '/test', test);
     }
 }

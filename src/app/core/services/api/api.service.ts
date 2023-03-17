@@ -22,7 +22,7 @@ import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 
-declare var KONG_URL: string;
+declare let KONG_URL: string;
 
 @Injectable()
 export class ApiService {

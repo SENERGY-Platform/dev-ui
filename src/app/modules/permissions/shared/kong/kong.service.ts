@@ -18,7 +18,7 @@
 
 import {Injectable} from '@angular/core';
 
-declare var KONG_URIS: any;
+declare let KONG_URIS: any;
 
 @Injectable({
     providedIn: 'root',

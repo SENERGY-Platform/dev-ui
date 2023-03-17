@@ -58,7 +58,7 @@ export class PermissionsListComponent implements OnInit {
     public endpointControl = new UntypedFormControl();
     public filteredOptions: Observable<string[]>;
     public uris: string[] = [];
-    public test: { clientID: string, userId: string, roles: string[], username: string, target_method: string, target_uri: string } = {
+    public test: { clientID: string; userId: string; roles: string[]; username: string; target_method: string; target_uri: string } = {
         clientID: '',
         userId: '',
         roles: [],
@@ -66,7 +66,7 @@ export class PermissionsListComponent implements OnInit {
         target_method: '',
         target_uri: ''
     };
-    public testResult: { GET: boolean, POST: boolean, PUT: boolean, PATCH: boolean, DELETE: boolean, HEAD: boolean } = {
+    public testResult: { GET: boolean; POST: boolean; PUT: boolean; PATCH: boolean; DELETE: boolean; HEAD: boolean } = {
         GET: false,
         POST: false,
         PUT: false,

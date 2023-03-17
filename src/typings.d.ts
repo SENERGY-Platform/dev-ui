@@ -17,9 +17,9 @@
  */
 
 /* SystemJS module definition */
-declare var module: NodeModule;
+declare let module: NodeModule;
 
-// tslint:disable-next-line:interface-name
+// eslint-disable-next-line @typescript-eslint/naming-convention
 interface NodeModule {
     id: string;
 }

@@ -19,8 +19,8 @@
 import {KeycloakService} from 'keycloak-angular';
 import {environment} from '../../../../environments/environment';
 
-declare var KEYCLOAK_URL: any;
-declare var CLIENT_ID: any;
+declare let KEYCLOAK_URL: any;
+declare let CLIENT_ID: any;
 
 export function init(keycloak: KeycloakService): Promise<boolean> {
     if (!environment.loginRequired) {
